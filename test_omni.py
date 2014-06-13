@@ -1,6 +1,6 @@
 #!/usr/bin/python
 from __future__ import print_function
-from omnihack import indexer
+from omnihack import enumerator
 import unittest
 import sys
 
@@ -12,7 +12,7 @@ except ImportError:
 
 class TestOmni(unittest.TestCase):
     def test_values(self):
-        i = indexer()
+        i = enumerator()
         self.assertEqual(i["cat"], 0)
         self.assertEqual(i["dog"], 1)
         self.assertEqual(i["cat"], 0)

@@ -11,7 +11,7 @@ def doc(s):
     return f
 
 
-class indexer(collections.Mapping):
+class enumerator(collections.Mapping):
 
     def __init__(self):
         self.d = {}
