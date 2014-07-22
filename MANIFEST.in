@@ -1,6 +1,5 @@
-include omnihack.py
-include ez_setup.py
+include omnihack/*.py
 include LICENSE
-include test_omni.py
+include tests/*.py
 include setup.py
 include README.rst
