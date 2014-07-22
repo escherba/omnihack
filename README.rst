@@ -10,7 +10,6 @@ indices assigned in the order of first access.
 ::
 
     enum = enumerator()
-    >>
     print enum["cat"]
     >> 0
     print enum["dog"]
