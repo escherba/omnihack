@@ -12,7 +12,7 @@ tests_require = [
 
 
 setup(
-    name='OmniHack',
+    name='pymaptools',
     version='0.0.1',
     description='A collection of Python containers for data analysis',
     author='Eugene Scherba',

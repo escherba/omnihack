@@ -1,7 +1,7 @@
 Pythonic containers for data analysis
 ===============================================================
 
-Omnihack is a collection of miscellaneous containers that
+PyMapTools are a collection of miscellaneous containers that
 make it easier to analyze data sets.
 
 enumerator is an key-value mapping that maps keys to numeric

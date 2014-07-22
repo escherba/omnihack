@@ -4,7 +4,7 @@ import unittest
 from pymaptools import enumerator
 
 
-class TestOmni(unittest.TestCase):
+class TestEnum(unittest.TestCase):
     def test_values(self):
         i = enumerator()
         self.assertEqual(i["cat"], 0)
