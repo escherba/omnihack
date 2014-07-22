@@ -11,3 +11,7 @@ build/
 *.egg-info
 setuptools-*.egg
 .ropeproject/
+
+*.egg
+
+*.sw[op]
