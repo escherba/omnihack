@@ -1,7 +1,7 @@
 __author__ = 'escherba'
 
 import unittest
-from omnihack import UnionFind
+from pymaptools import UnionFind
 
 
 class TestUnionFind(unittest.TestCase):

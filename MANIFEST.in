@@ -1,4 +1,4 @@
-include omnihack/*.py
+include pymaptools/*.py
 include LICENSE
 include tests/*.py
 include setup.py

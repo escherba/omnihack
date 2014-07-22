@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 
 import unittest
-from omnihack import enumerator
+from pymaptools import enumerator
 
 
 class TestOmni(unittest.TestCase):
