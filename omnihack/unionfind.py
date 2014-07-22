@@ -68,20 +68,26 @@ class UnionFind:
 
     def union(self, *objs):
         """Find the sets containing the objects and merge them all."""
-        weights_ = self.weights
-        parents_ = self.parents
-        roots = map(self.__getitem__, objs)
-        heaviest_root = max((weights_[r], r) for r in roots)[1]
-        for root in roots:
+        weights = self.weights
+        parents = self.parents
+        found_roots = map(self.__getitem__, objs)
+        heaviest_root = max(found_roots, key=weights.__getitem__)
+        for root in found_roots:
             if root != heaviest_root:
-                weights_[heaviest_root] += weights_[root]
-                parents_[root] = heaviest_root
+                weights[heaviest_root] += weights[root]
+                parents[root] = heaviest_root
 
     def sets(self):
         """Return a list of each disjoint set
         :rtype: list
         """
-        ret = defaultdict(list)
-        for k, v in self.parents.iteritems():
-            ret[v].append(k)
-        return ret.values()
+        result = defaultdict(list)
+        for element in self.parents.iterkeys():
+            result[self[element]].append(element)
+        return result.values()
+
+    def num_neighbors(self, obj):
+        """Return the number of objects in the cluster
+        containing given object
+        """
+        return self.weights[self[obj]] - 1

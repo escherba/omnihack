@@ -1,4 +1,4 @@
-omnihack: a collection of Pythonic containers
+Pythonic containers for data analysis
 ===============================================================
 
 Omnihack is a collection of miscellaneous containers that
@@ -20,4 +20,15 @@ indices assigned in the order of first access.
     print len(enum)
     >> 2
 
+UnionFind is a an algorithm for returning maintainig and retrieving
+connected components in a graph. Example:
 
+::
+
+    uf = UnionFind()
+    uf.union(0, 1)
+    uf.union(2, 3)
+    uf.union(3, 0)
+    uf.union(4, 5)
+    print uf.sets()
+    >> [[0, 1, 2, 3], [4, 5]]
