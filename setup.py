@@ -1,29 +1,59 @@
-#!/usr/bin/env python2
-
-from pkg_resources import resource_string
+import re
+from functools import partial
 from setuptools import setup, find_packages
+from pkg_resources import resource_string
 
-tests_require = [
-    'nose>=1.0',
-    'coverage',
-    'nosexcover',
-    'mock>=1.0'
-]
+get_resource = partial(resource_string, __name__)
+
+# Regex groups: 0: URL part, 1: package name, 2: package version
+find_egg = partial(
+    re.search,
+    re.compile(r'^(.+)#egg=([a-z0-9_.]+)-([a-z0-9_.-]+)$')
+)
+
+
+def process_reqs(reqs):
+    """
+    Add all egg-containing links to list #1 and egg information plus
+    package names to list #2. Note: we rely on dependency links, support
+    for which will be removed in future versions of pip.
+
+    TODO: migrate to custom pip repo.
+    """
+    pkg_reqs = []
+    dep_links = []
+    for req in reqs:
+        egg_info = find_egg(req)
+        if egg_info is None:
+            pkg_reqs.append(req)
+        else:
+            url, egg = egg_info.group(1, 2)
+            pkg_reqs.append(egg)
+            dep_links.append(req)
+    return pkg_reqs, dep_links
+
+requirements = get_resource('requirements.txt').splitlines()
+dev_requirements = get_resource('dev_requirements.txt').splitlines()
+
+install_requires, dep_links1 = process_reqs(requirements)
+tests_require, dep_links2 = process_reqs(dev_requirements)
+dependency_links = dep_links1 + dep_links2
 
 
 setup(
-    name='pymaptools',
-    version='0.0.1',
-    description='A collection of Python containers for data analysis',
-    author='Eugene Scherba',
-    author_email='escherba@gmail.com',
-    url='http://about.me/escherba',
+    name="pymaptools",
+    version="0.0.2",
+    author="Eugene Scherba",
+    author_email="escherba@gmail.com",
+    description=("A collection of Python containers for data analysis"),
     license="MIT",
-    keywords="mapping key-value container data analysis algorithm",
+    url='https://github.com/escherba/pymaptools',
     packages=find_packages(exclude=['tests']),
-    test_suite="nose.collector",
+    install_requires=install_requires,
+    dependency_links=dependency_links,
+    tests_require=tests_require,
     zip_safe=True,
-    setup_requires=tests_require,
+    test_suite='nose.collector',
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Operating System :: OS Independent',

@@ -15,3 +15,7 @@ setuptools-*.egg
 *.egg
 
 *.sw[op]
+
+# Virtualenv
+bin
+env
