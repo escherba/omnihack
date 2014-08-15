@@ -20,7 +20,7 @@ indices assigned in the order of first access.
     >> 2
 
 UnionFind is a an algorithm for creating, maintainig, and retrieving
-disjoint cluters from a graph. Example:
+disjoint clusters from a graph. Example:
 
 ::
 
