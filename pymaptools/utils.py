@@ -1,5 +1,6 @@
 import collections
 from copy import deepcopy
+from pkg_resources import resource_filename
 
 
 def deepupdate(d, u):
@@ -23,3 +24,12 @@ def deepupdate(d, u):
 def override(parent, child):
     """Inherit child from parent and return a new object"""
     return deepupdate(deepcopy(parent), child)
+
+
+def read_text_file(rel, filename):
+    """Read text file ignoring comments beginning with pound sign"""
+    with open(resource_filename(rel, filename), 'r') as fh:
+        for line in fh:
+            li = line.strip()
+            if not li.startswith('#'):
+                yield li

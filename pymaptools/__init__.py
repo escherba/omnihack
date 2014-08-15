@@ -6,7 +6,7 @@ from funcy import compose
 from itertools import imap
 
 
-def fmap(f, g):
+def amap(f, g):
     """ Lift a scalar transformer f into an iterable
     :param f: transformer of type a -> b where a, b are scalars
     :type f: function
