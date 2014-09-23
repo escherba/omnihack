@@ -13,7 +13,7 @@ enumerator
 ``enumerator`` is a key-value mapping that maps keys to numeric
 indices assigned in the order of first access. You can use it to vectorize strings.
 
-::
+.. code-block:: python
 
 	from pymaptools.vectorize import enumerator
 	
@@ -33,7 +33,7 @@ UnionFind
 ``UnionFind`` is an algorithm for creating, maintainig, and retrieving
 disjoint clusters from a graph. Example:
 
-::
+.. code-block:: python
 
 	from pymaptools.unionfind import UnionFind
 	
@@ -50,7 +50,7 @@ Pipe and Filter
 
 ``Pipe`` is basic pipeline for processing data in sequence. You create pipes by composing ``Filter`` instances (or any callables). ``Pipe`` makes heavy use of generators to make processing memory-efficient:
 
-::
+.. code-block:: python
 
 	from pymaptools.pipeline import Filter, Pipe
 	
