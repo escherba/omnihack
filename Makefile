@@ -16,6 +16,7 @@ dev: dev_requirements.txt env
 
 clean:
 	$(PYTHON) setup.py clean
+	rm -rf dist build
 	find . -type f -name "*.pyc" -exec rm {} \;
 
 nuke: clean
