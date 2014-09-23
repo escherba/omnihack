@@ -79,7 +79,7 @@ Pipe and Filter
         """
         demonstrate use of state
         """
-        def __init__(self, init_sum)
+        def __init__(self, init_sum):
             self.total = init_sum
 
         def __call__(self, obj):
@@ -108,8 +108,20 @@ Pipe and Filter
     pipe = Pipe([
         FilterDeserialize(),
         FilterMap(),
-        FilterAdd(),
+        FilterAdd(0),
         filter_multiply,
         FilterOutput()
     ])
     pipe.run(input_seq)
+
+    # outputs:
+    >> 20
+    >> 20
+    >> 24
+    >> 16
+    >> 20
+    >> 20
+    >> 28
+    >> 12
+    >> 32
+    >> 8
