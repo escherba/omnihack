@@ -42,7 +42,7 @@ dependency_links = dep_links1 + dep_links2
 
 setup(
     name="pymaptools",
-    version="0.0.3",
+    version="0.0.4",
     author="Eugene Scherba",
     author_email="escherba@gmail.com",
     description=("A collection of Python containers for data analysis"),

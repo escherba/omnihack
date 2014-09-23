@@ -1,4 +1,4 @@
-from enum import enumerator
+from vectorize import enumerator
 from unionfind import UnionFind
 
 from functools import partial
