@@ -1,4 +1,4 @@
-.PHONY: clean virtualenv upgrade test package dev
+.PHONY: clean virtualenv upgrade test package dev dist
 
 PYENV = . env/bin/activate;
 PYTHON = $(PYENV) python
@@ -13,6 +13,9 @@ test: env dev
 
 dev: dev_requirements.txt env
 	$(PYENV) pip install --process-dependency-links -e . -r $<
+
+dist:
+	$(PYTHON) setup.py sdist
 
 clean:
 	$(PYTHON) setup.py clean
