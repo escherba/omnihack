@@ -15,17 +15,17 @@ indices assigned in the order of first access. You can use it to vectorize strin
 
 .. code-block:: python
 
-    from pymaptools.vectorize import enumerator
-
-    enum = enumerator()
-    print enum["cat"]
-    >> 0
-    print enum["dog"]
-    >> 1
-    print enum["cat"]
-    >> 0
-    print len(enum)
-    >> 2
+    >>> from pymaptools.vectorize import enumerator
+    ...
+    >>> enum = enumerator()
+    >>> enum["cat"]
+    0
+    >>> enum["dog"]
+    1
+    >>> enum["cat"]
+    0
+    >>> len(enum)
+    2
 
 UnionFind
 ---------
@@ -35,15 +35,15 @@ disjoint clusters from a graph. Example:
 
 .. code-block:: python
 
-    from pymaptools.unionfind import UnionFind
-
-    uf = UnionFind()
-    uf.union(0, 1)
-    uf.union(2, 3)
-    uf.union(3, 0)
-    uf.union(4, 5)
-    print uf.sets()
-    >> [[0, 1, 2, 3], [4, 5]]
+    >>> from pymaptools.unionfind import UnionFind
+    ...
+    >>> uf = UnionFind()
+    >>> uf.union(0, 1)
+    >>> uf.union(2, 3)
+    >>> uf.union(3, 0)
+    >>> uf.union(4, 5)
+    >>> uf.sets()
+    [[0, 1, 2, 3], [4, 5]]
 
 Pipe and Step
 ---------------
@@ -137,10 +137,10 @@ The output of the above is:
 
 .. code-block:: python
 
-    >> 20
-    >> 8
-    >> 28
-    >> 44
-    >> 88
-    >> failed to deserialize `Ceci n\'est pas une pipe`
-    >> 28
+    20
+    8
+    28
+    44
+    88
+    failed to deserialize `Ceci n\'est pas une pipe`
+    28
