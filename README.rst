@@ -96,7 +96,7 @@ Pipe and Step
             self.handle.write(str(obj) + "\n")
 
 
-    # finally,
+    # process a sequence of possible JSON strings
     input_seq = ['{"x":[0,-6,4]}', '{"x":[12]}', '{"x":[34]}', '{"x":[-9]}',
                 "Ceci n'est pas une pipe", '{"x":[4]}']
     pipe = Pipe([
