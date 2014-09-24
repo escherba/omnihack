@@ -10,6 +10,7 @@ package: env
 
 test: env dev
 	$(PYENV) nosetests $(NOSEARGS)
+	$(PYENV) py.test README.rst
 
 dev: dev_requirements.txt env
 	$(PYENV) pip install -e . -r $<
