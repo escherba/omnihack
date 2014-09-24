@@ -43,9 +43,9 @@ disjoint clusters from a graph. Example:
     [[0, 1, 2, 3], [4, 5]]
 
 Pipe and Step
----------------
+-------------
 
-``Pipe`` is class for basic pipeline for processing data in sequence. You create pipes by composing ``Step`` instances (or any callables). ``Pipe`` makes heavy use of generators to make processing memory-efficient:
+``Pipe`` is a basic pipeline for processing data in sequence. You create pipes by composing ``Step`` instances (or any callables). ``Pipe`` makes heavy use of generators to make processing memory-efficient:
 
 Basic example:
 
