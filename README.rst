@@ -104,6 +104,7 @@ Pipe and Filter
 The output of the above is:
 
 .. code-block:: python
+
     >> 20
     >> 44
     >> 88
