@@ -60,6 +60,7 @@ setup(
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Topic :: Software Development :: Libraries :: Python Modules',
+        'Topic :: Text Processing',
         'Programming Language :: Python :: 2.7',
     ],
     long_description=resource_string(__name__, 'README.rst'),
