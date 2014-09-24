@@ -90,7 +90,7 @@ Pipe and Filter
             print obj
 
     # finally,
-    input_seq = ['{"x":0}', '{"x":12}', '{"x":34}', '{"x":-9}', "abracadabra", '{"x":1}', '{"x":4}']
+    input_seq = ['{"x":0}', '{"x":12}', '{"x":34}', '{"x":-9}', "Ceci n'est pas une pipe", '{"x":1}', '{"x":4}']
     pipe = Pipe([
         deserialize,
         FilterEven(),
@@ -107,5 +107,5 @@ The output of the above is:
     >> 20
     >> 44
     >> 88
-    >> failed to deserialize `abracadabra`
+    >> failed to deserialize `Ceci n\'est pas une pipe`
     >> 28
