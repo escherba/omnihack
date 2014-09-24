@@ -53,6 +53,7 @@ Pipe and Filter
 .. code-block:: python
 
     import json
+    import sys
     from pymaptools.pipeline import Filter, Pipe
 
     def deserialize(obj):
@@ -77,7 +78,6 @@ Pipe and Filter
             yield obj + self.value
 
     class Multiply(Filter):
-        """ demonstrate use of state """
         def __init__(self, value):
             self.value = value
 
@@ -86,8 +86,11 @@ Pipe and Filter
 
     class Output(Filter):
         """ demonstrate that we can use IO """
+        def __init__(self, handle):
+            self.handle = handle
+
         def __call__(self, obj):
-            print obj
+            self.handle.write(str(obj) + "\n")
 
     # finally,
     input_seq = ['{"x":0}', '{"x":12}', '{"x":34}', '{"x":-9}', "Ceci n'est pas une pipe", '{"x":1}', '{"x":4}']
@@ -96,7 +99,7 @@ Pipe and Filter
         FilterEven(),
         Add(10),
         Multiply(2),
-        Output()
+        Output(sys.stdout)
     ])
     pipe.run(input_seq)
 
