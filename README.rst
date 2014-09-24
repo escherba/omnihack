@@ -101,7 +101,9 @@ Pipe and Filter
     ])
     pipe.run(input_seq)
 
-    # outputs:
+The output of the above is:
+
+.. code-block:: python
     >> 20
     >> 44
     >> 88
