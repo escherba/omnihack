@@ -1,3 +1,8 @@
+"""
+``Pipe`` is a basic pipeline for processing data in sequence. You can create
+pipes by composing ``Step`` instances (or any callables).
+"""
+
 import abc
 from functools import partial
 import itertools as it
@@ -55,11 +60,11 @@ class Pipe(object):
         """
         run all the steps on a single object
         """
-        new_vals = [obj]
+        results = [obj]
         for step in self.steps:
             apply_step = partial(self.apply_step, step)
-            new_vals = list(it.chain(*it.imap(apply_step, new_vals)))
-        for result in new_vals:
+            results = list(it.chain(*it.imap(apply_step, results)))
+        for result in results:
             yield result
 
     def run(self, input_iter):
