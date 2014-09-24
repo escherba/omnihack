@@ -1,5 +1,5 @@
-Algorithms and data structures for data analysis
-================================================
+Tools and algorithms for data wrangling
+=======================================
 
 About this repo
 ---------------
