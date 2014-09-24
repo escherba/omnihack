@@ -12,7 +12,7 @@ test: env dev
 	$(PYENV) nosetests $(NOSEARGS)
 
 dev: dev_requirements.txt env
-	$(PYENV) pip install --process-dependency-links -e . -r $<
+	$(PYENV) pip install -e . -r $<
 
 dist:
 	$(PYTHON) setup.py sdist
@@ -28,8 +28,5 @@ nuke: clean
 env virtualenv: env/bin/activate
 env/bin/activate: requirements.txt setup.py
 	test -f $@ || virtualenv --no-site-packages env
-	$(PYENV) pip install --process-dependency-links -e . -r $<
+	$(PYENV) pip install -e . -r $<
 	touch $@
-
-upgrade: env
-	$(PYENV) pip install --process-dependency-links -e . -r $< --upgrade

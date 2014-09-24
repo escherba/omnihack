@@ -48,7 +48,7 @@ setup(
     description=("A collection of Python containers for data analysis"),
     license="MIT",
     url='https://github.com/escherba/pymaptools',
-    packages=find_packages(exclude=['tests']),
+    packages=find_packages(exclude=['tests', 'scripts']),
     install_requires=install_requires,
     dependency_links=dependency_links,
     tests_require=tests_require,

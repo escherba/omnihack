@@ -52,76 +52,58 @@ Pipe and Filter
 
 .. code-block:: python
 
+    import json
     from pymaptools.pipeline import Filter, Pipe
 
-    class FilterDeserialize(Filter):
-        """
-        deserialize data
-        """
-        def __call__(self, obj):
-            try:
-                yield int(obj)
-            except ValueError:
-                yield 0
+    def deserialize(obj):
+        """ demonstrate use of plain functions as callables """
+        try:
+            yield json.loads(obj)
+        except ValueError:
+            print "failed to deserialize {}".format(obj)
 
-
-    class FilterMap(Filter):
+    class FilterEven(Filter):
         def __call__(self, obj):
-            """
-            demonstrate that values can be dropped
-            """
+            """ demonstrate that values can be dropped """
             if obj % 2 == 0:
                 yield obj
-                yield -obj
 
-
-    class FilterAdd(Filter):
-        """
-        demonstrate use of state
-        """
-        def __init__(self, init_sum):
-            self.total = init_sum
+    class Add(Filter):
+        """ demonstrate use of state """
+        def __init__(self, value):
+            self.value = value
 
         def __call__(self, obj):
-            self.total += obj
-            if self.total < 100:
-                yield obj + 10
+            yield obj + self.value
 
+    class Multiply(Filter):
+        """ demonstrate use of state """
+        def __init__(self, value):
+            self.value = value
 
-    def filter_multiply(obj):
-        """
-        demonstrate the use of plain functions as callables
-        """
-        yield obj * 2
+        def __call__(self, obj):
+            yield obj * self.value
 
-
-    class FilterOutput(Filter):
-        """
-        demonstarte that we can use IO
-        """
+    class Output(Filter):
+        """ demonstrate that we can use IO """
         def __call__(self, obj):
             print obj
 
 
     # finally,
-    input_seq = ["0", "1", "2", "3", "abracadabra", "4", "5", "6"]
+    input_seq = ['{"x":0}', '{"x":12}', '{"x":34}', '{"x":-9}', "abracadabra", '{"x":1}', '{"x":4}']
     pipe = Pipe([
-        FilterDeserialize(),
-        FilterMap(),
-        FilterAdd(0),
-        filter_multiply,
-        FilterOutput()
+        deserialize,
+        FilterEven(),
+        Add(10),
+        Multiply(2),
+        Output()
     ])
     pipe.run(input_seq)
 
     # outputs:
     >> 20
-    >> 20
-    >> 24
-    >> 16
-    >> 20
-    >> 20
+    >> 44
+    >> 88
+    >> failed to deserialize `abracadabra`
     >> 28
-    >> 12
-    >> 32
-    >> 8

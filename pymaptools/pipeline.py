@@ -39,7 +39,7 @@ class Pipe(object):
         for filt in self.filters:
             apply_filter = partial(self.apply_filter, filt)
             # note: a version w/o iterators (for debugging):
-            # gen_stack.append(list(it.chain(*map(list, map(apply_filter, gen_stack[-1])))))
+            #gen_stack.append(list(it.chain(*map(list, map(apply_filter, gen_stack[-1])))))
             gen_stack.append(it.chain(*it.imap(apply_filter, gen_stack[-1])))
         for result in gen_stack[-1]:
             yield result
