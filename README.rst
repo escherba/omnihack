@@ -58,9 +58,9 @@ Pipe and Filter
     def deserialize(obj):
         """ demonstrate use of plain functions as callables """
         try:
-            yield json.loads(obj)
-        except ValueError:
-            print "failed to deserialize {}".format(obj)
+            yield int(json.loads(obj)["x"])
+        except:
+            print "failed to deserialize `{}`".format(obj)
 
     class FilterEven(Filter):
         def __call__(self, obj):
@@ -88,7 +88,6 @@ Pipe and Filter
         """ demonstrate that we can use IO """
         def __call__(self, obj):
             print obj
-
 
     # finally,
     input_seq = ['{"x":0}', '{"x":12}', '{"x":34}', '{"x":-9}', "abracadabra", '{"x":1}', '{"x":4}']
