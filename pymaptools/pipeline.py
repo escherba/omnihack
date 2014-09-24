@@ -5,7 +5,7 @@ import itertools as it
 
 class Step(object):
     """
-    base class for filters (for use with Pipe)
+    base class for steps (for use with Pipe)
     """
     @abc.abstractmethod
     def __call__(self, obj):
@@ -15,39 +15,37 @@ class Step(object):
 class Pipe(object):
 
     """
-    Apply a series of filters to an iterator
+    Apply a series of steps to an iterator
     """
 
-    def __init__(self, filters):
+    def __init__(self, steps):
         """
-        given an array of filter objects, compose them into a pipe
+        given an array of step objects, compose them into a pipe
         """
-        self.filters = filters
+        self.steps = steps
 
-    def apply_filter(self, filter, obj):
+    def apply_step(self, step, obj):
         """
-        apply filter and return an empty list if result is not iterable
+        apply step and return an empty list if result is not iterable
         """
-        result = filter(obj)
+        result = step(obj)
         return result if hasattr(result, '__iter__') else []
 
-    def apply_filters(self, obj):
+    def apply_steps(self, obj):
         """
-        run all the filters on a single object
+        run all the steps on a single object
         """
-        gen_stack = [[obj]]
-        for filt in self.filters:
-            apply_filter = partial(self.apply_filter, filt)
-            # note: a version w/o iterators (for debugging):
-            #gen_stack.append(list(it.chain(*map(list, map(apply_filter, gen_stack[-1])))))
-            gen_stack.append(it.chain(*it.imap(apply_filter, gen_stack[-1])))
-        for result in gen_stack[-1]:
+        new_vals = [obj]
+        for step in self.steps:
+            apply_step = partial(self.apply_step, step)
+            new_vals = list(it.chain(*it.imap(apply_step, new_vals)))
+        for result in new_vals:
             yield result
 
     def run(self, input_iter):
         """
-        run all the filters on input iterator
+        run all the steps on input iterator
         """
         for obj in input_iter:
-            for _ in self.apply_filters(obj):
+            for _ in self.apply_steps(obj):
                 pass
