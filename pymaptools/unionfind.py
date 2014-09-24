@@ -26,6 +26,15 @@ class UnionFind:
     - X.union(item1, item2, ...) merges the sets containing each item
       into a single larger set.  If any item is not yet part of a set
       in X, it is added to X as one of the members of the merged set.
+
+    >>> uf = UnionFind()
+    >>> uf.union(0, 1)
+    >>> uf.union(2, 3)
+    >>> uf.union(3, 0)
+    >>> uf.union(4, 5)
+    >>> uf.sets()
+    [[0, 1, 2, 3], [4, 5]]
+
     """
 
     def __init__(self):
@@ -56,7 +65,7 @@ class UnionFind:
         for ancestor in path:
             self.parents[ancestor] = root
 
-        #return the representative
+        # return the representative
         return root
 
     def __iter__(self):

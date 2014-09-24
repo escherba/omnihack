@@ -12,6 +12,20 @@ def doc(s):
 
 
 class enumerator(collections.Mapping):
+    """
+    A simple vectorizer for text tokens
+
+    >>> enum = enumerator()
+    >>> enum["cat"]
+    0
+    >>> enum["dog"]
+    1
+    >>> enum["cat"]
+    0
+    >>> len(enum)
+    2
+
+    """
 
     def __init__(self):
         self.d = {}
