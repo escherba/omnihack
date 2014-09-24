@@ -1,9 +1,6 @@
 Tools and algorithms for data wrangling
 =======================================
 
-About this repo
----------------
-
 PyMapTools are a collection of miscellaneous containers that
 make it easier to analyze data sets.
 
