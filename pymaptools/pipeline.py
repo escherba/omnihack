@@ -7,6 +7,8 @@ class Step(object):
     """
     base class for steps (for use with Pipe)
     """
+    __metaclass__ = abc.ABCMeta
+
     @abc.abstractmethod
     def __call__(self, obj):
         """Process one piece of content"""
@@ -16,6 +18,24 @@ class Pipe(object):
 
     """
     Apply a series of steps to an iterator
+
+    >>> def deserialize(obj):
+    ...     yield int(obj)
+    ...
+    >>> def square(obj):
+    ...     yield obj * obj
+    ...
+    >>> class Sum(Step):
+    ...     def __init__(self):
+    ...         self.sum = 0
+    ...     def __call__(self, obj):
+    ...         self.sum += obj
+    ...
+    >>> sumsq = Pipe([deserialize, square, Sum()])
+    >>> sumsq.run(["1", "2", "3"])
+    >>> sumsq.steps[-1].sum
+    14
+
     """
 
     def __init__(self, steps):
@@ -49,3 +69,8 @@ class Pipe(object):
         for obj in input_iter:
             for _ in self.apply_steps(obj):
                 pass
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()

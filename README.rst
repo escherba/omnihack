@@ -50,6 +50,31 @@ Pipe and Step
 
 ``Pipe`` is class for basic pipeline for processing data in sequence. You create pipes by composing ``Step`` instances (or any callables). ``Pipe`` makes heavy use of generators to make processing memory-efficient:
 
+Basic example:
+
+.. code-block:: python
+
+    >>> from pymaptools.pipeline import Pipe, Step
+    ...
+    >>> def deserialize(obj):
+    ...     yield int(obj)
+    ...
+    >>> def square(obj):
+    ...     yield obj * obj
+    ...
+    >>> class Sum(Step):
+    ...     def __init__(self):
+    ...         self.sum = 0
+    ...     def __call__(self, obj):
+    ...         self.sum += obj
+    ...
+    >>> sumsq = Pipe([deserialize, square, Sum()])
+    >>> sumsq.run(["1", "2", "3"])
+    >>> sumsq.steps[-1].sum
+    14
+
+A more complex example:
+
 .. code-block:: python
 
     import json

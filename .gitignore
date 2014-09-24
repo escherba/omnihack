@@ -1,4 +1,4 @@
-*.pyc
+*.py[cod]
 *.pyo
 *.pyd
 *.d
@@ -17,5 +17,10 @@ setuptools-*.egg
 *.sw[op]
 
 # Virtualenv
-bin
 env
+
+# coverage
+.coverage
+cover/
+coverage.xml
+nosetests.xml
