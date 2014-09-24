@@ -26,8 +26,7 @@ class Add(Filter):
     def __call__(self, obj):
         yield obj + self.value
 
-class Multiply(Filter):
-    """ demonstrate use of state """
+class MultiplyBy(Filter):
     def __init__(self, value):
         self.value = value
 
@@ -50,7 +49,7 @@ pipe = Pipe([
     deserialize,
     filter_even,
     Add(10),
-    Multiply(2),
+    MultiplyBy(2),
     Output(sys.stdout)
 ])
 pipe.run(input_seq)
