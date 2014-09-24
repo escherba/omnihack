@@ -8,7 +8,7 @@ package: env
 	$(PYTHON) setup.py bdist_egg
 	$(PYTHON) setup.py sdist
 
-test: env dev
+test: dev
 	$(PYENV) nosetests $(NOSEARGS)
 	$(PYENV) py.test README.rst
 
