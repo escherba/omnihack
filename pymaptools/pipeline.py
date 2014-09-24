@@ -3,7 +3,7 @@ from functools import partial
 import itertools as it
 
 
-class Filter(object):
+class Step(object):
     """
     base class for filters (for use with Pipe)
     """

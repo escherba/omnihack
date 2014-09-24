@@ -45,16 +45,16 @@ disjoint clusters from a graph. Example:
     print uf.sets()
     >> [[0, 1, 2, 3], [4, 5]]
 
-Pipe and Filter
+Pipe and Step
 ---------------
 
-``Pipe`` is basic pipeline for processing data in sequence. You create pipes by composing ``Filter`` instances (or any callables). ``Pipe`` makes heavy use of generators to make processing memory-efficient:
+``Pipe`` is basic pipeline for processing data in sequence. You create pipes by composing ``Step`` instances (or any callables). ``Pipe`` makes heavy use of generators to make processing memory-efficient:
 
 .. code-block:: python
 
     import json
     import sys
-    from pymaptools.pipeline import Filter, Pipe
+    from pymaptools.pipeline import Pipe, Step
 
     def deserialize(obj):
         """ demonstrate use of plain functions as callables
@@ -72,7 +72,7 @@ Pipe and Filter
         if obj % 2 == 0:
             yield obj
 
-    class Add(Filter):
+    class Add(Step):
         """ demonstrate use of state """
         def __init__(self, value):
             self.value = value
@@ -80,14 +80,14 @@ Pipe and Filter
         def __call__(self, obj):
             yield obj + self.value
 
-    class MultiplyBy(Filter):
+    class MultiplyBy(Step):
         def __init__(self, value):
             self.value = value
 
         def __call__(self, obj):
             yield obj * self.value
 
-    class Output(Filter):
+    class Output(Step):
         """ demonstrate that we can use IO """
         def __init__(self, handle):
             self.handle = handle

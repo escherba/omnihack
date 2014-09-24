@@ -1,6 +1,6 @@
 import json
 import sys
-from pymaptools.pipeline import Filter, Pipe
+from pymaptools.pipeline import Pipe, Step
 
 def deserialize(obj):
     """ demonstrate use of plain functions as callables
@@ -18,7 +18,7 @@ def filter_even(obj):
     if obj % 2 == 0:
         yield obj
 
-class Add(Filter):
+class Add(Step):
     """ demonstrate use of state """
     def __init__(self, value):
         self.value = value
@@ -26,14 +26,14 @@ class Add(Filter):
     def __call__(self, obj):
         yield obj + self.value
 
-class MultiplyBy(Filter):
+class MultiplyBy(Step):
     def __init__(self, value):
         self.value = value
 
     def __call__(self, obj):
         yield obj * self.value
 
-class Output(Filter):
+class Output(Step):
     """ demonstrate that we can use IO """
     def __init__(self, handle):
         self.handle = handle
