@@ -69,8 +69,3 @@ class Pipe(object):
         for obj in input_iter:
             for _ in self.apply_steps(obj):
                 pass
-
-
-if __name__ == "__main__":
-    import doctest
-    doctest.testmod()

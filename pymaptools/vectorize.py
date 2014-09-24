@@ -24,9 +24,7 @@ class enumerator(collections.Mapping):
     0
     >>> len(enum)
     2
-
     """
-
     def __init__(self):
         self.d = {}
 

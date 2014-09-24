@@ -73,7 +73,10 @@ def repeatfunc(func, times=None, *args):
 
 
 def pairwise(iterable):
-    "s -> (s0,s1), (s1,s2), (s2, s3), ..."
+    """
+    >>> list(pairwise([1,2,3]))
+    [(1, 2), (2, 3)]
+    """
     a, b = tee(iterable)
     next(b, None)
     return izip(a, b)
@@ -90,8 +93,12 @@ def grouper(iterable, n, fillvalue=None):
 
 
 def roundrobin(*iterables):
-    "roundrobin('ABC', 'D', 'EF') --> A D E B F C"
-    # Recipe credited to George Sakkis
+    """
+    Recipe credited to George Sakkis
+
+    >>> list(roundrobin('ABC', 'D', 'EF'))
+    ['A', 'D', 'E', 'B', 'F', 'C']
+    """
     pending = len(iterables)
     nexts = cycle(iter(it).next for it in iterables)
     while pending:
