@@ -3,17 +3,20 @@ import sys
 from pymaptools.pipeline import Filter, Pipe
 
 def deserialize(obj):
-    """ demonstrate use of plain functions as callables """
+    """ demonstrate use of plain functions as callables
+        demonstrate multiple outputs
+    """
     try:
-        yield int(json.loads(obj)["x"])
+        array = json.loads(obj)["x"]
+        for num in array:
+            yield int(num)
     except:
         print "failed to deserialize `{}`".format(obj)
 
-class FilterEven(Filter):
-    def __call__(self, obj):
-        """ demonstrate that values can be dropped """
-        if obj % 2 == 0:
-            yield obj
+def filter_even(obj):
+    """ demonstrate that values can be dropped """
+    if obj % 2 == 0:
+        yield obj
 
 class Add(Filter):
     """ demonstrate use of state """
@@ -41,10 +44,11 @@ class Output(Filter):
 
 
 # finally,
-input_seq = ['{"x":0}', '{"x":12}', '{"x":34}', '{"x":-9}', "abracadabra", '{"x":1}', '{"x":4}']
+input_seq = ['{"x":[0,-6,4]}', '{"x":[12]}', '{"x":[34]}', '{"x":[-9]}',
+             "Ceci n'est pas une pipe", '{"x":[4]}']
 pipe = Pipe([
     deserialize,
-    FilterEven(),
+    filter_even,
     Add(10),
     Multiply(2),
     Output(sys.stdout)
