@@ -15,9 +15,6 @@ test: dev
 dev: dev_requirements.txt env
 	$(PYENV) pip install -e . -r $<
 
-dist:
-	$(PYTHON) setup.py sdist
-
 clean:
 	$(PYTHON) setup.py clean
 	rm -rf dist build
