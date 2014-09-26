@@ -25,6 +25,10 @@ class Step(object):
 
     def __exit__(self, type, value, traceback):
         """Exit context (tear down)"""
+        self.on_exit()
+
+    def on_exit(self):
+        """callback when pipeline is done or error occured"""
         pass
 
 
