@@ -75,7 +75,6 @@ class Pipe(object):
                 step = StepWrapper(step)
             steps_with_exit.append(step)
         self.steps = steps_with_exit
-        self._entered_steps = []
 
     @staticmethod
     def apply_step(step, obj):
@@ -90,10 +89,10 @@ class Pipe(object):
         run all the steps on a single object
         """
         results = [obj]
-        for step in self._entered_steps:
+        for step in self.steps:
             apply_step = partial(self.apply_step, step)
-			# note: some exceptions may not be caught if imap is used
-			# instead of map here below:
+            # note: some exceptions may not be caught if imap is used
+            # instead of map here below:
             results = list(it.chain(*map(apply_step, results)))
         for result in results:
             yield result
@@ -103,8 +102,8 @@ class Pipe(object):
         run all the steps on input iterator
         """
         with contextlib.nested(*self.steps) as entered_steps:
-            self._entered_steps = entered_steps
+            for i, step in enumerate(entered_steps):
+                self.steps[i] = step
             for obj in input_iter:
                 for _ in self.apply_steps(obj):
                     pass
-        self.steps = self._entered_steps
