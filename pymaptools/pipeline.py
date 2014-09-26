@@ -4,8 +4,9 @@ pipes by composing ``Step`` instances (or any callables).
 """
 
 import abc
-from functools import partial
+import contextlib
 import itertools as it
+from functools import partial
 
 
 class Step(object):
@@ -17,6 +18,26 @@ class Step(object):
     @abc.abstractmethod
     def __call__(self, obj):
         """Process one piece of content"""
+
+    def __enter__(self):
+        """Enter context"""
+        return self
+
+    def __exit__(self, type, value, traceback):
+        """Exit context (tear down)"""
+        pass
+
+
+class StepWrapper(Step):
+    """
+    A wrapper for plain callables and other step-like objects not derived
+    from Step
+    """
+    def __init__(self, fun):
+        self._callable = fun
+
+    def __call__(self, obj):
+        return self._callable(obj)
 
 
 class Pipe(object):
@@ -47,9 +68,17 @@ class Pipe(object):
         """
         given an array of step objects, compose them into a pipe
         """
-        self.steps = steps
+        steps_with_exit = []
+        for step in steps:
+            assert hasattr(step, '__call__')
+            if not isinstance(step, Step):
+                step = StepWrapper(step)
+            steps_with_exit.append(step)
+        self.steps = steps_with_exit
+        self._entered_steps = []
 
-    def apply_step(self, step, obj):
+    @staticmethod
+    def apply_step(step, obj):
         """
         apply step and return an empty list if result is not iterable
         """
@@ -61,9 +90,11 @@ class Pipe(object):
         run all the steps on a single object
         """
         results = [obj]
-        for step in self.steps:
+        for step in self._entered_steps:
             apply_step = partial(self.apply_step, step)
-            results = list(it.chain(*it.imap(apply_step, results)))
+			# note: some exceptions may not be caught if imap is used
+			# instead of map here below:
+            results = list(it.chain(*map(apply_step, results)))
         for result in results:
             yield result
 
@@ -71,6 +102,9 @@ class Pipe(object):
         """
         run all the steps on input iterator
         """
-        for obj in input_iter:
-            for _ in self.apply_steps(obj):
-                pass
+        with contextlib.nested(*self.steps) as entered_steps:
+            self._entered_steps = entered_steps
+            for obj in input_iter:
+                for _ in self.apply_steps(obj):
+                    pass
+        self.steps = self._entered_steps
