@@ -9,14 +9,15 @@ package: env
 	$(PYTHON) setup.py sdist
 
 test: dev
-	$(PYENV) nosetests $(NOSEARGS)
+	$(PYTHON) `which nosetests` $(NOSEARGS)
 	$(PYENV) py.test README.rst
 
-dev: dev_requirements.txt env
-	$(PYENV) pip install -e . -r $<
+dev: env requirements*.txt
+	rm -rf env/build
+	$(PYENV) for req in requirements*.txt; do pip install -e . -r $$req; done
 
 clean:
-	$(PYTHON) setup.py clean
+	python setup.py clean
 	rm -rf dist build
 	find . -type f -name "*.pyc" -exec rm {} \;
 
