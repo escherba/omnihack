@@ -7,7 +7,7 @@ class PMTimer(object):
     >>> period = 0.2
     >>> with PMTimer() as timer:
     ...     time.sleep(period)
-    >>> timer.wall_interval > period
+    >>> timer.wall_interval >= period
     True
     """
 
