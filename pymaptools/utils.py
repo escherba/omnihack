@@ -1,7 +1,17 @@
 import collections
+import uuid
 from copy import deepcopy
 from pkg_resources import resource_filename
 from contextlib import contextmanager
+
+
+def uuid1_to_posix(uuid1):
+    """Convert a UUID1 timestamp to a standard POSIX timestamp
+    """
+    uuid1 = uuid.UUID(uuid1)
+    if uuid1.version != 1:
+        raise ValueError('only applies to UUID type 1')
+    return (uuid1.time - 0x01b21dd213814000) / 1e7
 
 
 def deepupdate(dest, source):
