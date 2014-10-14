@@ -26,7 +26,7 @@ class Heap(object):
         """Place an item on the heap"""
         if self._nmax is None or len(self._heap) < self._nmax:
             heappush(self._heap, (priority, item))
-        else:
+        elif self._nmax > 0:
             heapreplace(self._heap, (priority, item))
 
     def __len__(self):
