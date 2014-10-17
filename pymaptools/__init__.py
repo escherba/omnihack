@@ -1,4 +1,4 @@
-__version__ = '0.0.9'
+__version__ = '0.0.10'
 
 from vectorize import enumerator
 from unionfind import UnionFind
@@ -27,3 +27,21 @@ def amap(f, g):
 
     """
     return compose(partial(imap, f), g)
+
+
+def all_equal(xs):
+    """check that all elements of a list are equal
+    :param xs: a sequence of elements
+    :type xs: list, str
+    :rtype: bool
+
+    >>> all_equal("aaa")
+    True
+    >>> all_equal("abc")
+    False
+    >>> all_equal(["a", "b"])
+    False
+    >>> all_equal([1] * 10)
+    True
+    """
+    return not xs or xs.count(xs[0]) == len(xs)
