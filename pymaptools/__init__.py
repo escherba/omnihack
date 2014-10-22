@@ -45,3 +45,19 @@ def all_equal(xs):
     True
     """
     return not xs or xs.count(xs[0]) == len(xs)
+
+
+def uniq(tokens):
+    """Analog of UNIX command uniq
+    :param tokens: an iterable of hashable tokens
+    :type tokens: collections.Iterable
+    :return: a generator of unique tokens
+
+    >>> list(uniq([1, 1, 2, 3, 2, 4]))
+    [1, 2, 3, 4]
+    """
+    seen = set()
+    for token in tokens:
+        if token not in seen:
+            yield token
+            seen.add(token)
