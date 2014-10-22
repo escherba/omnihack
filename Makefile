@@ -3,6 +3,7 @@
 PYENV = . env/bin/activate;
 PYTHON = $(PYENV) python
 PYTHON_TIMED = $(PYENV) time python
+EXTRAS_REQS := $(wildcard requirements-*.txt)
 
 package: env
 	$(PYTHON) setup.py bdist_egg
@@ -12,9 +13,11 @@ test: dev
 	$(PYTHON) `which nosetests` $(NOSEARGS)
 	$(PYENV) py.test README.rst
 
-dev: env requirements*.txt
+dev: env/make.dev
+env/make.dev: $(EXTRAS_REQS) | env
 	rm -rf env/build
-	$(PYENV) for req in requirements*.txt; do pip install -e . -r $$req; done
+	$(PYENV) for req in $?; do pip install -r $$req; done
+	touch $@
 
 clean:
 	python setup.py clean
