@@ -9,6 +9,43 @@ from itertools import islice, imap, chain, starmap, ifilterfalse, count, \
     repeat, izip, izip_longest, groupby, cycle, tee, combinations
 
 
+def nskip(n, iterable):
+    """Skip some elements from an iterable
+
+    :param n: How many items to skip
+    :type n: int
+    :param iterable: Iterable
+    :type iterable: collections.Iterable
+    :returns: sequence with skipped items
+    :rtype: generator
+
+    >>> list(nskip(2, "abcdefg"))
+    ['a', 'd', 'g']
+    >>> list(nskip(5, "abc"))
+    ['a']
+    """
+    n_1 = n + 1
+    return (v for i, v in enumerate(iterable) if not i % n_1)
+
+
+def ntuples(n, iterable):
+    """Tuplify an iterable
+
+    :param n: Tuple size
+    :type n: int
+    :param iterable: Iterable
+    :type iterable: collections.Iterable
+    :returns: iterable of tuples
+    :rtype: itertools.izip
+
+    >>> list(ntuples(2, "abcde"))
+    [('a', 'b'), ('c', 'd')]
+    >>> list(ntuples(2, "abcd"))
+    [('a', 'b'), ('c', 'd')]
+    """
+    return izip(*[iterable[i::n] for i in xrange(n)])
+
+
 def take(n, iterable):
     """Return first n items of the iterable as a list
 
@@ -98,13 +135,16 @@ def dotproduct(vec1, vec2):
     return sum(imap(operator.mul, vec1, vec2))
 
 
-def flatten(listOfLists):
+def flatten(iterable):
     """Flatten one level of nesting
+
+    :param iterable: a list of lists
+    :type iterable: collections.Iterable
 
     >>> list(flatten([[1,2,3],[3,4,5]]))
     [1, 2, 3, 3, 4, 5]
     """
-    return chain.from_iterable(listOfLists)
+    return chain.from_iterable(iterable)
 
 
 def repeatfunc(func, times=None, *args):

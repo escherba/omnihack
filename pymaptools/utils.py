@@ -7,6 +7,9 @@ from contextlib import contextmanager
 
 def uuid1_to_posix(uuid1):
     """Convert a UUID1 timestamp to a standard POSIX timestamp
+
+    >>> uuid1_to_posix("d64736cf-5bfa-11e4-a292-542696da2c01")
+    1414209362.290043
     """
     uuid1 = uuid.UUID(uuid1)
     if uuid1.version != 1:
