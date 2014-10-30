@@ -85,3 +85,32 @@ def uniq_replace(tokens, placeholder=None):
         else:
             yield token
             seen.add(token)
+
+
+def nested_get(root, keys):
+    """Get value from a nested dict using keys (a list of keys)
+    :param root: root dictionary
+    :type root: dict
+    :param keys: a list of keys
+    :type keys: list
+
+    >>> example = {"a": {"b": 1, "c": 42}, "d": None}
+    >>> nested_get(example, ["a", "c"])
+    42
+    """
+    return reduce(dict.__getitem__, keys, root)
+
+
+def nested_set(root, keys, value):
+    """Set value in a nested dict using a keys
+    :param root: root dictionary
+    :type root: dict
+    :param keys: a list of keys
+    :type keys: list
+
+    >>> example = {"a": {"b": 1, "c": 42}, "d": None}
+    >>> nested_set(example, ["a", "c"], None)
+    >>> nested_get(example, ["a", "c"]) is None
+    True
+    """
+    nested_get(root, keys[:-1])[keys[-1]] = value
