@@ -87,30 +87,71 @@ def uniq_replace(tokens, placeholder=None):
             seen.add(token)
 
 
-def nested_get(root, keys):
+def nested_get(root, keys, strict=False):
     """Get value from a nested dict using keys (a list of keys)
     :param root: root dictionary
     :type root: dict
     :param keys: a list of keys
     :type keys: list
+    :param strict: whether to throw KeyError on missing key
+    :type strict: bool
 
     >>> example = {"a": {"b": 1, "c": 42}, "d": None}
     >>> nested_get(example, ["a", "c"])
     42
+    >>> example = {}
+    >>> nested_get(example, ["abc"], strict=False) is None
+    True
     """
-    return reduce(dict.__getitem__, keys, root)
+    try:
+        result = reduce(dict.__getitem__, keys, root)
+    except KeyError:
+        if strict:
+            raise
+        else:
+            result = None
+    return result
 
 
-def nested_set(root, keys, value):
+def nested_set(root, keys, value, strict=False):
     """Set value in a nested dict using a keys
     :param root: root dictionary
     :type root: dict
     :param keys: a list of keys
     :type keys: list
+    :param value: a value to set
+    :type value: obj
+    :param strict: whether to throw KeyError on intermediate levels
+    :type create: bool
 
     >>> example = {"a": {"b": 1, "c": 42}, "d": None}
     >>> nested_set(example, ["a", "c"], None)
     >>> nested_get(example, ["a", "c"]) is None
     True
+    >>> example = {}
+    >>> nested_set(example, ["a", "b", "c"], 56)
+    >>> example
+    {'a': {'b': {'c': 56}}}
     """
-    nested_get(root, keys[:-1])[keys[-1]] = value
+    if strict:
+        nested_get(root, keys[:-1], strict=strict)[keys[-1]] = value
+    else:
+        curr_dict = root
+        for key in keys[:-1]:
+            if key in curr_dict:
+                curr_dict = curr_dict[key]
+            else:
+                new_dict = dict()
+                curr_dict[key] = new_dict
+                curr_dict = new_dict
+        curr_dict[keys[-1]] = value
+
+
+def excise(lst, idx):
+    """Return a new list with a particular element index removed
+
+    >>> lst = range(0, 10)
+    >>> excise(lst, 0)
+    [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    """
+    return lst[:idx] + lst[idx + 1:]
