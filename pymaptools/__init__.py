@@ -105,7 +105,7 @@ def nested_get(root, keys, strict=False):
     """
     try:
         result = reduce(dict.__getitem__, keys, root)
-    except KeyError:
+    except (KeyError, TypeError):
         if strict:
             raise
         else:
