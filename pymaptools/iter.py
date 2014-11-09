@@ -97,7 +97,7 @@ def nth(iterable, n, default=None):
 
 
 def quantify(iterable, pred=bool):
-    """Count how many times the predicate is true
+    """Sum predicate output over a sequence
 
     Example: count odd numbers
     >>> quantify([1, 2, 3, 4, 5], pred=lambda x: x % 2)
