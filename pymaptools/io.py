@@ -3,6 +3,8 @@ import re
 import json
 import collections
 import gzip
+from pymaptools.utils import hasmethod
+
 
 HAS_GZ_EXTENSION = ur'.*\.gz$'
 
@@ -15,11 +17,6 @@ def open_gz(fname, mode='r', compresslevel=9):
         return open(fname, mode)
     else:
         return gzip.open(fname, mode + 'b', compresslevel)
-
-
-def hasmethod(obj, method):
-    """check whether object has a method"""
-    return hasattr(obj, method) and callable(getattr(obj, method))
 
 
 def parse_json(line):
