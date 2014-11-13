@@ -41,13 +41,7 @@ def override(parent, child):
 
 
 def read_text_file(rel, fname):
-    """Read a text resource ignoring comments beginning with pound sign
-    :param rel: path
-    :type rel: str
-    :param fname: path
-    :type fname: str
-    :rtype: generator
-    """
+    """Deprecated"""
     with open(resource_filename(rel, fname), 'r') as fhandle:
         for line in fhandle:
             stripped = line.strip()
