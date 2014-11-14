@@ -1,4 +1,5 @@
-import collections
+from collections import MutableSet, Sequence
+from cyordereddict import OrderedDict
 from heapq import heappush, heapreplace, nsmallest, nlargest
 
 SLICE_ALL = slice(None)
@@ -19,7 +20,7 @@ def is_iterable(obj):
     return hasattr(obj, '__iter__') and not isinstance(obj, str)
 
 
-class OrderedSet(collections.MutableSet):
+class OrderedSet(MutableSet, Sequence):
     """
     An OrderedSet is a custom MutableSet that remembers its order, so that
     every entry has an index that can be looked up.
@@ -34,7 +35,7 @@ class OrderedSet(collections.MutableSet):
     With a small modification, this class can be made into an LRU cache.
     """
     def __init__(self, iterable=None, maxlen=None):
-        self._mapping = collections.OrderedDict()
+        self._mapping = OrderedDict()
         self._maxlen = maxlen
         if iterable is not None:
             self |= iterable
