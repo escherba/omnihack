@@ -1,23 +1,10 @@
 from collections import MutableSet, Sequence
 from cyordereddict import OrderedDict
 from heapq import heappush, heapreplace, nsmallest, nlargest
+from pymaptools.utils import isiterable
+
 
 SLICE_ALL = slice(None)
-
-
-def is_iterable(obj):
-    """
-    Are we being asked to look up a list of things, instead of a single thing?
-    We check for the `__iter__` attribute so that this can cover types that
-    don't have to be known by this module, such as NumPy arrays.
-
-    Strings, however, should be considered as atomic values to look up, not
-    iterables.
-
-    We don't need to check for the Python 2 `unicode` type, because it doesn't
-    have an `__iter__` attribute anyway.
-    """
-    return hasattr(obj, '__iter__') and not isinstance(obj, str)
 
 
 class OrderedSet(MutableSet, Sequence):
@@ -63,7 +50,7 @@ class OrderedSet(MutableSet, Sequence):
                 return OrderedSet(result)
             else:
                 return result
-        elif is_iterable(index):
+        elif isiterable(index):
             keys = self._mapping.keys()
             return OrderedSet([keys[i] for i in index])
         else:

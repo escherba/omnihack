@@ -5,6 +5,24 @@ from pkg_resources import resource_filename
 from contextlib import contextmanager
 
 
+def isiterable(obj):
+    """
+    Are we being asked to look up a list of things, instead of a single thing?
+    We check for the `__iter__` attribute so that this can cover types that
+    don't have to be known by this module, such as NumPy arrays.
+
+    Strings, however, should be considered as atomic values to look up, not
+    iterables.
+
+    We don't need to check for the Python 2 `unicode` type, because it doesn't
+    have an `__iter__` attribute anyway.
+
+    This method was written by Luminoso Technologies
+        https://github.com/LuminosoInsight/ordered-set
+    """
+    return hasattr(obj, '__iter__') and not isinstance(obj, str)
+
+
 def hasmethod(obj, method):
     """check whether object has a method"""
     return hasattr(obj, method) and callable(getattr(obj, method))
