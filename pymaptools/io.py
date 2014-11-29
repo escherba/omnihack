@@ -27,6 +27,11 @@ def parse_json(line):
         return None
 
 
+def write_json_line(handle, obj):
+    """write a line encoding a JSON object to a file handle"""
+    handle.write(u"%s\n" % json.dumps(obj))
+
+
 class FileReader(collections.Iterator):
     """Read files sequentially and return lines from each
 
@@ -42,21 +47,22 @@ class FileReader(collections.Iterator):
     def __init__(self, files, mode='r', openhook=None):
         self._files = iter(files)
         self._curr_handle = None
+        self._curr_filename = None
         self._openhook = openhook
         self._mode = mode
         self._advance_handle()
 
     def _advance_handle(self):
-        filename = self._files.next()
+        self._curr_filename = self._files.next()
         if self._openhook is None:
-            self._curr_handle = filename \
-                if hasmethod(filename, 'next') \
-                else iter(filename)
+            self._curr_handle = self._curr_filename \
+                if hasmethod(self._curr_filename, 'next') \
+                else iter(self._curr_filename)
         else:
             curr_handle = self._curr_handle
             if hasmethod(curr_handle, 'close'):
                 curr_handle.close()
-            self._curr_handle = self._openhook(filename, self._mode)
+            self._curr_handle = self._openhook(self._curr_filename, self._mode)
 
     def __iter__(self):
         return self
