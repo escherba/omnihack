@@ -43,6 +43,9 @@ class FileReader(collections.Iterator):
     >>> reader = FileReader([[], []])
     >>> list(reader)
     []
+    >>> reader = FileReader([])
+    >>> list(reader)
+    []
     """
     def __init__(self, files, mode='r', openhook=None):
         self._files = iter(files)
@@ -50,7 +53,8 @@ class FileReader(collections.Iterator):
         self._curr_filename = None
         self._openhook = openhook
         self._mode = mode
-        self._advance_handle()
+        if files:
+            self._advance_handle()
 
     def _advance_handle(self):
         self._curr_filename = self._files.next()
@@ -73,6 +77,8 @@ class FileReader(collections.Iterator):
 
     def next(self):
         line = None
+        if self._curr_handle is None:
+            raise StopIteration()
         while line is None:
             try:
                 line = self._curr_handle.next()
