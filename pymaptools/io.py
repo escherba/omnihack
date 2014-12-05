@@ -3,6 +3,8 @@ import re
 import json
 import collections
 import gzip
+import pickle
+import joblib
 from pymaptools.utils import hasmethod
 
 
@@ -135,3 +137,38 @@ class GzipFileType(argparse.FileType):
             except OSError as err:
                 raise argparse.ArgumentTypeError(
                     "can't open '%s': %s" % (string, err))
+
+
+class DumperFacade(object):
+    """Provides a consistent interface to dumper objects"""
+
+    MODEL_DUMP_TYPES = {
+        'pickle': dict(load=pickle.load, dump='_dump_pickle'),
+        'joblib': dict(load=joblib.load, dump='_dump_joblib')
+    }
+
+    def __init__(self, dumper_type='joblib'):
+        dumper_props = self.MODEL_DUMP_TYPES[dumper_type]
+        self.load = dumper_props['load']
+        self.dump = getattr(self, dumper_props['dump'])
+
+    @classmethod
+    def keys(cls):
+        return cls.MODEL_DUMP_TYPES.keys()
+
+    @staticmethod
+    def _dump_joblib(estimator, fname):
+        joblib.dump(estimator, fname, compress=9)
+
+    @staticmethod
+    def _dump_pickle(estimator, fname):
+        with open(fname, 'wb') as fhandle:
+            pickle.dump(estimator, fhandle)
+
+    @staticmethod
+    def load(fname):
+        pass
+
+    @staticmethod
+    def dump(obj, fname):
+        pass
