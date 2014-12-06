@@ -65,9 +65,9 @@ class TestOrderedSet(unittest.TestCase):
 class TestHeap(unittest.TestCase):
     def test_basic(self):
         heap = Heap(2)
-        heap.push("woof", 4)
-        heap.push("meow", 3)
-        heap.push("moo", 10)
+        heap.push(4, "woof")
+        heap.push(3, "meow")
+        heap.push(10, "moo")
         self.assertEqual(len(heap), 2)
         self.assertEqual(heap.smallest(), [(4, "woof")])
         self.assertEqual(heap.largest(), [(10, "moo")])

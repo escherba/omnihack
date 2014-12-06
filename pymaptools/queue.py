@@ -128,28 +128,29 @@ class Heap(object):
 
     Allows one to easily maintain fixed-sized heaps
 
-    >>> h = Heap(nmax=2)
-    >>> h.push("woof", 4)
-    >>> h.push("meow", 3)
-    >>> h.push("moo", 10)
-    >>> h.snapshot()
+    >>> h = Heap(maxlen=2)
+    >>> h.push(4, "woof")
+    >>> h.push(3, "meow")
+    >>> h.push(10, "moo")
+    (3, 'meow')
+    >>> h.all(reverse=True)
     [(10, 'moo'), (4, 'woof')]
     """
 
-    def __init__(self, nmax=None):
+    def __init__(self, maxlen=None):
         """
-        :param nmax: maximum number of items in heap (no limit if None)
-        :type nmax: int
+        :param maxlen: maximum number of items in heap (no limit if None)
+        :type maxlen: int
         """
         self._heap = []
-        self._nmax = nmax
+        self._maxlen = maxlen
 
-    def push(self, item, priority):
+    def push(self, priority, item):
         """Place an item on the heap"""
-        if self._nmax is None or len(self._heap) < self._nmax:
-            heappush(self._heap, (priority, item))
-        elif self._nmax > 0:
-            heapreplace(self._heap, (priority, item))
+        if self._maxlen is None or len(self._heap) < self._maxlen:
+            return heappush(self._heap, (priority, item))
+        elif self._maxlen > 0:
+            return heapreplace(self._heap, (priority, item))
 
     def __len__(self):
         """Return number of elements in the heap
@@ -165,11 +166,42 @@ class Heap(object):
         """same as heapq.nlargest"""
         return nlargest(n, self._heap)
 
-    def snapshot(self, nmax=None):
-        """Return all items stored sorted in descending order
-        :param nmax: limit output to this many objects (no limit if none)
-        :type nmax: int
+    def all(self, maxlen=None, reverse=False):
+        """Return all items stored sorted in ASC or DESC order
+        :param maxlen: limit output to this many objects (no limit if none)
+        :type maxlen: int
+        :param reverse: if True, use DESC order
+        :type reverse: Bool
         :rtype: list
         """
-        limit = len(self._heap) if nmax is None else nmax
-        return nlargest(limit, self._heap)
+        limit = len(self._heap) if maxlen is None else maxlen
+        if reverse:
+            return nlargest(limit, self._heap)
+        else:
+            return nsmallest(limit, self._heap)
+
+
+class SortedSet(Heap):
+    """Like ordered set except maintain elements in a heap
+
+	In a very primitive way, this acts like Redis' sorted set
+    >>> s = SortedSet(maxlen=3)
+    >>> s.push(3, "abc")
+    >>> s.push(3, "abc")
+    >>> s.push(20, "xyz")
+    >>> s.all()
+    [(3, 'abc'), (20, 'xyz')]
+    """
+
+    def __init__(self, maxlen=None):
+        super(SortedSet, self).__init__(maxlen=maxlen)
+        self._set = set()
+
+    def push(self, score, member):
+        if member in self._set:
+            heapreplace(self._heap, (score, member))
+        else:
+            dropped = super(SortedSet, self).push(score, member)
+            if dropped is not None:
+                del self._set[dropped[1]]
+            self._set.add(member)
