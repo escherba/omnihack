@@ -1,4 +1,4 @@
-from collections import MutableSet, Sequence
+import collections
 from cyordereddict import OrderedDict
 from heapq import heappush, heapreplace, nsmallest, nlargest
 from pymaptools.utils import isiterable
@@ -7,7 +7,7 @@ from pymaptools.utils import isiterable
 SLICE_ALL = slice(None)
 
 
-class OrderedSet(MutableSet, Sequence):
+class OrderedSet(collections.MutableSet, collections.Sequence):
     """
     An OrderedSet is a custom MutableSet that remembers its order, so that
     every entry has an index that can be looked up.
@@ -123,33 +123,36 @@ class OrderedSet(MutableSet, Sequence):
             return set(self) == other_as_set
 
 
-class Heap(object):
+class Heap(collections.Iterable):
     """Super-simple object-oriented interface for python's heap queue
 
     Allows one to easily maintain fixed-sized heaps
 
-    >>> h = Heap(nmax=2)
-    >>> h.push("woof", 4)
-    >>> h.push("meow", 3)
-    >>> h.push("moo", 10)
-    >>> h.snapshot()
-    [(10, 'moo'), (4, 'woof')]
+    >>> h = Heap(maxlen=2)
+    >>> h.add(4, "woof")
+    >>> h.add(3, "meow")
+    >>> h.add(10, "moo")
+    (3, 'meow')
+    >>> list(h)
+    ['woof', 'moo']
     """
 
-    def __init__(self, nmax=None):
+    def __init__(self, maxlen=None):
         """
-        :param nmax: maximum number of items in heap (no limit if None)
-        :type nmax: int
+        :param maxlen: maximum number of items in heap (no limit if None)
+        :type maxlen: int
         """
         self._heap = []
-        self._nmax = nmax
+        self._maxlen = maxlen
 
-    def push(self, item, priority):
+    def add(self, priority, item):
         """Place an item on the heap"""
-        if self._nmax is None or len(self._heap) < self._nmax:
-            heappush(self._heap, (priority, item))
-        elif self._nmax > 0:
-            heapreplace(self._heap, (priority, item))
+        if self._maxlen is None or len(self._heap) < self._maxlen:
+            return heappush(self._heap, (priority, item))
+        elif self._maxlen > 0:
+            return heapreplace(self._heap, (priority, item))
+
+    append = add
 
     def __len__(self):
         """Return number of elements in the heap
@@ -165,11 +168,10 @@ class Heap(object):
         """same as heapq.nlargest"""
         return nlargest(n, self._heap)
 
-    def snapshot(self, nmax=None):
-        """Return all items stored sorted in descending order
-        :param nmax: limit output to this many objects (no limit if none)
-        :type nmax: int
-        :rtype: list
-        """
-        limit = len(self._heap) if nmax is None else nmax
-        return nlargest(limit, self._heap)
+    def __iter__(self):
+        """iterate from smallest to largest"""
+        return (v for _, v in nsmallest(len(self._heap), self._heap))
+
+    def __reversed__(self):
+        """iterate from largest to smallest"""
+        return (v for _, v in nlargest(len(self._heap), self._heap))

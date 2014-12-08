@@ -2,7 +2,7 @@ __version__ = '0.0.12'
 
 from vectorize import enumerator
 from unionfind import UnionFind
-
+from collections import defaultdict
 from functools import partial
 from funcy import compose
 from itertools import imap
@@ -145,6 +145,23 @@ def nested_set(root, keys, value, strict=False):
                 curr_dict[key] = new_dict
                 curr_dict = new_dict
         curr_dict[keys[-1]] = value
+
+
+def nested_type(levels=0, constructor=dict):
+    """Constructor for nested dict types
+
+    Recursive implementation given here
+
+    >>> ndtype = nested_type(2)
+    >>> d = ndtype()
+    >>> d[1][2][3] = 4
+    >>> d[1][2][3]
+    4
+    """
+    if levels == 0:
+        return constructor
+    else:
+        return partial(defaultdict, nested_type(levels - 1, constructor=constructor))
 
 
 def excise(lst, idx):

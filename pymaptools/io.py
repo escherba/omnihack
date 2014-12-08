@@ -31,7 +31,7 @@ def parse_json(line):
 
 def write_json_line(handle, obj):
     """write a line encoding a JSON object to a file handle"""
-    handle.write(u"%s\n" % json.dumps(obj))
+    handle.write(u"{}\n".format(json.dumps(obj)))
 
 
 class FileReader(collections.Iterator):

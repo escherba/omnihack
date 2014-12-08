@@ -1,4 +1,5 @@
 from pymaptools.queue import OrderedSet, Heap
+import time
 import pickle
 import unittest
 
@@ -65,9 +66,18 @@ class TestOrderedSet(unittest.TestCase):
 class TestHeap(unittest.TestCase):
     def test_basic(self):
         heap = Heap(2)
-        heap.push("woof", 4)
-        heap.push("meow", 3)
-        heap.push("moo", 10)
+        heap.add(4, "woof")
+        heap.add(3, "meow")
+        heap.add(10, "moo")
         self.assertEqual(len(heap), 2)
         self.assertEqual(heap.smallest(), [(4, "woof")])
         self.assertEqual(heap.largest(), [(10, "moo")])
+
+    def test_order(self):
+        h = Heap(3)
+        h.append(time.clock(), "xz")
+        h.append(time.clock(), "io")
+        h.append(time.clock(), "zz")
+        dropped = h.append(time.clock(), "zz")
+        self.assertEqual(dropped[1], "xz")
+        self.assertEqual(list(h), ["io", "zz", "zz"])

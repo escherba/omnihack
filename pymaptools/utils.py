@@ -64,7 +64,6 @@ def override(parent, child):
 
 
 def read_text_file(rel, fname):
-    """Deprecated"""
     with open(resource_filename(rel, fname), 'r') as fhandle:
         for line in fhandle:
             stripped = line.strip()
