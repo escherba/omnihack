@@ -1,4 +1,4 @@
-from collections import MutableSet, Sequence
+import collections
 from cyordereddict import OrderedDict
 from heapq import heappush, heapreplace, nsmallest, nlargest
 from pymaptools.utils import isiterable
@@ -7,7 +7,7 @@ from pymaptools.utils import isiterable
 SLICE_ALL = slice(None)
 
 
-class OrderedSet(MutableSet, Sequence):
+class OrderedSet(collections.MutableSet, collections.Sequence):
     """
     An OrderedSet is a custom MutableSet that remembers its order, so that
     every entry has an index that can be looked up.
@@ -123,18 +123,18 @@ class OrderedSet(MutableSet, Sequence):
             return set(self) == other_as_set
 
 
-class Heap(object):
+class Heap(collections.Iterable):
     """Super-simple object-oriented interface for python's heap queue
 
     Allows one to easily maintain fixed-sized heaps
 
     >>> h = Heap(maxlen=2)
-    >>> h.push(4, "woof")
-    >>> h.push(3, "meow")
-    >>> h.push(10, "moo")
+    >>> h.add(4, "woof")
+    >>> h.add(3, "meow")
+    >>> h.add(10, "moo")
     (3, 'meow')
-    >>> h.all(reverse=True)
-    [(10, 'moo'), (4, 'woof')]
+    >>> list(h)
+    ['woof', 'moo']
     """
 
     def __init__(self, maxlen=None):
@@ -145,12 +145,14 @@ class Heap(object):
         self._heap = []
         self._maxlen = maxlen
 
-    def push(self, priority, item):
+    def add(self, priority, item):
         """Place an item on the heap"""
         if self._maxlen is None or len(self._heap) < self._maxlen:
             return heappush(self._heap, (priority, item))
         elif self._maxlen > 0:
             return heapreplace(self._heap, (priority, item))
+
+    append = add
 
     def __len__(self):
         """Return number of elements in the heap
@@ -166,42 +168,10 @@ class Heap(object):
         """same as heapq.nlargest"""
         return nlargest(n, self._heap)
 
-    def all(self, maxlen=None, reverse=False):
-        """Return all items stored sorted in ASC or DESC order
-        :param maxlen: limit output to this many objects (no limit if none)
-        :type maxlen: int
-        :param reverse: if True, use DESC order
-        :type reverse: Bool
-        :rtype: list
-        """
-        limit = len(self._heap) if maxlen is None else maxlen
-        if reverse:
-            return nlargest(limit, self._heap)
-        else:
-            return nsmallest(limit, self._heap)
+    def __iter__(self):
+        """iterate from smallest to largest"""
+        return (v for _, v in nsmallest(len(self._heap), self._heap))
 
-
-class SortedSet(Heap):
-    """Like ordered set except maintain elements in a heap
-
-	In a very primitive way, this acts like Redis' sorted set
-    >>> s = SortedSet(maxlen=3)
-    >>> s.push(3, "abc")
-    >>> s.push(3, "abc")
-    >>> s.push(20, "xyz")
-    >>> s.all()
-    [(3, 'abc'), (20, 'xyz')]
-    """
-
-    def __init__(self, maxlen=None):
-        super(SortedSet, self).__init__(maxlen=maxlen)
-        self._set = set()
-
-    def push(self, score, member):
-        if member in self._set:
-            heapreplace(self._heap, (score, member))
-        else:
-            dropped = super(SortedSet, self).push(score, member)
-            if dropped is not None:
-                del self._set[dropped[1]]
-            self._set.add(member)
+    def __reversed__(self):
+        """iterate from largest to smallest"""
+        return (v for _, v in nlargest(len(self._heap), self._heap))
