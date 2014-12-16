@@ -25,10 +25,8 @@ class PMTimer(object):
         return self
 
     def __exit__(self, *args):
-        clock_end = time.clock()
-        wall_end = time.time()
-        self.clock_interval = clock_end - self.clock_start
-        self.wall_interval = wall_end - self.wall_start
+        self.clock_interval = time.clock() - self.clock_start
+        self.wall_interval = time.time() - self.wall_start
 
     def __str__(self):
         return "clock: %0.03f sec, wall: %0.03f sec." \
