@@ -1,6 +1,6 @@
 import collections
 from cyordereddict import OrderedDict
-from heapq import heappush, heapreplace, nsmallest, nlargest
+from heapq import heappush, heapreplace, nsmallest, nlargest, heappop
 from pymaptools.utils import isiterable
 
 
@@ -135,6 +135,8 @@ class Heap(collections.Iterable):
     (3, 'meow')
     >>> list(h)
     ['woof', 'moo']
+    >>> list(reversed(h))
+    ['moo', 'woof']
     """
 
     def __init__(self, maxlen=None):
@@ -175,3 +177,43 @@ class Heap(collections.Iterable):
     def __reversed__(self):
         """iterate from largest to smallest"""
         return (v for _, v in nlargest(len(self._heap), self._heap))
+
+
+class RankingQueue(object):
+    """Rank objects according to consistent index
+
+    Use this to sort lists that were previously ordered in increments of one
+    and where there are no long-distance replacements (e.g. for re-sorting items
+    retrieved from a concurrent engine)
+
+    >>> ranker = RankingQueue()
+    >>> ranker.push(1, "a")
+    >>> list(ranker.retrieve())
+    []
+    >>> ranker.push(0, "b")
+    >>> ranker.push(2, "c")
+    >>> list(ranker.retrieve())
+    ['b', 'a', 'c']
+    """
+    def __init__(self, start=0, step=1):
+        self._heap = []
+        self._prev_idx = start - step
+        self._step = step
+
+    def push(self, idx, value):
+        """
+        :param idx: index of the item
+        :type idx: int
+        :param value: item value
+        """
+        heappush(self._heap, (idx, value))
+
+    def retrieve(self):
+        """
+        :rtype: generator
+        """
+        heap = self._heap
+        step = self._step
+        while heap and nsmallest(1, heap)[0][0] == self._prev_idx + step:
+            self._prev_idx, value = heappop(heap)
+            yield value
