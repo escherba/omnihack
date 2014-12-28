@@ -179,14 +179,14 @@ class Heap(collections.Iterable):
         return (v for _, v in nlargest(len(self._heap), self._heap))
 
 
-class OnlineRanker(object):
+class RankingQueue(object):
     """Rank objects according to consistent index
 
     Use this to sort lists that were previously ordered in increments of one
     and where there are no long-distance replacements (e.g. for re-sorting items
     retrieved from a concurrent engine)
 
-    >>> ranker = OnlineRanker()
+    >>> ranker = RankingQueue()
     >>> ranker.push(1, "a")
     >>> list(ranker.retrieve())
     []
