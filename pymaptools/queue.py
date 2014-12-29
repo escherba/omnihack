@@ -179,20 +179,27 @@ class Heap(collections.Iterable):
         return (v for _, v in nlargest(len(self._heap), self._heap))
 
 
-class RankingQueue(object):
-    """Rank objects according to consistent index
+class RangeQueue(object):
+    """Rank objects according to consistently-spaced index
 
-    Use this to sort lists that were previously ordered in increments of one
-    and where there are no long-distance replacements (e.g. for re-sorting items
-    retrieved from a concurrent engine)
+    Motivation: Sometimes an ordered stream of items becomes disordered (for example,
+    due to several workers operating on it). In that case, one may still decide
+    to return items in order (i.e. do not wait until all items are
+    processed to start the sorting phase and instead finish in one pass).
+    The idea is that the workers hopefully will not disorganize the list
+    *too much* (i.e.  will not introduce *very* large distances between
+    former neighboring items). If so, one may take adavantage of this partial
+    order and try to return all items in order by caching n items (where n
+    is hopefully a small number) untill all n items form a whole "run" without
+    any lacking items in the middle and thus can be retrieved at once.
 
-    >>> ranker = RankingQueue()
-    >>> ranker.push(1, "a")
-    >>> list(ranker.retrieve())
+    >>> queue = RangeQueue()
+    >>> queue.push(1, "a")
+    >>> list(queue.retrieve())
     []
-    >>> ranker.push(0, "b")
-    >>> ranker.push(2, "c")
-    >>> list(ranker.retrieve())
+    >>> queue.push(0, "b")
+    >>> queue.push(2, "c")
+    >>> list(queue.retrieve())
     ['b', 'a', 'c']
     """
     def __init__(self, start=0, step=1):
