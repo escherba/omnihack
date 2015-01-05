@@ -63,14 +63,6 @@ def override(parent, child):
     return deepupdate(deepcopy(parent), child)
 
 
-def read_text_file(rel, fname):
-    with open(resource_filename(rel, fname), 'r') as fhandle:
-        for line in fhandle:
-            stripped = line.strip()
-            if not stripped.startswith('#'):
-                yield stripped
-
-
 @contextmanager
 def empty_context(*args, **kwargs):
     """Generic empty context wrapper

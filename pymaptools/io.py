@@ -5,6 +5,7 @@ import collections
 import gzip
 import pickle
 import joblib
+import codecs
 from pymaptools.utils import hasmethod, passthrough_context
 
 
@@ -100,17 +101,19 @@ class JSONLineReader(FileReader):
         return parse_json(line)
 
 
-def read_text_resource(finput, ignore_prefix=u'#'):
+def read_text_resource(finput, encoding='utf-8', ignore_prefix='#'):
     """Read a text resource ignoring comments beginning with pound sign
     :param finput: path or file handle
     :type finput: str, file
+    :param encoding: which encoding to use (default: UTF-8)
+    :type encoding: str
     :param ignore_prefix: lines matching this prefix will be skipped
-    :type ignore_prefix: str
+    :type ignore_prefix: str, unicode
     :rtype: generator
     """
-    ctx = passthrough_context(finput) \
+    ctx = passthrough_context(codecs.iterdecode(finput, encoding=encoding)) \
         if isinstance(finput, file) \
-        else open(finput, 'r')
+        else codecs.open(finput, 'r', encoding=encoding)
     with ctx as fhandle:
         for line in fhandle:
             if ignore_prefix is not None:
