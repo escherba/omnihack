@@ -5,7 +5,7 @@ import collections
 import gzip
 import pickle
 import joblib
-from pymaptools.utils import hasmethod
+from pymaptools.utils import hasmethod, passthrough_context
 
 
 HAS_GZ_EXTENSION = ur'.*\.gz$'
@@ -100,21 +100,24 @@ class JSONLineReader(FileReader):
         return parse_json(line)
 
 
-def read_text_resource(fname, ignore_prefix='#', strip_whitespace=True):
+def read_text_resource(finput, ignore_prefix=u'#'):
     """Read a text resource ignoring comments beginning with pound sign
-    :param fname: path
-    :type fname: str
+    :param finput: path or file handle
+    :type finput: str, file
     :param ignore_prefix: lines matching this prefix will be skipped
     :type ignore_prefix: str
-    :param strip_whitespace: whether to strip whitespace
-    :type strip_whitespace: bool
     :rtype: generator
     """
-    with open(fname, 'r') as fhandle:
+    ctx = passthrough_context(finput) \
+        if isinstance(finput, file) \
+        else open(finput, 'r')
+    with ctx as fhandle:
         for line in fhandle:
-            stripped = line.strip() if strip_whitespace else line
-            if ignore_prefix is None or not stripped.startswith(ignore_prefix):
-                yield stripped
+            if ignore_prefix is not None:
+                line = line.split(ignore_prefix)[0]
+            line = line.strip()
+            if line:
+                yield line
 
 
 class GzipFileType(argparse.FileType):
