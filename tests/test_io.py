@@ -4,7 +4,7 @@ import unittest
 import tempfile
 import shutil
 import os
-from pymaptools.io import open_gz, read_text_resource
+from pymaptools.io import open_gz, read_text_resource, GzipFileType
 
 
 class TestIO(unittest.TestCase):
@@ -25,25 +25,28 @@ class TestIO(unittest.TestCase):
 
         return fname
 
-    def eval_file(self, fname, lines):
+    def eval_file(self, fname, lines, fun=open_gz):
         self.assertTrue(os.path.exists(fname))
         lines = []
-        with open_gz(fname, mode='r') as fh:
+        with fun(fname) as fh:
             for line in fh:
                 lines.append(line)
         self.assertListEqual(lines, lines)
 
     def test_gz(self):
         fname = self.write_file('test.gz', self.sample_strings)
-        self.eval_file(fname, self.sample_strings)
+        self.eval_file(fname, self.sample_strings, fun=open_gz)
+        self.eval_file(fname, self.sample_strings, fun=GzipFileType())
 
     def test_bz2(self):
         fname = self.write_file('test.bz2', self.sample_strings)
-        self.eval_file(fname, self.sample_strings)
+        self.eval_file(fname, self.sample_strings, fun=open_gz)
+        self.eval_file(fname, self.sample_strings, fun=GzipFileType())
 
     def test_noext(self):
         fname = self.write_file('test', self.sample_strings)
-        self.eval_file(fname, self.sample_strings)
+        self.eval_file(fname, self.sample_strings, fun=open_gz)
+        self.eval_file(fname, self.sample_strings, fun=GzipFileType())
 
     def test_read_resource(self):
         fname = self.write_file('test', self.sample_strings)
