@@ -7,7 +7,7 @@ import bz2
 import pickle
 import joblib
 import codecs
-from pymaptools.utils import hasmethod, passthrough_context
+from pymaptools.utils import hasmethod, passthrough_context, isiterable
 
 
 SUPPORTED_EXTENSION = re.compile(ur'(\.(?:gz|bz2))$', re.IGNORECASE)
@@ -134,7 +134,7 @@ def read_text_resource(finput, encoding='utf-8', ignore_prefix='#'):
     :rtype: generator
     """
     ctx = passthrough_context(codecs.iterdecode(finput, encoding=encoding)) \
-        if isinstance(finput, file) \
+        if isiterable(finput) \
         else codecs.open(finput, 'r', encoding=encoding)
     with ctx as fhandle:
         for line in fhandle:
