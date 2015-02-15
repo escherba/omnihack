@@ -82,7 +82,7 @@ DEPENDENCY_LINKS = list(set(itertools.chain(
 
 setup(
     name="pymaptools",
-    version="0.0.13",
+    version="0.0.14",
     author="Eugene Scherba",
     author_email="escherba@gmail.com",
     description=("A collection of Python containers for data analysis"),
@@ -101,6 +101,7 @@ setup(
         'License :: OSI Approved :: MIT License',
         'Topic :: Software Development :: Libraries :: Python Modules',
         'Topic :: Text Processing',
+        'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
     ],
     long_description=resource_string(__name__, 'README.rst'),
