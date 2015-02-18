@@ -11,8 +11,8 @@ class Struct(object):
     a property it does not know about)
 
     >>> class Duck(Struct):
-    ...     supported_attrs = frozenset(["appearance", "vocalization", "locomotion"])
-    >>> duck = Duck(appearance="a medium-size bird")
+    ...     readwrite_attrs = frozenset(["description", "vocalization", "locomotion"])
+    >>> duck = Duck(description="a medium-size bird")
     >>> duck.vocalization
     >>> duck.engine_type
     Traceback (most recent call last):
@@ -33,7 +33,8 @@ class Struct(object):
     'walk, swim, fly'
 
     """
-    supported_attrs = frozenset()
+    readwrite_attrs = frozenset()
+    readonly_attrs = frozenset()
 
     @classmethod
     def fromDict(cls, entries):
@@ -44,10 +45,14 @@ class Struct(object):
 
     def _set_attr(self, name, value):
         """Creates an attribute if one does not exist
-        but is listed among the supported attribute names
+        but is listed among the readwrite attribute names
         """
-        if name in self.supported_attrs:
+        if name in self.readwrite_attrs:
             self.__dict__[name] = value
+        elif name in self.readonly_attrs:
+            raise AttributeError(
+                "attribute '{}' of instance {} is read-only".format(
+                    name, self.__class__.__name__))
         else:
             raise AttributeError(
                 "{} instance has no attribute '{}'".format(
@@ -61,7 +66,7 @@ class Struct(object):
         self._set_attr(name, value)
 
     def __getattr__(self, name):
-        if name in self.supported_attrs:
+        if name in self.readwrite_attrs or name in self.readonly_attrs:
             return None
         else:
             raise AttributeError(
