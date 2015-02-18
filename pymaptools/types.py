@@ -11,21 +11,27 @@ class Struct(object):
     a property it does not know about)
 
     >>> class Duck(Struct):
-    ...     supported_attrs = frozenset(["appearance", "sound", "locomotion"])
+    ...     supported_attrs = frozenset(["appearance", "vocalization", "locomotion"])
     >>> duck = Duck(appearance="a medium-size bird")
-    >>> duck.locomotion = "walk, swim"
-    >>> duck.sound = "quack"
+    >>> duck.vocalization
+    >>> duck.engine_type
+    Traceback (most recent call last):
+    ...
+    AttributeError: 'Duck' object has no attribute 'engine_type'
+    >>> duck.locomotion = "walk, swim, fly"
+    >>> duck.vocalization = "quack"
     >>> duck.laden_speed = "40 mph"
     Traceback (most recent call last):
     ...
-    TypeError: Duck instance has no attribute 'laden_speed'
-    >>> duck.toDict()
-    {'sound': 'quack', 'locomotion': 'walk, swim', 'appearance': 'a medium-size bird'}
+    AttributeError: Duck instance has no attribute 'laden_speed'
+    >>> duck.toDict()['vocalization']
+    'quack'
     >>> another_duck = Duck.fromDict(duck.toDict())
-    >>> another_duck.toDict()
-    {'sound': 'quack', 'locomotion': 'walk, swim', 'appearance': 'a medium-size bird'}
+    >>> another_duck.toDict()['locomotion']
+    'walk, swim, fly'
     >>> another_duck.locomotion
-    'walk, swim'
+    'walk, swim, fly'
+
     """
     supported_attrs = frozenset()
 
@@ -36,19 +42,28 @@ class Struct(object):
     def toDict(self):
         return dict(self.__dict__)
 
-    def _set_attr(self, key, val):
+    def _set_attr(self, name, value):
         """Creates an attribute if one does not exist
         but is listed among the supported attribute names
         """
-        if key in self.supported_attrs:
-            self.__dict__[key] = val
+        if name in self.supported_attrs:
+            self.__dict__[name] = value
         else:
-            raise TypeError("{} instance has no attribute '{}'"
-                            .format(self.__class__.__name__, key))
+            raise AttributeError(
+                "{} instance has no attribute '{}'".format(
+                    self.__class__.__name__, name))
 
     def __init__(self, **entries):
-        for key, val in entries.iteritems():
-            self._set_attr(key, val)
+        for name, value in entries.iteritems():
+            self._set_attr(name, value)
 
-    def __setattr__(self, key, val):
-        self._set_attr(key, val)
+    def __setattr__(self, name, value):
+        self._set_attr(name, value)
+
+    def __getattr__(self, name):
+        if name in self.supported_attrs:
+            return None
+        else:
+            raise AttributeError(
+                "'{}' object has no attribute '{}'".format(
+                    self.__class__.__name__, name))
