@@ -52,9 +52,18 @@ def parse_json(line):
         return None
 
 
-def write_json_line(handle, obj):
+def default_encode_json(obj):
+    """Default object encoder to JSON
+
+    Warning: one ought to define one's own decoder for one's own
+    object; this method works in many cases but may not be correct.
+    """
+    return obj.__dict__
+
+
+def write_json_line(handle, obj, default=default_encode_json, **kwargs):
     """write a line encoding a JSON object to a file handle"""
-    handle.write(u"{}\n".format(json.dumps(obj)))
+    handle.write(u"{}\n".format(json.dumps(obj, default=default, **kwargs)))
 
 
 class FileReader(collections.Iterator):
