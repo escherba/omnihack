@@ -48,7 +48,7 @@ def parse_json(line):
     """Safe wrapper around json.loads"""
     try:
         return json.loads(line)
-    except Exception:
+    except ValueError:
         return None
 
 
