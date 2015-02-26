@@ -1,5 +1,5 @@
 """
-This whole file derives from https://docs.python.org/2/library/itertools.html
+Many definitions here are from https://docs.python.org/2/library/itertools.html
 """
 import collections
 import operator
@@ -7,6 +7,29 @@ from operator import itemgetter
 import random
 from itertools import islice, imap, chain, starmap, ifilterfalse, count, \
     repeat, izip, izip_longest, groupby, cycle, tee, combinations
+
+
+def pyramid_slices(lst):
+    """Treat input list as a hierarchical path and return all subpaths
+
+    >>> list(pyramid_slices([1, 2, 3]))
+    [[1], [1, 2], [1, 2, 3]]
+    """
+    for i in xrange(len(lst)):
+        yield lst[:i + 1]
+
+
+def inverse_kvals(mapping):
+    """Inverse a sparse-value dense-key dict form where values are assumed to be lists
+
+    Resulting dict is sparse-key, dense-value
+
+    >>> {k: v for k, v in inverse_kvals({"a": [1, 2], "b": [3]})}
+    {1: 'a', 2: 'a', 3: 'b'}
+    """
+    for key, vals in mapping.iteritems():
+        for val in vals:
+            yield val, key
 
 
 def nskip(n, iterable):
@@ -168,7 +191,7 @@ def pairwise(iterable):
 
 
 def grouper(iterable, n, fillvalue=None):
-    """ Collect data into fixed-length chunks or blocks
+    """Collect data into fixed-length chunks or blocks
 
     >>> list(grouper('ABCDEFG', 3, 'x'))
     [('A', 'B', 'C'), ('D', 'E', 'F'), ('G', 'x', 'x')]
@@ -240,7 +263,7 @@ def unique_justseen(iterable, key=None):
 
 
 def iter_except(func, exception, first=None):
-    """ Call a function repeatedly until an exception is raised.
+    """Call a function repeatedly until an exception is raised.
 
     Converts a call-until-exception interface to an iterator interface.
     Like __builtin__.iter(func, sentinel) but uses an exception instead
@@ -261,6 +284,17 @@ def iter_except(func, exception, first=None):
         while 1:
             yield func()
     except exception:
+        pass
+
+
+def first_nonempty(iterable):
+    """Return first value from iterable not equal to None
+
+    after http://stackoverflow.com/a/18533669/597371
+    """
+    try:
+        return next(item for item in iterable if item is not None)
+    except StopIteration:
         pass
 
 
