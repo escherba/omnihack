@@ -1,7 +1,7 @@
 import collections
 from cyordereddict import OrderedDict
 from heapq import heappush, heapreplace, nsmallest, nlargest, heappop
-from pymaptools.utils import isiterable
+from pymaptools.iter import isiterable
 
 
 SLICE_ALL = slice(None)

@@ -9,6 +9,24 @@ from itertools import islice, imap, chain, starmap, ifilterfalse, count, \
     repeat, izip, izip_longest, groupby, cycle, tee, combinations
 
 
+def isiterable(obj):
+    """
+    Are we being asked to look up a list of things, instead of a single thing?
+    We check for the `__iter__` attribute so that this can cover types that
+    don't have to be known by this module, such as NumPy arrays.
+
+    Strings, however, should be considered as atomic values to look up, not
+    iterables.
+
+    We don't need to check for the Python 2 `unicode` type, because it doesn't
+    have an `__iter__` attribute anyway.
+
+    This method was written by Luminoso Technologies
+        https://github.com/LuminosoInsight/ordered-set
+    """
+    return hasattr(obj, '__iter__') and not isinstance(obj, str)
+
+
 def pyramid_slices(lst):
     """Treat input list as a hierarchical path and return all subpaths
 

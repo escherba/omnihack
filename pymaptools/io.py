@@ -7,7 +7,9 @@ import bz2
 import pickle
 import joblib
 import codecs
-from pymaptools.utils import hasmethod, joint_context, isiterable
+from pymaptools.inspect import hasmethod
+from pymaptools.utils import joint_context
+from pymaptools.iter import isiterable
 
 
 SUPPORTED_EXTENSION = re.compile(ur'(\.(?:gz|bz2))$', re.IGNORECASE)
