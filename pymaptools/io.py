@@ -7,7 +7,7 @@ import bz2
 import pickle
 import joblib
 import codecs
-from pymaptools.utils import hasmethod, passthrough_context, isiterable
+from pymaptools.utils import hasmethod, joint_context, isiterable
 
 
 SUPPORTED_EXTENSION = re.compile(ur'(\.(?:gz|bz2))$', re.IGNORECASE)
@@ -63,7 +63,7 @@ def default_encode_json(obj):
 
 def write_json_line(handle, obj, default=default_encode_json, **kwargs):
     """write a line encoding a JSON object to a file handle"""
-    handle.write(u"{}\n".format(json.dumps(obj, default=default, **kwargs)))
+    handle.write(u"%s\n" % json.dumps(obj, default=default, **kwargs))
 
 
 class FileReader(collections.Iterator):
@@ -142,7 +142,7 @@ def read_text_resource(finput, encoding='utf-8', ignore_prefix='#'):
     :type ignore_prefix: str, unicode
     :rtype: generator
     """
-    ctx = passthrough_context(codecs.iterdecode(finput, encoding=encoding)) \
+    ctx = joint_context(codecs.iterdecode(finput, encoding=encoding)) \
         if isiterable(finput) \
         else codecs.open(finput, 'r', encoding=encoding)
     with ctx as fhandle:

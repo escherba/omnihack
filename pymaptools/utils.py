@@ -1,7 +1,7 @@
 import collections
 import uuid
+import sys
 from copy import deepcopy
-from pkg_resources import resource_filename
 from contextlib import contextmanager
 
 
@@ -93,11 +93,16 @@ def empty_context(*args, **kwargs):
 
 
 @contextmanager
-def passthrough_context(*args):
+def joint_context(*args):
     """Generic empty context wrapper
 
     Allows constructions like:
-    with passthrough_context(open("filename.txt", "r")) as fhandle:
-    with passthrough_context(open("filename.txt", "r"), open("filename.txt", "r")) as (fhanlde1, fhandle2):
+    with join_context(open("filename.txt", "r")) as fhandle:
+    with join_context(open("file1.txt", "r"), open("file2.txt", "r")) as (fh1, fh2):
     """
-    yield args[0] if len(args) == 1 else args
+    try:
+        yield args[0] if len(args) == 1 else args
+    finally:
+        for arg in args:
+            if arg is not sys.stdout:
+                arg.close()
