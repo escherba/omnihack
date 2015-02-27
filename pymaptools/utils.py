@@ -97,8 +97,8 @@ def joint_context(*args):
     """Generic empty context wrapper
 
     Allows constructions like:
-    with join_context(open("filename.txt", "r")) as fhandle:
-    with join_context(open("file1.txt", "r"), open("file2.txt", "r")) as (fh1, fh2):
+    with joint_context(open("filename.txt", "r")) as fhandle:
+    with joint_context(open("file1.txt", "r"), open("file2.txt", "r")) as (fh1, fh2):
     """
     try:
         yield args[0] if len(args) == 1 else args
