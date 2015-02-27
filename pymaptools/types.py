@@ -63,7 +63,7 @@ class Struct(object):
     def __setattr__(self, name, value):
         """Set an attribute
 
-        Note that this also sreates an attribute if one does not exist
+        Note that this also creates an attribute if one does not exist
         but is listed among the readwrite attribute names
         """
         if name in self.readwrite_attrs:
