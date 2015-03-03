@@ -25,7 +25,7 @@ def parse_reqs(reqs):
     dep_links = []
     for req in reqs:
         # find things like
-        # --find-links http://packages.livefyre.com/buildout/packages/
+        # --find-links http://blah.com/blah
         dep_link_info = re.search(SKIP_RE, req)
         if dep_link_info is not None:
             url = dep_link_info.group(1)
@@ -82,7 +82,7 @@ DEPENDENCY_LINKS = list(set(itertools.chain(
 
 setup(
     name="pymaptools",
-    version="0.0.17",
+    version="0.0.18",
     author="Eugene Scherba",
     author_email="escherba@gmail.com",
     description=("A collection of Python containers for data analysis"),

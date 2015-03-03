@@ -213,3 +213,17 @@ class DumperFacade(object):
     @staticmethod
     def dump(obj, fname):
         pass
+
+
+class SimplePicklableMixin(object):
+    def save_to(self, filename):
+        with open_gz(filename, "wb") as fhandle:
+            pickle.dump(self, fhandle)
+
+    @classmethod
+    def load_from(cls, filename):
+        with open_gz(filename, "rb") as fhandle:
+            obj = pickle.load(fhandle)
+            if not isinstance(obj, cls):
+                raise TypeError("Loaded object not of expected type %s", cls.__name__)
+            return obj
