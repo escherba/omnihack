@@ -45,9 +45,7 @@ disjoint clusters from a graph. Example:
 Pipe and Step
 -------------
 
-``Pipe`` is a basic pipeline for processing data in sequence. You create pipes by composing ``Step`` instances (or any callables). ``Pipe`` makes extensive use of generators to make processing memory-efficient:
-
-Basic example:
+``Pipe`` is a basic pipeline for processing data in sequence. You create pipes by composing ``Step`` instances (or any callables). ``Pipe`` makes extensive use of generators to make processing memory-efficient. A basic example:
 
 .. code-block:: python
 
