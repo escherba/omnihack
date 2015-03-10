@@ -28,7 +28,7 @@ UnionFind
 ---------
 
 ``UnionFind`` is an algorithm for creating, maintainig, and retrieving
-disjoint clusters from a graph. Example:
+disjoint clusters from a graph. An example:
 
 .. code-block:: python
 
