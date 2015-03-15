@@ -3,7 +3,6 @@ Many definitions here are from https://docs.python.org/2/library/itertools.html
 """
 import collections
 import operator
-from operator import itemgetter
 import random
 from itertools import islice, imap, chain, starmap, ifilterfalse, count, \
     repeat, izip, izip_longest, groupby, cycle, tee, combinations
@@ -25,6 +24,23 @@ def isiterable(obj):
         https://github.com/LuminosoInsight/ordered-set
     """
     return hasattr(obj, '__iter__') and not isinstance(obj, str)
+
+
+def ismonotonic(iterable, operator):
+    """Check whether values in iterable are monotonic
+
+    http://en.wikipedia.org/wiki/Monotonic_function
+
+    >>> ismonotonic([1, 2, 3, 3], operator.le)
+    True
+    >>> ismonotonic(["a", "b", "aa"], operator.le)
+    False
+    >>> ismonotonic([4, 2], operator.ge)
+    True
+    >>> ismonotonic([2, 4], operator.ge)
+    False
+    """
+    return all(operator(x, y) for x, y in izip(iterable, iterable[1:]))
 
 
 def pyramid_slices(lst):
@@ -277,7 +293,7 @@ def unique_justseen(iterable, key=None):
     >>> list(unique_justseen('ABBCcAD', str.lower))
     ['A', 'B', 'C', 'A', 'D']
     """
-    return imap(next, imap(itemgetter(1), groupby(iterable, key)))
+    return imap(next, imap(operator.itemgetter(1), groupby(iterable, key)))
 
 
 def iter_except(func, exception, first=None):
