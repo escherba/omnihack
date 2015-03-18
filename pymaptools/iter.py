@@ -26,21 +26,21 @@ def isiterable(obj):
     return hasattr(obj, '__iter__') and not isinstance(obj, str)
 
 
-def ismonotonic(iterable, operator):
-    """Check whether values in iterable are monotonic
+def ismonotonic(oper, iterable):
+    """Check whether values in iterable are monotonic according to operator
 
     http://en.wikipedia.org/wiki/Monotonic_function
 
-    >>> ismonotonic([1, 2, 3, 3], operator.le)
+    >>> ismonotonic(operator.le, [1, 2, 3, 3])
     True
-    >>> ismonotonic(["a", "b", "aa"], operator.le)
+    >>> ismonotonic(operator.le, ["a", "b", "aa"])
     False
-    >>> ismonotonic([4, 2], operator.ge)
+    >>> ismonotonic(operator.ge, [4, 2])
     True
-    >>> ismonotonic([2, 4], operator.ge)
+    >>> ismonotonic(operator.ge, [2, 4])
     False
     """
-    return all(operator(x, y) for x, y in izip(iterable, iterable[1:]))
+    return all(oper(x, y) for x, y in izip(iterable, iterable[1:]))
 
 
 def pyramid_slices(lst):
