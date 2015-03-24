@@ -6,6 +6,7 @@ import gzip
 import bz2
 import pickle
 import joblib
+import os
 import codecs
 from pymaptools.inspect import hasmethod
 from pymaptools.utils import joint_context
@@ -178,6 +179,37 @@ class GzipFileType(argparse.FileType):
             except OSError as err:
                 raise argparse.ArgumentTypeError(
                     "can't open '%s': %s" % (string, err))
+
+
+class PathArgumentParser(argparse.ArgumentParser):
+
+    """
+    Supplement argparse.ArgumentParser with a method that checks for
+    valid filesystem paths
+    """
+
+    def __is_valid_file(self, arg):
+        if os.path.isfile(arg):
+            return arg
+        else:
+            self.error("Path '%s' does not correspond to existing file" % arg)
+
+    def __is_valid_directory(self, arg):
+        if os.path.isdir(arg):
+            return arg
+        else:
+            self.error("Path '%s' does not correspond to existing directory" % arg)
+
+    def add_argument(self, *args, **kwargs):
+        if 'metavar' in kwargs and ('type' not in kwargs or kwargs['type'] == str):
+            metavar = kwargs['metavar']
+            if metavar == 'FILE':
+                kwargs['type'] = self.__is_valid_file
+            elif metavar == 'DIR':
+                kwargs['type'] = self.__is_valid_directory
+            else:
+                raise ValueError("Invalid metavar parameter value '%s'" % metavar)
+        super(PathArgumentParser, self).add_argument(*args, **kwargs)
 
 
 class DumperFacade(object):
