@@ -8,6 +8,7 @@ import pickle
 import joblib
 import os
 import codecs
+import logging
 from pymaptools.inspect import hasmethod
 from pymaptools.utils import joint_context
 from pymaptools.iter import isiterable
@@ -26,6 +27,34 @@ def get_extension(fname, regex=SUPPORTED_EXTENSION, lowercase=True):
         return match.group().lower()
     else:
         return match.group()
+
+
+def walk_files(dirname, file_pattern=u'.*'):
+    """Recursively walk through directory tree and find matching files
+    Filename pattern provided for convenience only
+    """
+    file_re = re.compile(file_pattern)
+    for root, dirs, files in os.walk(dirname):
+        for name in files:
+            if file_re.match(name):
+                yield os.path.join(root, name)
+
+
+def simple_walk_files(dirname, prefix=None, extension=None):
+    file_pattern = u'^%s.*%s$' % (prefix or u'', extension or u'')
+    return walk_files(dirname, file_pattern=file_pattern)
+
+
+def read_json_lines(fhandle, logger=logging, show_progress=None):
+    for idx, line in enumerate(fhandle, start=1):
+        if show_progress and idx % show_progress == 0 and idx > 1:
+            logger.info("Processed %d lines", idx)
+        try:
+            obj = json.loads(line)
+        except ValueError as err:
+            logger.error("Could not parse line %d: %s", idx, err)
+            continue
+        yield obj
 
 
 FILEOPEN_FUNCTIONS = {
@@ -155,6 +184,27 @@ def read_text_resource(finput, encoding='utf-8', ignore_prefix='#'):
             line = line.strip()
             if line:
                 yield line
+
+
+def write_text_resource(foutput, text, encoding='utf-8'):
+    """Write a text resource
+    :param foutput: path or file handle
+    :type foutput: str, file
+    :param text: content to write
+    :type text: str, unicode, iterable
+    :param encoding: which encoding to use (default: UTF-8)
+    :type encoding: str
+    """
+    if isinstance(foutput, file):
+        for chunk in codecs.iterencode(text, encoding=encoding):
+            foutput.write(chunk)
+    else:
+        with codecs.open(foutput, 'w', encoding=encoding) as fhandle:
+            if isiterable(text):
+                for line in text:
+                    fhandle.write(line)
+            else:
+                fhandle.write(text)
 
 
 class GzipFileType(argparse.FileType):
