@@ -202,7 +202,7 @@ def write_text_resource(foutput, text, encoding='utf-8'):
         with codecs.open(foutput, 'w', encoding=encoding) as fhandle:
             if isiterable(text):
                 for line in text:
-                    fhandle.write(line)
+                    fhandle.write(u"%s\n" % line)
             else:
                 fhandle.write(text)
 
