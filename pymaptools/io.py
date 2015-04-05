@@ -9,6 +9,7 @@ import joblib
 import os
 import codecs
 import logging
+from fnmatch import fnmatch
 from pymaptools.inspect import hasmethod
 from pymaptools.utils import joint_context
 from pymaptools.iter import isiterable
@@ -29,20 +30,14 @@ def get_extension(fname, regex=SUPPORTED_EXTENSION, lowercase=True):
         return match.group()
 
 
-def walk_files(dirname, file_pattern=u'.*'):
+def walk_files(dirname, file_pattern=u'*'):
     """Recursively walk through directory tree and find matching files
-    Filename pattern provided for convenience only
     """
-    file_re = re.compile(file_pattern)
     for root, dirs, files in os.walk(dirname):
         for name in files:
-            if file_re.match(name):
-                yield os.path.join(root, name)
-
-
-def simple_walk_files(dirname, prefix=None, extension=None):
-    file_pattern = u'^%s.*%s$' % (prefix or u'', extension or u'')
-    return walk_files(dirname, file_pattern=file_pattern)
+            full_name = os.path.join(root, name)
+            if fnmatch(full_name, file_pattern):
+                yield full_name
 
 
 def read_json_lines(fhandle, logger=logging, show_progress=None):
