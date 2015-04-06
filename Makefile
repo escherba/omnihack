@@ -2,12 +2,11 @@
 
 PYENV = . env/bin/activate;
 PYTHON = $(PYENV) python
-PYTHON_TIMED = $(PYENV) time python
 EXTRAS_REQS := $(wildcard requirements-*.txt)
 DISTRIBUTE = sdist bdist_wheel
 
 package: env
-	@for pkg_type in $(DISTRIBUTE); do $(PYTHON) setup.py $$pkg_type; done
+	$(PYTHON) setup.py $(DISTRIBUTE)
 
 release: env
 	$(PYTHON) setup.py $(DISTRIBUTE) upload -r livefyre
