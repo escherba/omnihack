@@ -9,6 +9,7 @@ import joblib
 import os
 import codecs
 import logging
+from pkg_resources import resource_listdir, resource_filename
 from fnmatch import fnmatch
 from pymaptools.inspect import hasmethod
 from pymaptools.utils import joint_context
@@ -304,3 +305,27 @@ class SimplePicklableMixin(object):
             if not isinstance(obj, cls):
                 raise TypeError("Loaded object not of expected type %s", cls.__name__)
             return obj
+
+
+class ResourceBundle(object):
+
+    """Find and present resource paths in a convenient format
+
+    Usage:
+        >>> MY_RESOURCES = ResourceBundle(__name__, '.', '.py')
+        >>> MY_RESOURCES.io
+        'io.py'
+    """
+    @classmethod
+    def list_matching_files(cls, package_or_requirement, resource_dir, extension):
+        resource_pattern = "*" + extension
+        dirname = resource_filename(package_or_requirement, resource_dir)
+        for filename in resource_listdir(package_or_requirement, resource_dir):
+            if fnmatch(filename, resource_pattern):
+                rname = os.path.basename(filename).rstrip(extension)
+                rname = re.sub("\\W", "_", rname)
+                yield rname, os.path.join(dirname, filename)
+
+    def __init__(self, package_or_requirement, resource_dir, extension=".txt"):
+        for rname, fname in self.list_matching_files(package_or_requirement, resource_dir, extension):
+            self.__dict__[rname] = fname

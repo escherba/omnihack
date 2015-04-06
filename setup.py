@@ -82,7 +82,7 @@ DEPENDENCY_LINKS = list(set(itertools.chain(
 
 setup(
     name="pymaptools",
-    version="0.1.3",
+    version="0.1.4",
     author="Eugene Scherba",
     author_email="escherba@gmail.com",
     description=("A collection of Python containers for data analysis"),
