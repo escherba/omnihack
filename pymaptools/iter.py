@@ -53,6 +53,48 @@ def pyramid_slices(lst):
         yield lst[:i + 1]
 
 
+def shinglify(iterable, span, skip=0):
+    """Extract shingles from an iterable
+
+    :param iterable: Iterable
+    :type iterable: collections.Iterable
+    :param span: shingle span
+    :type span: int
+    :param skip: How many words to skip
+    :type skip: int
+    :returns: sequence of tuples (shingles)
+    :rtype : list
+
+    >>> shingles = list(shinglify("abracadabra", 5, skip=1))
+    >>> len(shingles)
+    7
+    >>> ('d', 'b', 'a') in shingles
+    True
+
+    Must return a single shingle when span > len(tokens)
+    >>> list(shinglify("abc", 4))
+    [('a', 'b', 'c')]
+
+    Must return an empty list when span=0
+    >>> list(shinglify("abc", 0))
+    []
+
+    Must return the last pair
+    >>> list(shinglify("abcde", 4, skip=1))
+    [('a', 'c'), ('b', 'd'), ('c', 'e')]
+
+    Must also skip tokens when span > len(tokens)
+    >>> list(shinglify("abc", 4, skip=1))
+    [('a', 'c')]
+
+    """
+    tokens = iterable if isinstance(iterable, list) else list(iterable)
+    if len(tokens) >= span:
+        return izip(*nskip(skip, (tokens[i:] for i in xrange(span))))
+    else:
+        return [tuple(nskip(skip, tokens))]
+
+
 def inverse_kvals(mapping):
     """Inverse a sparse-value dense-key dict form where values are assumed to be lists
 
