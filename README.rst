@@ -186,3 +186,11 @@ use case in mind when edges are assigned integer weights. One can do things like
    >>> b.add_edge("b", "c", 1)
    >>> b.get_weight()
    5
+
+Citations
+---------
+
+.. [Zhang2008] Zhang, Y., Chesler, E. J. & Langston, M. A. "On finding bicliques
+   in bipartite graphs: a novel algorithm with application to the integration
+   of diverse biological data types." Hawaii International Conference on System
+   Sciences 0, 473+ (2008).  URL http://dx.doi.org/10.1109/HICSS.2008.507.
