@@ -313,7 +313,7 @@ class ResourceBundle(object):
 
     Usage:
         >>> MY_RESOURCES = ResourceBundle(__name__, '.', '.py')
-        >>> MY_RESOURCES.io
+        >>> os.path.basename(MY_RESOURCES.io)
         'io.py'
     """
     @classmethod
