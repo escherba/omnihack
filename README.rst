@@ -45,7 +45,9 @@ disjoint clusters from a graph. An example:
 Pipe and Step
 -------------
 
-``Pipe`` is a basic pipeline for processing data in sequence. You create pipes by composing ``Step`` instances (or any callables). ``Pipe`` makes extensive use of generators to make processing memory-efficient. A basic example:
+``Pipe`` is a basic pipeline for processing data in sequence. You create pipes by
+composing ``Step`` instances (or any callables). ``Pipe`` makes extensive use of
+generators to make processing memory-efficient. A basic example:
 
 .. code-block:: python
 
@@ -139,3 +141,48 @@ The output of the above is:
     88
     failed to deserialize `Ceci n\'est pas une pipe`
     28
+
+Graph
+-----
+
+This module provides basic graph arithmetic and some standard algorithms
+such as connected components and clique-finding. The biclique-finding
+algorithm (for bipartite graph) is particularly efficient for large graphs
+and is an implementation of [Zhang2008]_.
+
+
+.. code-block:: python
+
+    >>> from pymaptools.graph import Bigraph
+    >>> g = Bigraph()
+    >>> g.add_biclique([1, 2, 3], [-1, -2, -3])
+    >>> h = Bigraph(g)
+    >>> g.add_biclique([4], [-4, -5])
+    >>> g.add_biclique([5], [-5, -6])
+    >>> g.add_edge(4, -1)
+    >>> h.add_edge(2, 100, weight=14)
+    >>> h.add_edge(5, -5, weight=10)
+    >>> j = g & h
+    >>> list(j.find_cliques())
+    [(set([1, 2, 3]), set([-1, -3, -2])), (set([5]), set([-5]))]
+    >>> components = j.find_connected_components()
+    >>> curr = components.next()
+    >>> (sorted(curr.U), sorted(curr.V))
+    ([1, 2, 3], [-3, -2, -1])
+    >>> curr = components.next()
+    >>> (sorted(curr.U), sorted(curr.V))
+    ([5], [-5])
+
+
+In addition to standard operations, this module is designed with the common
+use case in mind when edges are assigned integer weights. One can do things like:
+
+
+.. code-block:: python
+
+   >>> from pymaptools.graph import Bigraph
+   >>> b = Bigraph()
+   >>> b.add_edge("a", "b", 4)
+   >>> b.add_edge("b", "c", 1)
+   >>> b.get_weight()
+   5
