@@ -151,10 +151,6 @@ class FileReader(collections.Iterator):
 
 class JSONLineReader(FileReader):
     """A subclass of FileReader specialized for JSON line input
-
-    >>> reader = JSONLineReader([['{"a":1}', '{invalid'], []])
-    >>> list(reader)
-    [{u'a': 1}, None]
     """
     def parse(self, line):
         return parse_json(line)
@@ -180,6 +176,13 @@ def read_text_resource(finput, encoding='utf-8', ignore_prefix='#'):
             line = line.strip()
             if line:
                 yield line
+
+
+def read_tsv_like(finput, encoding='utf-8', ignore_prefix='%', sep=' '):
+    """TSV-like format
+    """
+    for line in read_text_resource(finput, encoding=encoding, ignore_prefix=ignore_prefix):
+        yield line.split(sep)
 
 
 def write_text_resource(foutput, text, encoding='utf-8'):

@@ -89,10 +89,22 @@ class Bigraph(SimplePicklableMixin):
                         self.add_edge(u, v, weight=weight)
 
     @classmethod
-    def from_series(cls, series):
+    def from_components(cls, components):
         """Constructs a graph from a series of components
         """
-        return reduce(operator.or_, series, cls())
+        return reduce(operator.or_, components, cls())
+
+    @classmethod
+    def from_edgelist(cls, edgelist):
+        """Construct a graph from a list of tuples or triples
+
+        Tuples represent edges u - v
+        Triples represent edges u - v plus weight component
+        """
+        g = cls()
+        for edge in edgelist:
+            g.add_edge(*edge)
+        return g
 
     def rename_nodes(self, unode_renamer=None, vnode_renamer=None):
         """Factory method that produces another graph just like current one
@@ -111,6 +123,22 @@ class Bigraph(SimplePicklableMixin):
     def get_weight(self):
         return sum(self.edges.itervalues())
 
+    def get_vnode_weight(self, node):
+        neighbors = self.V2U[node]
+        node_weight = self.weight_type()
+        for neighbor in neighbors:
+            edge = self.make_edge(neighbor, node)
+            node_weight += self.edges[edge]
+        return node_weight
+
+    def get_unode_weight(self, node):
+        neighbors = self.U2V[node]
+        node_weight = self.weight_type()
+        for neighbor in neighbors:
+            edge = self.make_edge(node, neighbor)
+            node_weight += self.edges[edge]
+        return node_weight
+
     def __and__(self, other):
         '''Get intersection of edges of two graphs
 
@@ -122,9 +150,11 @@ class Bigraph(SimplePicklableMixin):
         # compile edges into dicts and store weights
         g_map_edge = g._map_edge
         g_store_weight = g._store_weight
+        this_zero = self.weight_type()
+        other_zero = other.weight_type()
         for e in edge_intersection:
             g_map_edge(e)
-            val = min(dict1.get(e, 0), dict2.get(e, 0))
+            val = min(dict1.get(e, this_zero), dict2.get(e, other_zero))
             g_store_weight(e, val)
         return g
 
@@ -139,9 +169,11 @@ class Bigraph(SimplePicklableMixin):
         # compile edges into dicts and store weights
         g_map_edge = g._map_edge
         g_store_weight = g._store_weight
+        this_zero = self.weight_type()
+        other_zero = other.weight_type()
         for e in edge_union:
             g_map_edge(e)
-            val = dict1.get(e, 0) + dict2.get(e, 0)
+            val = dict1.get(e, this_zero) + dict2.get(e, other_zero)
             g_store_weight(e, val)
         return g
 
@@ -382,6 +414,7 @@ class Graph(Bigraph):
     undirected graph G = (V, E).
     """
     def __init__(self, base=None, weight_type=int):
+        self.weight_type = weight_type
         if base is None:
             # creating from scratch
             self.U2V = self.V2U = defaultdict(set)  # right to left mapping dict
