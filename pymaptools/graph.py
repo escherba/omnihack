@@ -1,4 +1,5 @@
 import operator
+from copy import deepcopy
 from collections import defaultdict
 from itertools import chain, product
 from StringIO import StringIO
@@ -74,9 +75,9 @@ class Bigraph(SimplePicklableMixin):
                                  base.edges.default_factory, weight_type)
             if min_edge_weight is None:
                 # simple copy of base object
-                self.edges = base.edges.copy()
-                self.U2V = defaultdict(set, base.U2V)
-                self.V2U = defaultdict(set, base.V2U)
+                self.edges = deepcopy(base.edges)
+                self.U2V = defaultdict(set, deepcopy(base.U2V))
+                self.V2U = defaultdict(set, deepcopy(base.V2U))
             else:
                 # filter out edges with weight below requested
                 self.U2V = defaultdict(set)
@@ -85,7 +86,7 @@ class Bigraph(SimplePicklableMixin):
                 for edge, weight in base.edges.iteritems():
                     if weight >= min_edge_weight:
                         u, v = edge
-                        self.add_edge(u, v, weight=weight)
+                        self.add_edge(u, v, weight=deepcopy(weight))
 
     @classmethod
     def from_components(cls, components):
@@ -482,16 +483,16 @@ class Graph(Bigraph):
             self.edges = defaultdict(weight_type)
         elif isinstance(base, self.__class__):
             # deriving from class instance
-            self.U2V = self.V2U = defaultdict(set, base.V2U)
-            self.edges = base.edges.copy()
+            self.U2V = self.V2U = deepcopy(base.V2U)
+            self.edges = deepcopy(base.edges)
         elif issubclass(self.__class__, base.__class__):
             # deriving from Bigraph instance
-            self.V2U = defaultdict(set, base.V2U)
-            self.V2U.update(base.U2V)
+            self.V2U = deepcopy(base.V2U)
+            self.V2U.update(deepcopy(base.U2V))
             self.U2V = self.V2U
             edge_map = defaultdict(weight_type)
             for (node1, node2), weight in base.edges.iteritems():
-                edge_map[self.make_edge(node1, node2)] = weight
+                edge_map[self.make_edge(node1, node2)] = deepcopy(weight)
             self.edges = edge_map
         else:
             raise TypeError("Base object has incorrect type")
