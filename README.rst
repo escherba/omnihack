@@ -154,12 +154,11 @@ in [Zhang2008]_ and iMBEA described in [Zhang2014]_.
 .. code-block:: python
 
     >>> from pymaptools.graph import Bigraph
-    >>> from itertools import product
     >>> g = Bigraph()
-    >>> for edge in product([1, 2, 3], [-1, -2, -3]): g.add_edge(*edge)
+    >>> g.add_clique(([1, 2, 3], [-1, -2, -3]))
     >>> h = Bigraph(g)
-    >>> for edge in product([4], [-4, -5]): g.add_edge(*edge)
-    >>> for edge in product([5], [-5, -5]): g.add_edge(*edge)
+    >>> g.add_clique(([4], [-4, -5]))
+    >>> g.add_clique(([5], [-5, -5]))
     >>> g.add_edge(4, -1)
     >>> h.add_edge(2, 100, weight=14)
     >>> h.add_edge(5, -5, weight=10)

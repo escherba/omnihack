@@ -15,9 +15,9 @@ class TestGraph(unittest.TestCase):
 
     def test_bigraph1(self):
         g = Bigraph()
-        g.add_biclique([1, 2, 3], [-1, -2, -3])
-        g.add_biclique([4], [-4, -5])
-        g.add_biclique([5], [-5, -6])
+        g.add_clique(([1, 2, 3], [-1, -2, -3]))
+        g.add_clique(([4], [-4, -5]))
+        g.add_clique(([5], [-5, -6]))
         g.add_edge(10, 20)
         g.add_edge(30, 20)
         g.add_edge(30, 40)
@@ -43,9 +43,9 @@ class TestGraph(unittest.TestCase):
 
     def test_bigraph1a(self):
         g = Bigraph()
-        g.add_biclique([1, 2, 3], [-1, -2, -3])
-        g.add_biclique([4], [-4, -5])
-        g.add_biclique([5], [-5, -6])
+        g.add_clique(([1, 2, 3], [-1, -2, -3]))
+        g.add_clique(([4], [-4, -5]))
+        g.add_clique(([5], [-5, -6]))
         g.add_edge(10, 20)
         g.add_edge(30, 20)
         g.add_edge(30, 40)
@@ -60,10 +60,10 @@ class TestGraph(unittest.TestCase):
 
     def test_bigraph1b(self):
         g = Bigraph()
-        g.add_biclique([1, 2, 3], [-1, -2, -3])
+        g.add_clique(([1, 2, 3], [-1, -2, -3]))
         h = Bigraph(g)
-        g.add_biclique([4], [-4, -5])
-        g.add_biclique([5], [-5, -6])
+        g.add_clique(([4], [-4, -5]))
+        g.add_clique(([5], [-5, -6]))
         g.add_edge(4, -1)
         h.add_edge(2, 100, weight=14)
         h.add_edge(5, -5, weight=10)

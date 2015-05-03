@@ -43,10 +43,10 @@ class Bigraph(SimplePicklableMixin):
     Example usage:
 
     >>> g = Bigraph()
-    >>> g.add_biclique([1, 2, 3], [-1, -2, -3])
+    >>> g.add_clique(([1, 2, 3], [-1, -2, -3]))
     >>> h = Bigraph(g)
-    >>> g.add_biclique([4], [-4, -5])
-    >>> g.add_biclique([5], [-5, -6])
+    >>> g.add_clique(([4], [-4, -5]))
+    >>> g.add_clique(([5], [-5, -6]))
     >>> g.add_edge(4, -1)
     >>> h.add_edge(2, 100, weight=14)
     >>> h.add_edge(5, -5, weight=10)
@@ -227,16 +227,19 @@ class Bigraph(SimplePicklableMixin):
     def _store_weight(self, edge, weight):
         self.edges[edge] += weight
 
-    def add_biclique(self, unodes, vnodes, weight=1):
+    def add_clique(self, clique, weight=1):
         '''Adds a complete bipartite subgraph (a 2-clique)
+
+        :param clique: a clique descriptor (tuple of U and V vertices)
         '''
+        unodes, vnodes = clique
         for u, v in product(unodes, vnodes):
             self.add_edge(u, v, weight=weight)
 
     def add_edge(self, u, v, weight=1):
         '''Add a single edge (plus two vertices if necessary)
 
-        This is a special case of add_biclique(), only with
+        This is a special case of add_clique(), only with
         scalar parameters. For reading data from files or adjacency
         matrices.
         '''
@@ -511,6 +514,14 @@ class Graph(Bigraph):
     @property
     def U(self):
         raise NotImplementedError("Set U is only for a bipartite graph")
+
+    def add_clique(self, clique, weight=1):
+        '''Adds a complete bipartite subgraph (a 2-clique)
+
+        :param clique: a clique descriptor (a set of vertices)
+        '''
+        for u, v in product(clique, clique):
+            self.add_edge(u, v, weight=weight)
 
     def get_density(self):
         '''Return the number of existing edges divided by the number of all possible edges
