@@ -6,6 +6,18 @@ from contextlib import contextmanager
 from pymaptools.iter import isiterable
 
 
+class SetComparisonMixin(object):
+    """Mixin to unittest.TestCase that provides set subset comparison
+    """
+    def assertSetContainsSubset(self, expected, actual, msg=None):
+        """Checks whether actual is a superset of expected."""
+        self.assertDictContainsSubset(
+            dict.fromkeys(expected),
+            dict.fromkeys(actual),
+            msg=msg
+        )
+
+
 def uuid1_to_posix(uuid1):
     """Convert a UUID1 timestamp to a standard POSIX timestamp
 

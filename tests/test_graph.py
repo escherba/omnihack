@@ -6,19 +6,12 @@ def makeSetPair(graph):
     return (graph.U, graph.V)
 
 
+def normalize_paired_sets(paired_sets):
+    for L, R in paired_sets:
+        yield tuple(sorted(L)), tuple(sorted(R))
+
+
 class TestGraph(unittest.TestCase):
-
-    def assertSetPairsEqual(self, seq1, seq2):
-        """Small extension to unittest to test for equality of set pairs
-
-        Also tests whether one of the iterables is longer than the other
-        """
-        iter1 = iter(seq1)
-        iter2 = iter(seq2)
-        for set1, set2 in zip(iter1, iter2):
-            self.assertSetEqual(set(set1), set(set2))
-        self.assertRaises(StopIteration, iter1.next)
-        self.assertRaises(StopIteration, iter2.next)
 
     def test_bigraph1(self):
         g = Bigraph()
@@ -28,21 +21,27 @@ class TestGraph(unittest.TestCase):
         g.add_edge(10, 20)
         g.add_edge(30, 20)
         g.add_edge(30, 40)
-        cliques = list(g.find_cliques())
-        self.assertEqual(6, len(cliques))
-        self.assertSetPairsEqual(([30], [40, 20]), cliques[0])
-        self.assertSetPairsEqual(([10, 30], [20]), cliques[1])
-        self.assertSetPairsEqual(([1, 2, 3], [-1, -2, -3]), cliques[2])
-        self.assertSetPairsEqual(([5], [-6, -5]), cliques[3])
-        self.assertSetPairsEqual(([4, 5], [-5]), cliques[4])
-        self.assertSetPairsEqual(([4], [-5, -4]), cliques[5])
-        components = list(g.find_connected_components())
-        self.assertEqual(3, len(components))
-        self.assertSetPairsEqual(([1, 2, 3], [-1, -3, -2]), makeSetPair(components[0]))
-        self.assertSetPairsEqual(([4, 5], [-6, -5, -4]), makeSetPair(components[1]))
-        self.assertSetPairsEqual(([10, 30], [40, 20]), makeSetPair(components[2]))
+        clique_list = list(g.find_cliques())
+        self.assertEqual(6, len(clique_list))
+        cliques = set(normalize_paired_sets(clique_list))
+        self.assertSetEqual(set([
+            ((30,),     (20, 40)),
+            ((10, 30),  (20,)),
+            ((1, 2, 3), (-3, -2, -1)),
+            ((5,),      (-6, -5)),
+            ((4, 5),    (-5,)),
+            ((4,),      (-5, -4)),
+        ]), cliques)
+        component_list = map(makeSetPair, g.find_connected_components())
+        self.assertEqual(3, len(component_list))
+        components = set(normalize_paired_sets(component_list))
+        self.assertSetEqual(set([
+            ((1, 2, 3), (-3, -2, -1)),
+            ((4, 5),    (-6, -5, -4)),
+            ((10, 30),  (20, 40))
+        ]), components)
 
-    def test_bigraph2(self):
+    def test_bigraph1a(self):
         g = Bigraph()
         g.add_biclique([1, 2, 3], [-1, -2, -3])
         g.add_biclique([4], [-4, -5])
@@ -51,12 +50,31 @@ class TestGraph(unittest.TestCase):
         g.add_edge(30, 20)
         g.add_edge(30, 40)
         g.add_edge(4, -1)
-        components = list(g.find_connected_components())
-        self.assertEqual(2, len(components))
-        self.assertSetPairsEqual(([1, 2, 3, 4, 5], [-2, -6, -5, -4, -3, -1]),
-                                 makeSetPair(components[0]))
-        self.assertSetPairsEqual(([10, 30], [40, 20]),
-                                 makeSetPair(components[1]))
+        component_list = map(makeSetPair, g.find_connected_components())
+        self.assertEqual(2, len(component_list))
+        components = set(normalize_paired_sets(component_list))
+        self.assertSetEqual(set([
+            ((1, 2, 3, 4, 5), (-6, -5, -4, -3, -2, -1)),
+            ((10, 30),        (20, 40))
+        ]), components)
+
+    def test_bigraph1b(self):
+        g = Bigraph()
+        g.add_biclique([1, 2, 3], [-1, -2, -3])
+        h = Bigraph(g)
+        g.add_biclique([4], [-4, -5])
+        g.add_biclique([5], [-5, -6])
+        g.add_edge(4, -1)
+        h.add_edge(2, 100, weight=14)
+        h.add_edge(5, -5, weight=10)
+        j = g & h
+        clique_list = list(j.find_cliques())
+        self.assertEqual(2, len(clique_list))
+        cliques = set(normalize_paired_sets(clique_list))
+        self.assertSetEqual(set([
+            ((1, 2, 3), (-3, -2, -1)),
+            ((5,), (-5,))
+        ]), cliques)
 
     def test_bigraph3(self):
         """Simple bigraph given in Fig. 2 of MBEA paper
@@ -71,10 +89,14 @@ class TestGraph(unittest.TestCase):
         # there should be a single connected component
         components = list(g.find_connected_components())
         self.assertEqual(1, len(components))
-        cliques = list(g.find_cliques())
-        self.assertEqual(2, len(cliques))
-        self.assertSetPairsEqual((set(['u1', 'u3']), set(['v1', 'v2'])), cliques[0])
-        self.assertSetPairsEqual((set(['u1', 'u3', 'u2']), set(['v2'])), cliques[1])
+
+        clique_list = list(g.find_cliques())
+        self.assertEqual(2, len(clique_list))
+        cliques = set(normalize_paired_sets(clique_list))
+        self.assertSetEqual(set([
+            (('u1', 'u3'), ('v1', 'v2')),
+            (('u1', 'u2', 'u3'), ('v2',))
+        ]), cliques)
 
     def test_graph(self):
         a = Graph()
