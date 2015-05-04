@@ -148,7 +148,8 @@ Graph
 This module provides basic set arithmetic on graphs where graphs
 are represented as collections of edges, and a few basic algorithms
 for graph analysis, including an implementation of MBEA algorithm
-for finding 2-cliques in bipartite graphs described in [Zhang2008]_.
+for fast finding of maximal bicliques in bipartite graphs described
+in [Zhang2008]_.
 
 
 .. code-block:: python
