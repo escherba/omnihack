@@ -147,8 +147,8 @@ Graph
 
 This module provides basic set arithmetic on graphs where graphs
 are represented as collections of edges, and a few basic algorithms
-for graph analysis, including implementations of MBEA algorithm described
-in [Zhang2008]_ and iMBEA described in [Zhang2014]_.
+for graph analysis, including an implementation of MBEA algorithm
+for finding 2-cliques in bipartite graphs described in [Zhang2008]_.
 
 
 .. code-block:: python
@@ -193,8 +193,3 @@ Citations
    in bipartite graphs: a novel algorithm with application to the integration
    of diverse biological data types." Hawaii International Conference on System
    Sciences 0, 473+ (2008).  URL http://dx.doi.org/10.1109/HICSS.2008.507.
-
-.. [Zhang2014] Zhang, Y. et al. "On finding bicliques
-   in bipartite graphs: a novel algorithm with application to the integration
-   of diverse biological data types." BMC Bioinformatics 15: 110 (2014).
-   URL http://dx.doi.org/10.1186/1471-2105-15-110

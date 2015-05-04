@@ -5,7 +5,6 @@ from itertools import chain, product
 from StringIO import StringIO
 from contextlib import closing
 from pymaptools.io import SimplePicklableMixin
-from pymaptools.queue import OrderedSet
 
 
 class GraphError(Exception):
@@ -105,6 +104,10 @@ class Bigraph(SimplePicklableMixin):
         for edge in edgelist:
             g.add_edge(*edge)
         return g
+
+    def to_edgelist(self):
+        for edge, weight in self.edges.iteritems():
+            yield edge
 
     def rename_nodes(self, unode_renamer=None, vnode_renamer=None):
         """Factory method that produces another graph just like current one
@@ -330,7 +333,7 @@ class Bigraph(SimplePicklableMixin):
             # stack is empty: done with one component
             yield component
 
-    def _cliques_MBEA(self, nodes=None, L=None, P=None):
+    def find_cliques(self, L=None, P=None):
         '''Find cliques (maximally connected components)
 
         Enumerate all maximal bicliques in an undirected bipartite graph.
@@ -347,10 +350,9 @@ class Bigraph(SimplePicklableMixin):
             P - a set of vertices in V that can be added to R
             Q - a set of vertices in V that have been previously added to R
         '''
-        L = set(self.U) if L is None else set(L)
-        P = set(self.V) if P is None else set(P)
-
         v2u = self.V2U
+        L = set(self.U) if L is None else set(L)
+        P = list(self.V) if P is None else list(P)
         stack = [(L, set(), P, set())]
         while stack:
             L, R, P, Q = stack.pop()
@@ -358,16 +360,16 @@ class Bigraph(SimplePicklableMixin):
                 x = P.pop()
                 # extend biclique
                 R_prime = R | {x}
-                L_prime = L & v2u[x]
+                L_prime = v2u[x] & L
                 # create new sets
-                P_prime = set()
+                P_prime = []
                 Q_prime = set()
                 # check maximality
                 is_maximal = True
                 for v in Q:
                     # checks whether L_prime is a subset of all adjacent nodes
                     # of v in Q
-                    Nv = L_prime & v2u[v]
+                    Nv = v2u[v] & L_prime
                     if len(Nv) == len(L_prime):
                         is_maximal = False
                         break
@@ -378,97 +380,18 @@ class Bigraph(SimplePicklableMixin):
                 if is_maximal:
                     for v in P:
                         # get the neighbors of v in L_prime
-                        Nv = L_prime & v2u[v]
+                        Nv = v2u[v] & L_prime
                         if len(Nv) == len(L_prime):
                             R_prime.add(v)
                         elif Nv:
                             # some vertices in L_prime are not adjacent to v:
                             # keep vertices adjacent to some vertex in L_prime
-                            P_prime.add(v)
+                            P_prime.append(v)
                     yield (L_prime, R_prime)  # report maximal biclique
                     if P_prime:
                         stack.append((L_prime, R_prime, P_prime, Q_prime))
                 # move x to former candidate set
                 Q.add(x)
-
-    def _cliques_iMBEA(self, nodes=None, L=None, P=None):
-        '''Find cliques (maximally connected components)
-
-        Enumerate all maximal bicliques in an undirected bipartite graph.
-
-        Adapted from: Zhang, Y., Chesler, E. J. & Langston, M. A.
-        "On finding bicliques in bipartite graphs: a novel algorithm with
-        application to the integration of diverse biological data types."
-        Hawaii International Conference on System Sciences 0, 473+ (2008).
-        URL http://dx.doi.org/10.1109/HICSS.2008.507.
-
-        Terminology:
-            L - a set of vertices in U that are common neighbors of vertices in R
-            R - a set of vertices in V belonging to the current biclique
-            P - a set of vertices in V that can be added to R
-            Q - a set of vertices in V that have been previously added to R
-        '''
-        v2u = self.V2U
-
-        L = set(self.U) if L is None else set(L)
-        if P is None:
-            P = self.V
-
-        # sort P by neighborhood size
-        P = OrderedSet(zip(*sorted((len(v2u[v]), v) for v in P))[1])
-
-        stack = [(L, set(), P, set())]
-        while stack:
-            L, R, P, Q = stack.pop()
-            while P:
-                x = P[0]
-
-                # extend biclique
-                R_prime = R | {x}
-                L_prime = L & v2u[x]
-                L_prime_dash = L - L_prime
-                C = set([x])
-                # create new sets
-                P_prime = OrderedSet()
-                Q_prime = set()
-                # check maximality
-                is_maximal = True
-                for v in Q:
-                    # checks whether L_prime is a subset of all adjacent nodes
-                    # of v in Q
-                    Nv = L_prime & v2u[v]
-                    if len(Nv) == len(L_prime):
-                        is_maximal = False
-                        break
-                    elif Nv:
-                        Q_prime.add(v)
-                if is_maximal:
-                    for v in P:
-                        # get the neighbors of v in L_prime
-                        Nv = L_prime & v2u[v]
-                        if len(Nv) == len(L_prime):
-                            R_prime.add(v)
-                            # obs. 3: expand to maximal
-                            S = L_prime_dash & v2u[v]
-                            # obs. 5: further pruning
-                            if len(S) == 0:
-                                C.add(v)
-                        elif Nv:
-                            # insert v into P_prime in non-decreasing order of
-                            # common neighborhood size
-                            P_prime.add(v)
-                    yield (L_prime, R_prime)  # report maximal biclique
-                    if P_prime:
-                        stack.append((L_prime, R_prime, P_prime, Q_prime))
-                # move C from candidate set to former candidate set
-                for c in C:
-                    Q.add(c)
-                    P.remove(c)
-
-    def find_cliques(self, method='iMBEA', L=None, P=None):
-        method_name = '_cliques_' + method
-        method = getattr(self, method_name)
-        return method(L=L, P=P)
 
 
 class Graph(Bigraph):

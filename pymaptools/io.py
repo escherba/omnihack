@@ -178,13 +178,6 @@ def read_text_resource(finput, encoding='utf-8', ignore_prefix='#'):
                 yield line
 
 
-def read_tsv_like(finput, encoding='utf-8', ignore_prefix='%', sep=' '):
-    """TSV-like format
-    """
-    for line in read_text_resource(finput, encoding=encoding, ignore_prefix=ignore_prefix):
-        yield line.split(sep)
-
-
 def write_text_resource(foutput, text, encoding='utf-8'):
     """Write a text resource
     :param foutput: path or file handle
@@ -204,6 +197,21 @@ def write_text_resource(foutput, text, encoding='utf-8'):
                     fhandle.write(u"%s\n" % line)
             else:
                 fhandle.write(text)
+
+
+def read_tsv_like(finput, encoding='utf-8', ignore_prefix='%', sep=' '):
+    """Read TSV-like format
+    """
+    for line in read_text_resource(finput, encoding=encoding, ignore_prefix=ignore_prefix):
+        yield line.split(sep)
+
+
+def write_tsv_like(foutput, records, encoding='utf-8', sep=' '):
+    """Write TSV-like format
+    """
+    unicode_sep = sep.decode(encoding)
+    text = (unicode_sep.join(record) for record in records)
+    write_text_resource(foutput, text, encoding=encoding)
 
 
 class GzipFileType(argparse.FileType):
