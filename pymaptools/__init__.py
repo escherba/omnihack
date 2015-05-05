@@ -126,13 +126,15 @@ def nested_set(root, keys, value, strict=False):
 
     >>> example = {"a": {"b": 1, "c": 42}, "d": None}
     >>> nested_set(example, ["a", "c"], None)
-    >>> nested_get(example, ["a", "c"]) is None
-    True
+    {'a': {'c': None, 'b': 1}, 'd': None}
     >>> example = {}
     >>> nested_set(example, ["a", "b", "c"], 56)
-    >>> example
     {'a': {'b': {'c': 56}}}
+    >>> nested_set(example, [], 42)
+    42
     """
+    if len(keys) == 0:
+        return value
     if strict:
         nested_get(root, keys[:-1], strict=strict)[keys[-1]] = value
     else:
@@ -145,6 +147,7 @@ def nested_set(root, keys, value, strict=False):
                 curr_dict[key] = new_dict
                 curr_dict = new_dict
         curr_dict[keys[-1]] = value
+    return root
 
 
 def nested_type(levels=0, constructor=dict):
