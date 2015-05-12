@@ -11,9 +11,17 @@ class SetComparisonMixin(object):
     """
     def assertSetContainsSubset(self, expected, actual, msg=None):
         """Checks whether actual is a superset of expected."""
-        self.assertDictContainsSubset(
-            dict.fromkeys(expected),
-            dict.fromkeys(actual),
+        self.assertListEqual(
+            [],
+            sorted(set(expected) - set(actual)),
+            msg=msg
+        )
+
+    def assertSetDoesNotContainSubset(self, not_expected, actual, msg=None):
+        """Expected should not be a part of actual."""
+        self.assertListEqual(
+            sorted(set(not_expected)),
+            sorted(set(not_expected) - set(actual)),
             msg=msg
         )
 
