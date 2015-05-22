@@ -333,7 +333,8 @@ class ResourceBundle(object):
         dirname = resource_filename(package_or_requirement, resource_dir)
         for filename in resource_listdir(package_or_requirement, resource_dir):
             if fnmatch(filename, resource_pattern):
-                rname = os.path.basename(filename).rstrip(extension)
+                bname = os.path.basename(filename)
+                rname, _ = os.path.splitext(bname)
                 rname = re.sub("\\W", "_", rname)
                 yield rname, os.path.join(dirname, filename)
 
