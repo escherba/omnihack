@@ -1,5 +1,6 @@
 .PHONY: clean coverage develop env extras package release test virtualenv
 
+PYMODULE = pymaptools
 PYENV = . env/bin/activate;
 PYTHON = $(PYENV) python
 EXTRAS_REQS := $(wildcard requirements-*.txt)
@@ -38,8 +39,8 @@ clean:
 
 develop:
 	@echo "Installing for " `which pip`
-	pip uninstall $(PYMODULE) || true
-	python setup.py develop
+	-pip uninstall $(PYMODULE)
+	pip install -e .
 
 env virtualenv: env/bin/activate
 env/bin/activate: requirements.txt setup.py
