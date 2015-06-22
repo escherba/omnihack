@@ -39,7 +39,7 @@ clean:
 
 develop:
 	@echo "Installing for " `which pip`
-	-pip uninstall $(PYMODULE)
+	-pip uninstall --yes $(PYMODULE)
 	pip install -e .
 
 env virtualenv: env/bin/activate

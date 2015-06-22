@@ -42,16 +42,20 @@ def walk_files(dirname, file_pattern=u'*'):
                 yield full_name
 
 
-def read_json_lines(fhandle, logger=logging, show_progress=None):
-    for idx, line in enumerate(fhandle, start=1):
-        if show_progress and idx % show_progress == 0 and idx > 1:
-            logger.info("Processed %d lines", idx)
-        try:
-            obj = json.loads(line)
-        except ValueError as err:
-            logger.error("Could not parse line %d: %s", idx, err)
-            continue
-        yield obj
+def read_json_lines(finput, logger=logging, show_progress=None):
+    ctx = joint_context(finput) \
+        if isiterable(finput) \
+        else open_gz(finput, 'r')
+    with ctx as fhandle:
+        for idx, line in enumerate(fhandle, start=1):
+            if show_progress and idx % show_progress == 0 and idx > 1:
+                logger.info("Processed %d lines", idx)
+            try:
+                obj = json.loads(line)
+            except ValueError as err:
+                logger.error("Could not parse line %d: %s", idx, err)
+                continue
+            yield obj
 
 
 FILEOPEN_FUNCTIONS = {
