@@ -324,6 +324,31 @@ class SimplePicklableMixin(object):
             return obj
 
 
+def pickle_dump(obj, output_file, protocol=2):
+    """Pickle object `obj` to file `output_file`.
+    `protocol` defaults to 2 so pickled objects are compatible across
+    Python 2.x and 3.x.
+    """
+    if isinstance(output_file, file):
+        pickle.dump(obj, output_file, protocol=protocol)
+    elif isinstance(output_file, basestring):
+        with open_gz(output_file, 'wb') as fhandle:
+            pickle.dump(obj, fhandle, protocol=protocol)
+    else:
+        raise TypeError("`output_file` must be ither file handle or path")
+
+
+def pickle_load(input_file):
+    """Load pickled object from `input_file`"""
+    if isinstance(input_file, file):
+        return pickle.load(input_file)
+    elif isinstance(input_file, basestring):
+        with open_gz(input_file, 'rb') as fhandle:
+            return pickle.load(fhandle)
+    else:
+        raise TypeError("`input_file` must be ither file handle or path")
+
+
 class ResourceBundle(object):
 
     """Find and present resource paths in a convenient format
