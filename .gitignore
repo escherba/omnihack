@@ -25,3 +25,5 @@ env
 cover/
 coverage.xml
 nosetests.xml
+
+.cache/
