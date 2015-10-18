@@ -14,12 +14,13 @@ def random_seed():
         return hash(time.time())
 
 
-def reservoir_iter(iterator, K, random_state=0):
+def reservoir_iter(iterator, K, random_state=None):
     """Simple reservoir sampler
     """
     if K is None:
         return iterator
-    random.seed(random_state)
+    if random_state is not None:
+        random.seed(random_state)
     sample = []
     for idx, item in enumerate(iterator):
         if len(sample) < K:
@@ -32,7 +33,7 @@ def reservoir_iter(iterator, K, random_state=0):
     return iter(sample)
 
 
-def reservoir_dict(iterator, field, Kdict, random_state=0):
+def reservoir_dict(iterator, field, Kdict, random_state=None):
     """Reservoir sampling over a list of dicts
 
     Given a field, and a mapping of field values to integers K,
@@ -46,7 +47,8 @@ def reservoir_dict(iterator, field, Kdict, random_state=0):
     """
     if Kdict is None:
         return iterator
-    random.seed(random_state)
+    if random_state is not None:
+        random.seed(random_state)
     sample = defaultdict(list)
     field_indices = Counter()
     for row in iterator:
@@ -63,3 +65,25 @@ def reservoir_dict(iterator, field, Kdict, random_state=0):
                     field_list[sample_idx] = row
             field_indices[field_val] += 1
     return list(chain.from_iterable(sample.itervalues()))
+
+
+def discrete_sample(prob_dist, random_state=None):
+    """Sample a random value from a discrete probability distribution
+    represented as a dict: P(x=value) = prob_dist[value].
+
+    Note: the prob_dist parameter doesn't have to be an ordered dict,
+    however for performance reasons it is best if it is.
+
+    :param prob_dist: the probability distribution
+    :type prob_dist: collections.Mapping
+    :returns: scalar drawn from the distribution
+    :rtype: object
+    """
+    limit = 0.0
+    if random_state is not None:
+        random.seed(random_state)
+    r = random.random()
+    for key, val in prob_dist.iteritems():
+        limit += val
+        if r <= limit:
+            return key
