@@ -8,6 +8,22 @@ from itertools import islice, imap, chain, starmap, ifilterfalse, count, \
     repeat, izip, izip_longest, groupby, cycle, tee, combinations
 
 
+def intersperse(delimiter, seq):
+    """Intersperse a sequence with a delimiter
+
+    :param delimiter: scalar
+    :type delimiter: object
+    :param seq: some iterable sequence
+    :type seq: collections.iterable
+    :returns: sequence interspersed with a delimiter
+    :returns: collections.iterable
+
+    >>> list(intersperse(" ", "abc"))
+    ['a', ' ', 'b', ' ', 'c']
+    """
+    return islice(chain.from_iterable(izip(repeat(delimiter), seq)), 1, None)
+
+
 def isiterable(obj):
     """
     Are we being asked to look up a list of things, instead of a single thing?
