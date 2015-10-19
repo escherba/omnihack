@@ -58,6 +58,27 @@ def read_json_lines(finput, logger=logging, show_progress=None):
             yield obj
 
 
+def ndjson2col(iterator):
+    """Convert line-delimited JSON input to Pandas-compatible column dict
+    """
+    result = collections.defaultdict(list)
+    try:
+        obj = iterator.next()
+    except StopIteration:
+        return result
+    fields = frozenset(obj.iterkeys())
+    for field in fields:
+        result[field].append(obj[field])
+    for idx, obj in enumerate(iterator, start=2):
+        missing_fields = fields - frozenset(obj.iterkeys())
+        if missing_fields:
+            raise RuntimeError("Missing fields %s at line %d" %
+                               (list(missing_fields), idx))
+        for field in fields:
+            result[field].append(obj[field])
+    return result
+
+
 FILEOPEN_FUNCTIONS = {
     '.gz': lambda fname, mode='r', compresslevel=9: gzip_open(fname, mode + 'b', compresslevel),
     '.bz2': lambda fname, mode='r', compresslevel=9: BZ2File(fname, mode, compresslevel),
