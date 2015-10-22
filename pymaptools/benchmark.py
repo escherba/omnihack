@@ -31,3 +31,7 @@ class PMTimer(object):
     def __str__(self):
         return "clock: %0.03f sec, wall: %0.03f sec." \
             % (self.clock_interval, self.wall_interval)
+
+    def to_dict(self):
+        return {'time_wall': self.wall_interval,
+                'time_clock': self.clock_interval}
