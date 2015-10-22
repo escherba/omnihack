@@ -34,4 +34,4 @@ class PMTimer(object):
 
     def to_dict(self):
         return {'time_wall': self.wall_interval,
-                'time_clock': self.clock_interval}
+                'time_cpu': self.clock_interval}
