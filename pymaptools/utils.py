@@ -25,6 +25,11 @@ class SetComparisonMixin(object):
             msg=msg
         )
 
+    def assertListAlmostEqual(self, expected, actual, num_digits, msg=None):
+        expected = [round(x, num_digits) for x in expected]
+        actual = [round(x, num_digits) for x in actual]
+        self.assertListEqual(expected, actual, msg=msg)
+
 
 def uuid1_to_posix(uuid1):
     """Convert a UUID1 timestamp to a standard POSIX timestamp
