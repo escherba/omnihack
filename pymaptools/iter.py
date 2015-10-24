@@ -8,6 +8,36 @@ from itertools import islice, imap, chain, starmap, ifilterfalse, count, \
     repeat, izip, izip_longest, groupby, cycle, tee, combinations
 
 
+def aggregate_tuples(iterable):
+    """Aggregate a list or iterable of tuples on the first key
+
+    Note: this works as an iterator (in sequence) and does not backtrack.
+    In order to achieve complete aggregation, the input iterable must be
+    presorted on the first key.
+
+    >>> tuples = [(1, "b"), (1, "a"), (1, "c"), (3, "d")]
+    >>> list(aggregate_tuples(tuples))
+    [(1, ['b', 'a', 'c']), (3, ['d'])]
+    >>> list(aggregate_tuples([]))
+    []
+    """
+    if not isinstance(iterable, collections.Iterator):
+        iterable = iter(iterable)
+    try:
+        fst_, snd_ = iterable.next()
+    except StopIteration:
+        return
+    bucket = [snd_]
+    for fst, snd in iterable:
+        if fst == fst_:
+            bucket.append(snd)
+        else:
+            yield fst_, bucket
+            fst_ = fst
+            bucket = [snd]
+    yield fst_, bucket
+
+
 def intersperse(delimiter, seq):
     """Intersperse a sequence with a delimiter
 
