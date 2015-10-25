@@ -14,6 +14,38 @@ def random_seed():
         return hash(time.time())
 
 
+def random_product(*args, **kwds):
+    """Random selection from itertools.product(*args, **kwds)"""
+    pools = map(tuple, args) * kwds.get('repeat', 1)
+    return tuple(random.choice(pool) for pool in pools)
+
+
+def random_permutation(iterable, r=None):
+    """Random selection from itertools.permutations()
+    """
+    pool = tuple(iterable)
+    r = len(pool) if r is None else r
+    return tuple(random.sample(pool, r))
+
+
+def random_combination(iterable, r):
+    """Random selection from itertools.combinations()
+    """
+    pool = tuple(iterable)
+    num = len(pool)
+    indices = sorted(random.sample(xrange(num), r))
+    return tuple(pool[i] for i in indices)
+
+
+def random_combination_with_replacement(iterable, r):
+    """Random selection from itertools.combinations_with_replacement()
+    """
+    pool = tuple(iterable)
+    num = len(pool)
+    indices = sorted(random.randrange(num) for i in xrange(r))
+    return tuple(pool[i] for i in indices)
+
+
 def reservoir_iter(iterator, K, random_state=None):
     """Simple reservoir sampler
     """

@@ -1,11 +1,74 @@
 """
 Many definitions here are from https://docs.python.org/2/library/itertools.html
 """
-import collections
+from collections import Mapping, Iterator, deque
 import operator
-import random
 from itertools import islice, imap, chain, starmap, ifilterfalse, count, \
     repeat, izip, izip_longest, groupby, cycle, tee, combinations
+from pymaptools.sample import random_product, random_combination, \
+    random_combination_with_replacement, random_permutation
+
+
+def iter_items(iterable):
+    """Map item iterator that treats arrays as maps
+    :type iterable: collections.Iterable
+    :rtype: collections.Iterator
+
+    >>> d = {"a": 10, "b": 20}
+    >>> list(iter_items(d)) == d.items()
+    True
+    >>> l = ["a", "b", "c"]
+    >>> list(iter_items(l))
+    [(0, 'a'), (1, 'b'), (2, 'c')]
+    """
+    if isinstance(iterable, Mapping):
+        return iterable.iteritems()
+    else:
+        return enumerate(iterable)
+
+
+def iter_vals(iterable):
+    """Map value iterator that treats arrays as maps
+    :type iterable: collections.Iterable
+    :rtype: collections.Iterator
+
+    >>> d = {"a": 10, "b": 20}
+    >>> list(iter_vals(d)) == d.values()
+    True
+    >>> l = ["a", "b", "c"]
+    >>> list(iter_vals(l))
+    ['a', 'b', 'c']
+    >>> list(iter_vals(iter(l)))
+    ['a', 'b', 'c']
+    """
+    if isinstance(iterable, Mapping):
+        return iterable.itervalues()
+    elif isinstance(iterable, Iterator):
+        return iterable
+    else:
+        return iter(iterable)
+
+
+def iter_keys(iterable):
+    """Map key iterator that treats arrays as maps
+    :type iterable: collections.Iterable
+    :rtype: collections.Iterator
+
+    >>> d = {"a": 10, "b": 20}
+    >>> list(iter_keys(d)) == d.keys()
+    True
+    >>> l = ["a", "b", "c"]
+    >>> list(iter_keys(l))
+    [0, 1, 2]
+    >>> list(iter_keys(iter(l)))
+    [0, 1, 2]
+    """
+    if isinstance(iterable, Mapping):
+        return iterable.iterkeys()
+    elif isinstance(iterable, Iterator):
+        return (idx for idx, _ in enumerate(iterable))
+    else:
+        return xrange(len(iterable))
 
 
 def aggregate_tuples(iterable):
@@ -21,7 +84,7 @@ def aggregate_tuples(iterable):
     >>> list(aggregate_tuples([]))
     []
     """
-    if not isinstance(iterable, collections.Iterator):
+    if not isinstance(iterable, Iterator):
         iterable = iter(iterable)
     try:
         fst_, snd_ = iterable.next()
@@ -44,9 +107,9 @@ def intersperse(delimiter, seq):
     :param delimiter: scalar
     :type delimiter: object
     :param seq: some iterable sequence
-    :type seq: collections.iterable
+    :type seq: collections.Iterable
     :returns: sequence interspersed with a delimiter
-    :returns: collections.iterable
+    :returns: collections.Iterable
 
     >>> list(intersperse(" ", "abc"))
     ['a', ' ', 'b', ' ', 'c']
@@ -226,7 +289,7 @@ def consume(iterator, n):
     # Use functions that consume iterators at C speed.
     if n is None:
         # feed the entire iterator into a zero-length deque
-        collections.deque(iterator, maxlen=0)
+        deque(iterator, maxlen=0)
     else:
         # advance to the empty slice starting at position n
         next(islice(iterator, n, n), None)
@@ -296,6 +359,13 @@ def repeatfunc(func, times=None, *args):
     """Repeat calls to func with specified arguments.
 
     Example: repeatfunc(random.random)
+
+    >>> s = set([1, 2, 3])
+    >>> list(repeatfunc(s.pop, 2))
+    [1, 2]
+    >>> list(repeatfunc(s.pop))
+    Traceback (most recent call last):
+    KeyError: 'pop from an empty set'
     """
     if times is None:
         return starmap(func, repeat(args))
@@ -399,13 +469,21 @@ def iter_except(func, exception, first=None):
         queueiter = iter_except(q.get_nowait, Queue.Empty)
         setiter = iter_except(s.pop, KeyError)
 
+    >>> s = set([1, 2, 3])
+    >>> t = set([4, 5, 6])
+    >>> list(iter_except(t.pop, KeyError, first=s.pop))
+    [1, 4, 5, 6]
+    >>> len(s)
+    2
+    >>> len(t)
+    0
     """
     try:
         if first is not None:
             yield first()
         while 1:
             yield func()
-    except exception:
+    except Exception:
         pass
 
 
@@ -413,43 +491,16 @@ def first_nonempty(iterable):
     """Return first value from iterable not equal to None
 
     after http://stackoverflow.com/a/18533669/597371
+
+    >>> first_nonempty([None, None, 78, None, 89])
+    78
+    >>> first_nonempty([]) is None
+    True
     """
     try:
         return next(item for item in iterable if item is not None)
     except StopIteration:
         pass
-
-
-def random_product(*args, **kwds):
-    """Random selection from itertools.product(*args, **kwds)"""
-    pools = map(tuple, args) * kwds.get('repeat', 1)
-    return tuple(random.choice(pool) for pool in pools)
-
-
-def random_permutation(iterable, r=None):
-    """Random selection from itertools.permutations()
-    """
-    pool = tuple(iterable)
-    r = len(pool) if r is None else r
-    return tuple(random.sample(pool, r))
-
-
-def random_combination(iterable, r):
-    """Random selection from itertools.combinations()
-    """
-    pool = tuple(iterable)
-    num = len(pool)
-    indices = sorted(random.sample(xrange(num), r))
-    return tuple(pool[i] for i in indices)
-
-
-def random_combination_with_replacement(iterable, r):
-    """Random selection from itertools.combinations_with_replacement()
-    """
-    pool = tuple(iterable)
-    num = len(pool)
-    indices = sorted(random.randrange(num) for i in xrange(r))
-    return tuple(pool[i] for i in indices)
 
 
 def tee_lookahead(t, i):
@@ -459,6 +510,14 @@ def tee_lookahead(t, i):
     Raise an IndexError if the underlying iterator doesn't
     have enough values.
 
+    >>> tee_obj = tee([10, 20, 30, 40])[0]
+    >>> tee_lookahead(tee_obj, 2)
+    30
+    >>> list(tee_obj)
+    [10, 20, 30, 40]
+    >>> tee_lookahead(tee([])[0], 1)
+    Traceback (most recent call last):
+    IndexError: 1
     """
     for value in islice(t.__copy__(), i, None):
         return value
