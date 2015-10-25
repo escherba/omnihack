@@ -71,6 +71,20 @@ def iter_keys(iterable):
         return xrange(len(iterable))
 
 
+def iter2map(iterable):
+    """Generalize maps to array types (index serves as key)
+
+    >>> sorted(iter2map([10, 20, 30]).items())
+    [(0, 10), (1, 20), (2, 30)]
+    >>> sorted(iter2map(iter2map([10, 20, 30])).items())
+    [(0, 10), (1, 20), (2, 30)]
+    """
+    if isinstance(iterable, Mapping):
+        return iterable
+    else:
+        return dict(enumerate(iterable))
+
+
 def aggregate_tuples(iterable):
     """Aggregate a list or iterable of tuples on the first key
 
