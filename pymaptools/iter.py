@@ -85,6 +85,30 @@ def iter2map(iterable):
         return dict(enumerate(iterable))
 
 
+def izip_with_cycles(*args):
+    """Wrapper around izip that persists scalar variables
+
+    This is useful when you want to be very flexible with the type of
+    arguments your method can accept. For example, in plotting, this allows
+    to be flexible color= parameter by letting it be an array when handling
+    series of data inputs or a scalar string when handling single data input.
+
+    >>> list(izip_with_cycles(["Series_A", "Series_B"], ['red', 'blue']))
+    [('Series_A', 'red'), ('Series_B', 'blue')]
+    >>> list(izip_with_cycles(["Series_A", "Series_B"], 'red'))
+    [('Series_A', 'red'), ('Series_B', 'red')]
+    """
+    iargs = []
+    for arg in args:
+        if isinstance(arg, Iterator):
+            iargs.append(arg)
+        elif isiterable(arg):
+            iargs.append(iter(arg))
+        else:
+            iargs.append(cycle([arg]))
+    return izip(*iargs)
+
+
 def aggregate_tuples(iterable):
     """Aggregate a list or iterable of tuples on the first key
 
