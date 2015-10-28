@@ -1,4 +1,4 @@
-.PHONY: clean coverage develop env extras package release test virtualenv
+.PHONY: clean coverage develop env extras package release test virtualenv shell
 
 PYMODULE = pymaptools
 PYENV = . env/bin/activate;
@@ -18,6 +18,9 @@ ifeq ($(shell uname -s), Darwin)
 coverage: test
 	open cover/index.html
 endif
+
+shell: extras
+	$(PYENV) $(ENV_EXTRA) ipython
 
 test: extras
 	$(PYENV) nosetests $(NOSEARGS)

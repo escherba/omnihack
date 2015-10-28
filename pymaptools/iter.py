@@ -97,15 +97,27 @@ def izip_with_cycles(*args):
     [('Series_A', 'red'), ('Series_B', 'blue')]
     >>> list(izip_with_cycles(["Series_A", "Series_B"], 'red'))
     [('Series_A', 'red'), ('Series_B', 'red')]
+    >>> list(izip_with_cycles("abc", "def"))
+    [('abc', 'def')]
     """
     iargs = []
+    have_iterables = False
     for arg in args:
-        if isinstance(arg, Iterator):
-            iargs.append(arg)
-        elif isiterable(arg):
-            iargs.append(iter(arg))
-        else:
-            iargs.append(cycle([arg]))
+        if isiterable(arg):
+            have_iterables = True
+            break
+    if have_iterables:
+        for arg in args:
+            if isinstance(arg, Iterator):
+                iargs.append(arg)
+            elif isiterable(arg):
+                iargs.append(iter(arg))
+            else:
+                iargs.append(cycle([arg]))
+    else:
+        # do not cycle if no iterables found (otherwise won't terminate)
+        for arg in args:
+            iargs.append([arg])
     return izip(*iargs)
 
 
