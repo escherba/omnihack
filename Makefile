@@ -43,7 +43,7 @@ clean:
 develop:
 	@echo "Installing for " `which pip`
 	-pip uninstall --yes $(PYMODULE)
-	pip install -e .
+	pip install -U -e .
 
 env virtualenv: env/bin/activate
 env/bin/activate: requirements.txt setup.py
