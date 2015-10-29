@@ -1,7 +1,7 @@
 import copy
 from itertools import izip
 from functools import partial
-from collections import OrderedDict, Callable
+from collections import OrderedDict, Callable, defaultdict
 from pymaptools.iter import iter_items, iter_vals
 
 
@@ -143,14 +143,12 @@ class TableOfCounts(object):
     """
     Example:
 
-    >>> table1 = TableOfCounts(rows=[(1, 5), (4, 6)])
-    >>> table1.grand_total
-    16
     >>> table2 = TableOfCounts(cols=[(0, 0), (45, 0)])
     >>> table2.grand_total
     45
-    >>> table2.col_totals.values()
-    [0, 45]
+    >>> table1 = TableOfCounts(rows=[(1, 5), (4, 6)])
+    >>> table1.col_totals.values()
+    [5, 11]
     """
     # TODO: use one of Scipy's sparse matrix representations instead of
     # a dict of dicts
@@ -208,6 +206,17 @@ class TableOfCounts(object):
             grand_total_ = self.grand_total_ = sum(self.iter_row_totals())
         return grand_total_
 
+    def to_labels(self):
+        """Returns a tuple (ltrue, lpred). Inverse of ``from_labels``
+        """
+        ltrue = []
+        lpred = []
+        for ri, ci, count in self.iter_cells_with_indices():
+            for _ in xrange(count):
+                ltrue.append(ri)
+                lpred.append(ci)
+        return ltrue, lpred
+
     @classmethod
     def from_labels(cls, labels_true, labels_pred):
         rows = DefaultOrderedDict(OrderedCounter)
@@ -223,6 +232,72 @@ class TableOfCounts(object):
             grand_total += 1
         return cls(rows=rows, cols=cols, row_totals=row_totals,
                    col_totals=col_totals, grand_total=grand_total)
+
+    def to_partitions(self):
+        """Inverse to ``from_partitions`` constructor
+
+        >>> p1 = [[5, 6, 7, 8], [9, 10, 11], [0, 1, 2, 3, 4]]
+        >>> p2 = [[0, 1, 5, 6, 9], [2, 3, 7], [8, 10, 11], [4]]
+        >>> t = TableOfCounts.from_partitions(p1, p2)
+        >>> t.to_partitions()
+        ([[5, 6, 7, 8], [9, 10, 11], [0, 1, 2, 3, 4]], [[0, 1, 5, 6, 9], [2, 3, 7], [8, 10, 11], [4]])
+        """
+        point = 0
+        ptrue = defaultdict(list)
+        ppred = defaultdict(list)
+        for ri, ci, count in self.iter_cells_with_indices():
+            for _ in xrange(count):
+                ptrue[ri].append(point)
+                ppred[ci].append(point)
+                point += 1
+        return ptrue.values(), ppred.values()
+
+    @classmethod
+    def from_partitions(cls, partitions1, partitions2):
+        """Construct a coincidence table from two import partitionings
+
+        Partitions are non-overlapping clusters.
+
+        >>> p1 = [[1, 2, 3, 4], [5, 6, 7], [8, 9, 10, 11, 12]]
+        >>> p2 = [[2, 4, 6, 8, 10], [3, 9, 12], [1, 5, 7], [11]]
+        >>> t = TableOfCounts.from_partitions(p1, p2)
+        >>> t.to_labels()
+        ([0, 0, 0, 0, 1, 1, 1, 2, 2, 2, 2, 2], [0, 0, 1, 2, 0, 2, 2, 0, 0, 1, 1, 3])
+
+        """
+        ltrue, lpred = partitions_to_labels(partitions1, partitions2)
+        return cls.from_labels(ltrue, lpred)
+
+    def to_clusters(self):
+        """Return a coded representation of clusters
+
+        In the representations, clusters are lists, classes are integers
+
+        >>> p1 = [[1, 2, 3, 4], [5, 6, 7], [8, 9, 10, 11, 12]]
+        >>> p2 = [[2, 4, 6, 8, 10], [3, 9, 12], [1, 5, 7], [11]]
+        >>> t = TableOfCounts.from_partitions(p1, p2)
+        >>> t.to_clusters()
+        [[0, 0, 1, 2, 2], [0, 2, 2], [0, 1, 1], [2]]
+        """
+        ltrue, lpred = self.to_labels()
+        return labels_to_clusters(ltrue, lpred)
+
+    @classmethod
+    def from_clusters(cls, clusters):
+        """Construct an instance from to_clusters() output
+
+        >>> clusters = [[2, 2, 0, 0, 1], [2, 2, 0], [0, 1, 1], [2]]
+        >>> t = TableOfCounts.from_clusters(clusters)
+        >>> t.to_clusters()
+        [[2, 2, 0, 0, 1], [2, 2, 0], [0, 1, 1], [2]]
+        """
+        ltrue = []
+        lpred = []
+        for k, class_labels in iter_items(clusters):
+            for c in class_labels:
+                ltrue.append(c)
+                lpred.append(k)
+        return cls.from_labels(ltrue, lpred)
 
     def iter_cells_with_indices(self):
         for ri, row in iter_items(self.rows):
@@ -256,3 +331,56 @@ class TableOfCounts(object):
 
     def iter_row_totals(self):
         return iter_vals(self.row_totals)
+
+
+def partitions_to_labels(p1, p2):
+
+    """Convert partitions to two arrays of labels
+
+    Partitions are non-overlapping clusters
+
+    >>> p1 = [[1, 2, 3, 4], [5, 6, 7], [8, 9, 10, 11, 12]]
+    >>> p2 = [[2, 4, 6, 8, 10], [3, 9, 12], [1, 5, 7], [11]]
+    >>> partitions_to_labels(p1, p2)
+    ([0, 0, 1, 2, 2, 0, 2, 2, 0, 1, 1, 2], [0, 0, 0, 0, 0, 1, 1, 1, 2, 2, 2, 3])
+    """
+
+    ltrue = []
+    lpred = []
+
+    points_to_pids_1 = {}
+
+    for pid1, points in iter_items(p1):
+        for point in points:
+            if point in points_to_pids_1:
+                raise ValueError("Non-unique element found: not a partitioning")
+            else:
+                points_to_pids_1[point] = pid1
+
+    seen_p2 = set()
+    for pid2, points in iter_items(p2):
+        for point in points:
+            if point in seen_p2:
+                raise ValueError("Non-unique element found: not a partitioning")
+            try:
+                pid1 = points_to_pids_1[point]
+            except KeyError:
+                raise ValueError("Second partitioning had an element not in first")
+            else:
+                del points_to_pids_1[point]
+            ltrue.append(pid1)
+            lpred.append(pid2)
+            seen_p2.add(point)
+
+    if points_to_pids_1:
+        raise ValueError("Second partitioning did not cover all elements in first")
+
+    return ltrue, lpred
+
+
+def labels_to_clusters(ltrue, lpred):
+
+    result = defaultdict(list)
+    for l1, l2 in izip(ltrue, lpred):
+        result[l2].append(l1)
+    return result.values()
