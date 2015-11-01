@@ -126,10 +126,12 @@ def nested_set(root, keys, value, strict=False):
 
     >>> example = {"a": {"b": 1, "c": 42}, "d": None}
     >>> nested_set(example, ["a", "c"], None)
-    {'a': {'c': None, 'b': 1}, 'd': None}
+    >>> example['a']['c']
+    None
     >>> example = {}
     >>> nested_set(example, ["a", "b", "c"], 56)
-    {'a': {'b': {'c': 56}}}
+    >>> example['a']['b']['c']
+    56
     >>> nested_set(example, [], 42)
     42
     """
