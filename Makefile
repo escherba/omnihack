@@ -25,7 +25,7 @@ endif
 shell: extras
 	$(PYENV) $(ENV_EXTRA) ipython
 
-test: extras
+test: env
 	$(PYENV) nosetests $(NOSEARGS)
 	$(PYENV) py.test README.rst
 

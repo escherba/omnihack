@@ -1,6 +1,8 @@
 dependencies:
   cache_directories:
     - "env"
+  override:
+    - make env
 
 test:
   override:
