@@ -45,9 +45,15 @@ develop:
 	-pip uninstall --yes $(PYMODULE)
 	pip install -U -e .
 
+ifeq ($(PIP_SYSTEM_SITE_PACKAGES),1)
+VENV_OPTS="--system-site-packages"
+else
+VENV_OPTS="--no-site-packages"
+endif
+
 env virtualenv: env/bin/activate
 env/bin/activate: requirements.txt setup.py
-	test -f $@ || virtualenv --no-site-packages env
+	test -f $@ || virtualenv $(VENV_OPTS) env
 	$(PYENV) pip install -U pip wheel
 	$(PYENV) pip install -e . -r $<
 	touch $@
