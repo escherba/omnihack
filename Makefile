@@ -1,16 +1,19 @@
 .PHONY: clean coverage develop env extras package release test virtualenv shell
 
-PYMODULE = pymaptools
-PYENV = . env/bin/activate;
-PYTHON = $(PYENV) python
-EXTRAS_REQS := $(wildcard requirements-*.txt)
-DISTRIBUTE = sdist bdist_wheel
+PYMODULE := pymaptools
+EXTRAS_REQS := dev-requirements.txt $(wildcard extras-*-requirements.txt)
+DISTRIBUTE := sdist bdist_wheel
+
+PYENV := . env/bin/activate;
+PYTHON := $(PYENV) python
+PIP := $(PYENV) pip
+
 
 package: env
 	$(PYTHON) setup.py $(DISTRIBUTE)
 
-release: env
-	$(PYTHON) setup.py $(DISTRIBUTE) upload -r livefyre
+#release: env
+#	$(PYTHON) setup.py $(DISTRIBUTE) upload -r livefyre
 
 # if in local dev on Mac, `make coverage` will run tests and open
 # coverage report in the browser
@@ -45,9 +48,17 @@ develop:
 	-pip uninstall --yes $(PYMODULE)
 	pip install -U -e .
 
+ifeq ($(PIP_SYSTEM_SITE_PACKAGES),1)
+VENV_OPTS="--system-site-packages"
+else
+VENV_OPTS="--no-site-packages"
+endif
+
 env virtualenv: env/bin/activate
-env/bin/activate: requirements.txt setup.py
-	test -f $@ || virtualenv --no-site-packages env
-	$(PYENV) pip install -U pip wheel
-	$(PYENV) pip install -e . -r $<
+env/bin/activate: dev-requirements.txt requirements.txt | setup.py
+	test -f $@ || virtualenv $(VENV_OPTS) env
+	$(PYENV) easy_install -U pip
+	$(PIP) install -U pip wheel
+	$(PYENV) for reqfile in $^; do pip install -r $$reqfile; done
+	$(PYENV) pip install -e .
 	touch $@

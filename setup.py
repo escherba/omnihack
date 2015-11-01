@@ -15,7 +15,7 @@ EGG_RE = re.compile(r'^(.+)#egg=([a-z0-9_.]+)-([a-z0-9_.-]+)$')
 URL_RE = re.compile(r'^\s*(https?://[\w\.]+.*/([^\/]+)/archive/)([^\/]+).zip$')
 
 # our custom way of specifying extra requirements in separate text files
-EXTRAS_RE = re.compile(r'.*\bextras\.(\w+)\.txt$')
+EXTRAS_RE = re.compile(r'^extras\-(\w+)\-requirements\.txt$')
 
 
 def parse_reqs(reqs):
@@ -71,8 +71,8 @@ def build_extras(glob_pattern):
 INSTALL_REQUIRES, INSTALL_DEPS = parse_reqs(
     resource_string(__name__, 'requirements.txt').splitlines())
 TESTS_REQUIRE, TESTS_DEPS = parse_reqs(
-    resource_string(__name__, 'requirements-tests.txt').splitlines())
-EXTRAS_REQUIRE, EXTRAS_DEPS = build_extras('requirements-extras.*.txt')
+    resource_string(__name__, 'dev-requirements.txt').splitlines())
+EXTRAS_REQUIRE, EXTRAS_DEPS = build_extras('extras-*-requirements.txt')
 DEPENDENCY_LINKS = list(set(itertools.chain(
     INSTALL_DEPS,
     TESTS_DEPS,
@@ -82,7 +82,7 @@ DEPENDENCY_LINKS = list(set(itertools.chain(
 
 setup(
     name="pymaptools",
-    version="0.1.25",
+    version="0.1.26",
     author="Eugene Scherba",
     author_email="escherba@gmail.com",
     description=("A collection of Python containers for data analysis"),

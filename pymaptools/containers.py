@@ -378,9 +378,37 @@ def partitions_to_labels(p1, p2):
     return ltrue, lpred
 
 
-def labels_to_clusters(ltrue, lpred):
+def labels_to_clusters(labels_true, labels_pred):
+    """Convert pair of label arrays to clusters of true labels
 
+    Exact inverse of ``clusters_to_labels``
+
+    >>> pair = ([1, 1, 1, 1, 1, 0, 0],
+    ...         [0, 0, 0, 1, 1, 2, 3])
+    >>> labels_to_clusters(*pair)
+    [[1, 1, 1], [1, 1], [0], [0]]
+
+    """
     result = defaultdict(list)
-    for l1, l2 in izip(ltrue, lpred):
-        result[l2].append(l1)
+    for label_true, label_pred in izip(labels_true, labels_pred):
+        result[label_pred].append(label_true)
     return result.values()
+
+
+def clusters_to_labels(iterable):
+    """Convert clusters of true labels to pair of label arrays
+
+    Exact inverse of ``labels_to_clusters``
+
+    >>> clusters = [[1, 1, 1], [1, 1], [0], [0]]
+    >>> clusters_to_labels(clusters)
+    ([1, 1, 1, 1, 1, 0, 0], [0, 0, 0, 1, 1, 2, 3])
+
+    """
+    labels_true = []
+    labels_pred = []
+    for cluster_idx, cluster in enumerate(iterable):
+        for label_true in cluster:
+            labels_true.append(label_true)
+            labels_pred.append(cluster_idx)
+    return labels_true, labels_pred
