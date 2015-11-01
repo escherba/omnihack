@@ -1,0 +1,11 @@
+dependencies:
+  cache_directories:
+    - "env"
+
+test:
+  override:
+    - make test
+
+general:
+  artifacts:
+    - "cover"
