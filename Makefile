@@ -26,7 +26,7 @@ shell: extras
 	$(PYENV) $(ENV_EXTRA) ipython
 
 test: env
-	$(PYENV) nosetests $(NOSEARGS)
+	$(PYENV) $(ENV_EXTRA) python `which nosetests` $(NOSEARGS)
 	$(PYENV) py.test README.rst
 
 extras: env/make.extras
@@ -58,7 +58,7 @@ env virtualenv: env/bin/activate
 env/bin/activate: dev-requirements.txt requirements.txt | setup.py
 	test -f $@ || virtualenv $(VENV_OPTS) env
 	$(PYENV) easy_install -U pip
-	$(PIP) install -U pip wheel
+	$(PIP) install -U wheel
 	$(PYENV) for reqfile in $^; do pip install -r $$reqfile; done
 	$(PYENV) pip install -e .
 	touch $@
