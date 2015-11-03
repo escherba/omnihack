@@ -100,7 +100,7 @@ class DefaultOrderedDict(OrderedDict):
     """
     def __init__(self, default_factory=None, *a, **kw):
         if (default_factory is not None and
-           not isinstance(default_factory, Callable)):
+                not isinstance(default_factory, Callable)):
             raise TypeError('first argument must be callable')
         OrderedDict.__init__(self, *a, **kw)
         self.default_factory = default_factory
@@ -132,7 +132,7 @@ class DefaultOrderedDict(OrderedDict):
 
     def __deepcopy__(self, memo):
         return type(self)(self.default_factory,
-                          copy.deepcopy(self.items()))
+                          copy.deepcopy(self.items(), memo=memo))
 
 
 OrderedCounter = partial(DefaultOrderedDict, int)
@@ -155,56 +155,82 @@ class TableOfCounts(object):
 
     def __init__(self, rows=None, cols=None,
                  row_totals=None, col_totals=None, grand_total=None):
-        self.rows_ = rows
-        self.cols_ = cols
-        self.row_totals_ = row_totals
-        self.col_totals_ = col_totals
-        self.grand_total_ = grand_total
+        self._rows = rows
+        self._cols = cols
+        self._row_totals = row_totals
+        self._col_totals = col_totals
+        self._grand_total = grand_total
 
     @property
     def rows(self):
-        rows_ = self.rows_
-        if rows_ is None:
-            rows_ = self.rows_ = DefaultOrderedDict(OrderedCounter)
-            for cid, col in iter_items(self.cols_):
+        """Rows
+        """
+        _rows = self._rows
+        if _rows is None:
+            _rows = self._rows = DefaultOrderedDict(OrderedCounter)
+            for cid, col in iter_items(self._cols):
                 for rid, cell in iter_items(col):
-                    rows_[rid][cid] = cell
-        return rows_
+                    _rows[rid][cid] = cell
+        return _rows
 
     @property
     def cols(self):
-        cols_ = self.cols_
-        if cols_ is None:
-            cols_ = self.cols_ = DefaultOrderedDict(OrderedCounter)
-            for rid, row in iter_items(self.rows_):
+        """Columns
+        """
+        _cols = self._cols
+        if _cols is None:
+            _cols = self._cols = DefaultOrderedDict(OrderedCounter)
+            for rid, row in iter_items(self._rows):
                 for cid, cell in iter_items(row):
-                    cols_[cid][rid] = cell
-        return cols_
+                    _cols[cid][rid] = cell
+        return _cols
 
     @property
     def row_totals(self):
-        row_totals_ = self.row_totals_
-        if row_totals_ is None:
-            row_totals_ = self.row_totals_ = OrderedCounter()
+        """Row Totals
+
+        >>> t = TableOfCounts.from_cells([1, 2, 3, 4, 5, 6], num_cols=2)
+        >>> t.row_totals.values()
+        [3, 7, 11]
+
+        Ensure attribute caching::
+
+        >>> t._row_totals[1]
+        7
+        """
+        _row_totals = self._row_totals
+        if _row_totals is None:
+            _row_totals = self._row_totals = OrderedCounter()
             for rid, row in iter_items(self.rows):
-                row_totals_[rid] = sum(iter_vals(row))
-        return row_totals_
+                _row_totals[rid] = sum(iter_vals(row))
+        return _row_totals
 
     @property
     def col_totals(self):
-        col_totals_ = self.col_totals_
-        if col_totals_ is None:
-            col_totals_ = self.cow_totals_ = OrderedCounter()
+        """Column Totals
+
+        >>> t = TableOfCounts.from_cells([1, 2, 3, 4, 5, 6], num_cols=2)
+        >>> t.col_totals.values()
+        [9, 12]
+
+        Ensure attribute caching::
+
+        >>> t._col_totals[1]
+        12
+        """
+        _col_totals = self._col_totals
+        if _col_totals is None:
+            _col_totals = self._col_totals = OrderedCounter()
             for rid, col in iter_items(self.cols):
-                col_totals_[rid] = sum(iter_vals(col))
-        return col_totals_
+                _col_totals[rid] = sum(iter_vals(col))
+        return _col_totals
 
     @property
     def grand_total(self):
-        grand_total_ = self.grand_total_
-        if grand_total_ is None:
-            grand_total_ = self.grand_total_ = sum(self.iter_row_totals())
-        return grand_total_
+        _grand_total = self._grand_total
+        if _grand_total is None:
+            _grand_total = self._grand_total = sum(self.iter_row_totals())
+        return _grand_total
 
     def to_labels(self):
         """Returns a tuple (ltrue, lpred). Inverse of ``from_labels``
@@ -220,18 +246,29 @@ class TableOfCounts(object):
     @classmethod
     def from_labels(cls, labels_true, labels_pred):
         rows = DefaultOrderedDict(OrderedCounter)
-        cols = DefaultOrderedDict(OrderedCounter)
-        row_totals = OrderedCounter()
-        col_totals = OrderedCounter()
-        grand_total = 0
         for c, k in izip(labels_true, labels_pred):
             rows[c][k] += 1
-            cols[k][c] += 1
-            row_totals[c] += 1
-            col_totals[k] += 1
-            grand_total += 1
-        return cls(rows=rows, cols=cols, row_totals=row_totals,
-                   col_totals=col_totals, grand_total=grand_total)
+        return cls(rows=rows)
+
+    def __getitem__(self, key):
+        return self.rows[key]
+
+    @classmethod
+    def from_cells(cls, iterable, num_cols):
+        """Instantiate class from a reshaped iterable of cells
+
+        >>> t = TableOfCounts.from_cells([1, 2, 3, 4, 5, 6], num_cols=2)
+        >>> t[1][1]
+        4
+        """
+        row_idx = 0
+        rows = DefaultOrderedDict(OrderedCounter)
+        for idx, cell in enumerate(iterable):
+            col_idx = idx % num_cols
+            rows[row_idx][col_idx] = cell
+            if col_idx == num_cols - 1:
+                row_idx += 1
+        return cls(rows=rows)
 
     def to_partitions(self):
         """Inverse to ``from_partitions`` constructor

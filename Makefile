@@ -46,7 +46,7 @@ clean:
 develop:
 	@echo "Installing for " `which pip`
 	-pip uninstall --yes $(PYMODULE)
-	pip install -U -e .
+	pip install -e .
 
 ifeq ($(PIP_SYSTEM_SITE_PACKAGES),1)
 VENV_OPTS="--system-site-packages"
