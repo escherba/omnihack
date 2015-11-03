@@ -552,7 +552,7 @@ def iter_except(func, exception, first=None):
             yield first()
         while 1:
             yield func()
-    except Exception:
+    except exception:
         pass
 
 
