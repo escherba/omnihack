@@ -3,7 +3,6 @@ import uuid
 import sys
 from copy import deepcopy
 from contextlib import contextmanager
-from pymaptools.iter import isiterable
 
 
 class SetComparisonMixin(object):

@@ -1,7 +1,5 @@
-__version__ = '0.1.28'
+__version__ = '0.2.0'
 
-from vectorize import enumerator
-from unionfind import UnionFind
 from collections import defaultdict
 from functools import partial
 from funcy import compose

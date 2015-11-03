@@ -1,4 +1,5 @@
-from pymaptools.queue import OrderedSet, Heap
+from pymaptools.queue import Heap
+from pymaptools.containers import OrderedSet
 import time
 import pickle
 import unittest

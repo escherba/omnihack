@@ -17,6 +17,7 @@ URL_RE = re.compile(r'^\s*(https?://[\w\.]+.*/([^\/]+)/archive/)([^\/]+).zip$')
 # our custom way of specifying extra requirements in separate text files
 EXTRAS_RE = re.compile(r'^extras\-(\w+)\-requirements\.txt$')
 
+
 def parse_reqs(reqs):
     """Parse requirements.txt files into lists of requirements and dependencies
     """
@@ -33,11 +34,11 @@ def parse_reqs(reqs):
         # git+https://github.com/Livefyre/pymaptools#egg=pymaptools-0.0.3
         egg_info = EGG_RE.match(req)
         if egg_info is not None:
-            url, egg, version = egg_info.group(0, 2, 3)
-            #if version is None:
-            #    pkg_reqs.append(egg)
-            #else:
-            #    pkg_reqs.append(egg + '==' + version)
+            url, _, _ = egg_info.group(0, 2, 3)
+            # if version is None:
+            #     pkg_reqs.append(egg)
+            # else:
+            #     pkg_reqs.append(egg + '==' + version)
             dep_links.append(url)
             continue
         # add packages of form:
@@ -82,7 +83,7 @@ DEPENDENCY_LINKS = list(set(itertools.chain(
 
 setup(
     name="pymaptools",
-    version="0.1.28",
+    version="0.2.0",
     author="Eugene Scherba",
     author_email="escherba@gmail.com",
     description=("A collection of Python containers for data analysis"),
