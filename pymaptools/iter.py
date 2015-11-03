@@ -9,6 +9,25 @@ from pymaptools.sample import random_product, random_combination, \
     random_combination_with_replacement, random_permutation
 
 
+def ilen(iterable):
+    """Consumes an iterator and returns its length.
+
+    Also works on all iterables.
+
+    Why doesn't this exist in itertools...
+
+    >>> g = (x for x in [1, 2, 3])
+    >>> ilen(g)
+    3
+    >>> ilen([1, 2, 3])
+    3
+    """
+    if isinstance(iterable, Iterator):
+        return sum(1 for _ in iterable)
+    else:
+        return len(iterable)
+
+
 def iter_items(iterable):
     """Map item iterator that treats arrays as maps
     :type iterable: collections.Iterable
