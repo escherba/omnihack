@@ -22,9 +22,9 @@ def rename_store_weight(cls):
     Class decorator to allow Bigraph objects to use
     unsorted version of _store_edge() in place of
     the sorted one while still allowing Bigraph descendants
-    to override _store_weight_sorted() on their own
+    to override store_weight_sorted() on their own
     '''
-    cls._store_weight_sorted = cls._store_weight
+    cls.store_weight_sorted = cls.store_weight
     return cls
 
 
@@ -35,7 +35,7 @@ class Bigraph(SimplePicklableMixin):
     Note that U->V mapping is unnecessary if the only goal is to find bicliques.
 
     No sorting in Bigraph -- classes that inherit from Bigraph will have to
-    define the _store_weight_sorted() method on their own.
+    define the store_weight_sorted() method on their own.
 
     Weights by default are assumed to be integers, and the default
     instances serve as edge counters.
@@ -82,7 +82,7 @@ class Bigraph(SimplePicklableMixin):
                 self.U2V = defaultdict(set)
                 self.V2U = defaultdict(set)
                 self.edges = defaultdict(weight_type)
-                for edge, weight in base.edges.iteritems():
+                for edge, weight in base.iter_edge_weights():
                     if weight >= min_edge_weight:
                         u, v = edge
                         self.add_edge(u, v, weight=deepcopy(weight))
@@ -105,16 +105,18 @@ class Bigraph(SimplePicklableMixin):
             g.add_edge(*edge)
         return g
 
-    def to_edgelist(self):
-        for edge, weight in self.edges.iteritems():
-            yield edge
+    def iter_edges(self):
+        return self.edges.iterkeys()
+
+    def iter_edge_weights(self):
+        return self.edges.iteritems()
 
     def rename_nodes(self, unode_renamer=None, vnode_renamer=None):
         """Factory method that produces another graph just like current one
         except with renamed nodes (can be used for reducing a graph)
         """
         new_graph = self.__class__()
-        for (u, v), weight in self.edges.iteritems():
+        for (u, v), weight in self.iter_edge_weights():
             try:
                 u = unode_renamer(u)
                 v = vnode_renamer(v)
@@ -151,8 +153,8 @@ class Bigraph(SimplePicklableMixin):
         dict1, dict2 = self.edges, other.edges
         edge_intersection = set(dict1.keys()) & set(dict2.keys())
         # compile edges into dicts and store weights
-        g_map_edge = g._map_edge
-        g_store_weight = g._store_weight
+        g_map_edge = g.map_edge
+        g_store_weight = g.store_weight
         this_zero = self.weight_type()
         other_zero = other.weight_type()
         for e in edge_intersection:
@@ -170,8 +172,8 @@ class Bigraph(SimplePicklableMixin):
         dict1, dict2 = self.edges, other.edges
         edge_union = set(dict1.keys()) | set(dict2.keys())
         # compile edges into dicts and store weights
-        g_map_edge = g._map_edge
-        g_store_weight = g._store_weight
+        g_map_edge = g.map_edge
+        g_store_weight = g.store_weight
         this_zero = self.weight_type()
         other_zero = other.weight_type()
         for e in edge_union:
@@ -187,8 +189,8 @@ class Bigraph(SimplePicklableMixin):
         dict1, dict2 = self.edges, other.edges
         edge_difference = set(dict1.keys()) - set(dict2.keys())
         # hash edges into dicts and store weights
-        g_map_edge = g._map_edge
-        g_store_weight = g._store_weight
+        g_map_edge = g.map_edge
+        g_store_weight = g.store_weight
         for e in edge_difference:
             g_map_edge(e)
             g_store_weight(e, dict1[e])
@@ -215,20 +217,20 @@ class Bigraph(SimplePicklableMixin):
         for node in self.V:
             node_name, attrs = vnode_decorator(self, node)
             sV.add_node(node_name, **attrs)
-        for edge, weight in self.edges.iteritems():
+        for edge, weight in self.iter_edge_weights():
             unode, vnode = edge
             edge, attrs = edge_decorator(self, unode, vnode, weight)
             g.add_edge(*edge, **attrs)
         return g
 
-    def _map_edge(self, edge):
+    def map_edge(self, edge):
         u, v = edge
         if u is None or v is None:
             raise GraphError("An edge must connect two nodes")
         self.U2V[u].add(v)
         self.V2U[v].add(u)
 
-    def _store_weight(self, edge, weight):
+    def store_weight(self, edge, weight):
         self.edges[edge] += weight
 
     def add_clique(self, clique, weight=1):
@@ -248,12 +250,13 @@ class Bigraph(SimplePicklableMixin):
         matrices.
         '''
         edge = (u, v)
-        self._map_edge(edge)
+        self.map_edge(edge)
         # using "sorted" version of adding an edge -- needed
         # only for subclasses which redefine this method
-        self._store_weight_sorted(edge, weight)
+        self.store_weight_sorted(edge, weight)
 
-    def make_edge(self, u, v):
+    @staticmethod
+    def make_edge(u, v):
         return (u, v)
 
     def __len__(self):
@@ -399,6 +402,7 @@ class Graph(Bigraph):
     undirected graph G = (V, E).
     """
     def __init__(self, base=None, weight_type=int):
+        super(Graph, self).__init__()
         self.weight_type = weight_type
         if base is None:
             # creating from scratch
@@ -420,18 +424,18 @@ class Graph(Bigraph):
         else:
             raise TypeError("Base object has incorrect type")
 
-    def rename_nodes(self, vnode_renamer=None):
+    def rename_nodes(self, vnode_renamer=None, **kwargs):
         """Factory method that produces another graph just like current one
         except with renamed nodes (can be used for reducing a graph)
         """
         new_graph = self.__class__()
-        for (u, v), weight in self.edges.iteritems():
+        for (u, v), weight in self.iter_edge_weights():
             u = vnode_renamer(u)
             v = vnode_renamer(v)
             new_graph.add_edge(u, v, weight)
         return new_graph
 
-    def _store_weight_sorted(self, edge, weight):
+    def store_weight_sorted(self, edge, weight):
         # Storing weights is antisymmetric -- order the tuple
         self.edges[self.make_edge(*edge)] += weight
 
@@ -460,7 +464,8 @@ class Graph(Bigraph):
         else:
             return None
 
-    def make_edge(self, u, v):
+    @staticmethod
+    def make_edge(u, v):
         return tuple(sorted((u, v)))
 
     def find_connected_components(self):
@@ -492,7 +497,7 @@ class Graph(Bigraph):
             # stack is empty: done with one component
             yield component
 
-    def get_dot(self, name="graph", edge_decorator=None, vnode_decorator=None, **kwargs):
+    def get_dot(self, name="graph", edge_decorator=None, vnode_decorator=None):
         import pygraphviz as pgv
         if edge_decorator is None:
             edge_decorator = lambda g, u, v, weight: ((u, v), {})
@@ -502,7 +507,7 @@ class Graph(Bigraph):
         for node in self.V:
             node_name, attrs = vnode_decorator(self, node)
             g.add_node(node_name, **attrs)
-        for edge, weight in self.edges.iteritems():
+        for edge, weight in self.iter_edge_weights():
             unode, vnode = edge
             edge, attrs = edge_decorator(self, unode, vnode, weight)
             g.add_edge(*edge, **attrs)
@@ -565,7 +570,7 @@ def describe_graph(g, graph_name=None):
         print >>sio, "U2V mapping (%d):\n\t%s\n" % (len(g.U2V), g.U2V)
         print >>sio, "Nodes (%d):\n\t%s\n" % (len(g.V), g.V)
         print >>sio, "Connected components:"
-        for idx, comp in enumerate(g.find_connected_components(), start=1):
+        for comp in g.find_connected_components():
             print >>sio, "\tComponent density: %.3f" % comp.get_density()
             print >>sio, "\tMaximal cliques:"
             for jdx, clique in enumerate(g.find_cliques(comp), start=1):
