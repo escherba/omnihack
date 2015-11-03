@@ -322,14 +322,6 @@ class DumperFacade(object):
         with open(fname, 'wb') as fhandle:
             pickle.dump(estimator, fhandle)
 
-    @staticmethod
-    def load(fname):
-        pass
-
-    @staticmethod
-    def dump(obj, fname):
-        pass
-
 
 class SimplePicklableMixin(object):
     def save_to(self, filename):
