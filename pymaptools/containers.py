@@ -153,13 +153,12 @@ class TableOfCounts(object):
     # TODO: use one of Scipy's sparse matrix representations instead of
     # a dict of dicts
 
-    def __init__(self, rows=None, cols=None,
-                 row_totals=None, col_totals=None, grand_total=None):
+    def __init__(self, rows=None, cols=None):
         self._rows = rows
         self._cols = cols
-        self._row_totals = row_totals
-        self._col_totals = col_totals
-        self._grand_total = grand_total
+        self._row_totals = None
+        self._col_totals = None
+        self._grand_total = None
 
     @property
     def rows(self):
