@@ -23,7 +23,7 @@ class Step(object):
         """Enter context"""
         return self
 
-    def __exit__(self, type, value, traceback):
+    def __exit__(self, obj_type, obj_value, traceback):
         """Exit context (tear down)"""
         self.on_exit()
 

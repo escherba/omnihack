@@ -11,7 +11,7 @@ with significant additional changes by D. Eppstein.
 from collections import defaultdict
 
 
-class UnionFind:
+class UnionFind(object):
     """Union-find data structure.
 
     Each unionFind instance X maintains a family of disjoint sets of

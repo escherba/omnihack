@@ -1,9 +1,8 @@
-from pymaptools import uniq
-
 """
 the get_class_attrs and get_object_attrs methods below
 are based on http://stackoverflow.com/a/10313703/597371
 """
+from pymaptools import uniq
 
 
 def get_class_attrs(klass):
