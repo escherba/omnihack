@@ -497,7 +497,8 @@ class Graph(Bigraph):
             # stack is empty: done with one component
             yield component
 
-    def get_dot(self, name="graph", edge_decorator=None, vnode_decorator=None):
+    def get_dot(self, name="graph", edge_decorator=None, vnode_decorator=None,
+                **kwargs):
         import pygraphviz as pgv
         if edge_decorator is None:
             edge_decorator = lambda g, u, v, weight: ((u, v), {})

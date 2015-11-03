@@ -5,8 +5,6 @@ from collections import Mapping, Iterator, deque
 import operator
 from itertools import islice, imap, chain, starmap, ifilterfalse, count, \
     repeat, izip, izip_longest, groupby, cycle, tee, combinations
-from pymaptools.sample import random_product, random_combination, \
-    random_combination_with_replacement, random_permutation
 
 
 def ilen(iterable):

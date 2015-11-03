@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 
 import unittest
-from pymaptools import enumerator
+from pymaptools.vectorize import enumerator
 
 
 class TestEnum(unittest.TestCase):
