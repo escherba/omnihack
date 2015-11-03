@@ -155,35 +155,35 @@ class TableOfCounts(object):
 
     def __init__(self, rows=None, cols=None,
                  row_totals=None, col_totals=None, grand_total=None):
-        self.rows_ = rows
-        self.cols_ = cols
-        self.row_totals_ = row_totals
-        self.col_totals_ = col_totals
-        self.grand_total_ = grand_total
+        self._rows = rows
+        self._cols = cols
+        self._row_totals = row_totals
+        self._col_totals = col_totals
+        self._grand_total = grand_total
 
     @property
     def rows(self):
         """Rows
         """
-        rows_ = self.rows_
-        if rows_ is None:
-            rows_ = self.rows_ = DefaultOrderedDict(OrderedCounter)
-            for cid, col in iter_items(self.cols_):
+        _rows = self._rows
+        if _rows is None:
+            _rows = self._rows = DefaultOrderedDict(OrderedCounter)
+            for cid, col in iter_items(self._cols):
                 for rid, cell in iter_items(col):
-                    rows_[rid][cid] = cell
-        return rows_
+                    _rows[rid][cid] = cell
+        return _rows
 
     @property
     def cols(self):
         """Columns
         """
-        cols_ = self.cols_
-        if cols_ is None:
-            cols_ = self.cols_ = DefaultOrderedDict(OrderedCounter)
-            for rid, row in iter_items(self.rows_):
+        _cols = self._cols
+        if _cols is None:
+            _cols = self._cols = DefaultOrderedDict(OrderedCounter)
+            for rid, row in iter_items(self._rows):
                 for cid, cell in iter_items(row):
-                    cols_[cid][rid] = cell
-        return cols_
+                    _cols[cid][rid] = cell
+        return _cols
 
     @property
     def row_totals(self):
@@ -195,15 +195,15 @@ class TableOfCounts(object):
 
         Ensure attribute caching::
 
-        >>> t.row_totals_[1]
+        >>> t._row_totals[1]
         7
         """
-        row_totals_ = self.row_totals_
-        if row_totals_ is None:
-            row_totals_ = self.row_totals_ = OrderedCounter()
+        _row_totals = self._row_totals
+        if _row_totals is None:
+            _row_totals = self._row_totals = OrderedCounter()
             for rid, row in iter_items(self.rows):
-                row_totals_[rid] = sum(iter_vals(row))
-        return row_totals_
+                _row_totals[rid] = sum(iter_vals(row))
+        return _row_totals
 
     @property
     def col_totals(self):
@@ -215,22 +215,22 @@ class TableOfCounts(object):
 
         Ensure attribute caching::
 
-        >>> t.col_totals_[1]
+        >>> t._col_totals[1]
         12
         """
-        col_totals_ = self.col_totals_
-        if col_totals_ is None:
-            col_totals_ = self.col_totals_ = OrderedCounter()
+        _col_totals = self._col_totals
+        if _col_totals is None:
+            _col_totals = self._col_totals = OrderedCounter()
             for rid, col in iter_items(self.cols):
-                col_totals_[rid] = sum(iter_vals(col))
-        return col_totals_
+                _col_totals[rid] = sum(iter_vals(col))
+        return _col_totals
 
     @property
     def grand_total(self):
-        grand_total_ = self.grand_total_
-        if grand_total_ is None:
-            grand_total_ = self.grand_total_ = sum(self.iter_row_totals())
-        return grand_total_
+        _grand_total = self._grand_total
+        if _grand_total is None:
+            _grand_total = self._grand_total = sum(self.iter_row_totals())
+        return _grand_total
 
     def to_labels(self):
         """Returns a tuple (ltrue, lpred). Inverse of ``from_labels``
