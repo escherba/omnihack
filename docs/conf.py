@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # pymaptools documentation build configuration file, created by
-# sphinx-quickstart on Tue Nov  3 21:02:58 2015.
+# sphinx-quickstart on Tue Nov  3 21:14:59 2015.
 #
 # This file is execfile()d with the current directory set to its
 # containing dir.

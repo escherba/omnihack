@@ -29,3 +29,5 @@ nosetests.xml
 .cache/
 
 *.so
+
+docs/_build/
