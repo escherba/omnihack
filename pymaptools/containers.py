@@ -19,34 +19,34 @@ class Struct(object):
 
     bunch.Bunch object is very close to what we want, but it is not
     strict (it will not throw an error if we try to assign to it a
-    a property it does not know about)
+    a property it does not know about)::
 
-    >>> class Duck(Struct):
-    ...     readonly_attrs = frozenset(["description"])
-    ...     readwrite_attrs = frozenset(["vocalization", "locomotion"])
-    >>> duck = Duck(description="a medium-size bird")
-    >>> duck.vocalization
-    >>> duck.locomotion = "walk, swim, fly"
-    >>> duck.vocalization = "quack"
-    >>> duck.description = "an ostrich"
-    Traceback (most recent call last):
-    ...
-    AttributeError: Attribute 'description' of Duck instance is read-only
-    >>> duck.engine_type
-    Traceback (most recent call last):
-    ...
-    AttributeError: 'Duck' object has no attribute 'engine_type'
-    >>> duck.laden_speed = "40 mph"
-    Traceback (most recent call last):
-    ...
-    AttributeError: Duck instance has no attribute 'laden_speed'
-    >>> duck.to_dict()['vocalization']
-    'quack'
-    >>> another_duck = Duck.from_dict(duck.to_dict())
-    >>> another_duck.to_dict()['locomotion']
-    'walk, swim, fly'
-    >>> another_duck.locomotion
-    'walk, swim, fly'
+        >>> class Duck(Struct):
+        ...     readonly_attrs = frozenset(["description"])
+        ...     readwrite_attrs = frozenset(["vocalization", "locomotion"])
+        >>> duck = Duck(description="a medium-size bird")
+        >>> duck.vocalization
+        >>> duck.locomotion = "walk, swim, fly"
+        >>> duck.vocalization = "quack"
+        >>> duck.description = "an ostrich"
+        Traceback (most recent call last):
+        ...
+        AttributeError: Attribute 'description' of Duck instance is read-only
+        >>> duck.engine_type
+        Traceback (most recent call last):
+        ...
+        AttributeError: 'Duck' object has no attribute 'engine_type'
+        >>> duck.laden_speed = "40 mph"
+        Traceback (most recent call last):
+        ...
+        AttributeError: Duck instance has no attribute 'laden_speed'
+        >>> duck.to_dict()['vocalization']
+        'quack'
+        >>> another_duck = Duck.from_dict(duck.to_dict())
+        >>> another_duck.to_dict()['locomotion']
+        'walk, swim, fly'
+        >>> another_duck.locomotion
+        'walk, swim, fly'
 
     """
     readwrite_attrs = frozenset()
@@ -100,14 +100,14 @@ class Struct(object):
 class TableOfCounts(object):
 
     """
-    Example:
+    Example::
 
-    >>> table2 = TableOfCounts(cols=[(0, 0), (45, 0)])
-    >>> table2.grand_total
-    45
-    >>> table1 = TableOfCounts(rows=[(1, 5), (4, 6)])
-    >>> table1.col_totals.values()
-    [5, 11]
+        >>> table2 = TableOfCounts(cols=[(0, 0), (45, 0)])
+        >>> table2.grand_total
+        45
+        >>> table1 = TableOfCounts(rows=[(1, 5), (4, 6)])
+        >>> table1.col_totals.values()
+        [5, 11]
     """
     # TODO: use one of Scipy's sparse matrix representations instead of
     # a dict of dicts
@@ -147,14 +147,16 @@ class TableOfCounts(object):
     def row_totals(self):
         """Row Totals
 
-        >>> t = TableOfCounts.from_cells([1, 2, 3, 4, 5, 6], num_cols=2)
-        >>> t.row_totals.values()
-        [3, 7, 11]
+        ::
+
+            >>> t = TableOfCounts.from_cells([1, 2, 3, 4, 5, 6], num_cols=2)
+            >>> t.row_totals.values()
+            [3, 7, 11]
 
         Ensure attribute caching::
 
-        >>> t._row_totals[1]
-        7
+            >>> t._row_totals[1]
+            7
         """
         _row_totals = self._row_totals
         if _row_totals is None:
@@ -167,14 +169,16 @@ class TableOfCounts(object):
     def col_totals(self):
         """Column Totals
 
-        >>> t = TableOfCounts.from_cells([1, 2, 3, 4, 5, 6], num_cols=2)
-        >>> t.col_totals.values()
-        [9, 12]
+        ::
+
+            >>> t = TableOfCounts.from_cells([1, 2, 3, 4, 5, 6], num_cols=2)
+            >>> t.col_totals.values()
+            [9, 12]
 
         Ensure attribute caching::
 
-        >>> t._col_totals[1]
-        12
+            >>> t._col_totals[1]
+            12
         """
         _col_totals = self._col_totals
         if _col_totals is None:
@@ -215,9 +219,11 @@ class TableOfCounts(object):
     def from_cells(cls, iterable, num_cols):
         """Instantiate class from a reshaped iterable of cells
 
-        >>> t = TableOfCounts.from_cells([1, 2, 3, 4, 5, 6], num_cols=2)
-        >>> t[1][1]
-        4
+        ::
+
+            >>> t = TableOfCounts.from_cells([1, 2, 3, 4, 5, 6], num_cols=2)
+            >>> t[1][1]
+            4
         """
         row_idx = 0
         rows = DefaultOrderedDict(OrderedCounter)
@@ -231,11 +237,13 @@ class TableOfCounts(object):
     def to_partitions(self):
         """Inverse to ``from_partitions`` constructor
 
-        >>> p1 = [[5, 6, 7, 8], [9, 10, 11], [0, 1, 2, 3, 4]]
-        >>> p2 = [[0, 1, 5, 6, 9], [2, 3, 7], [8, 10, 11], [4]]
-        >>> t = TableOfCounts.from_partitions(p1, p2)
-        >>> t.to_partitions()
-        ([[5, 6, 7, 8], [9, 10, 11], [0, 1, 2, 3, 4]], [[0, 1, 5, 6, 9], [2, 3, 7], [8, 10, 11], [4]])
+        ::
+
+            >>> p1 = [[5, 6, 7, 8], [9, 10, 11], [0, 1, 2, 3, 4]]
+            >>> p2 = [[0, 1, 5, 6, 9], [2, 3, 7], [8, 10, 11], [4]]
+            >>> t = TableOfCounts.from_partitions(p1, p2)
+            >>> t.to_partitions()
+            ([[5, 6, 7, 8], [9, 10, 11], [0, 1, 2, 3, 4]], [[0, 1, 5, 6, 9], [2, 3, 7], [8, 10, 11], [4]])
         """
         point = 0
         ptrue = defaultdict(list)
@@ -253,11 +261,13 @@ class TableOfCounts(object):
 
         Partitions are non-overlapping clusters.
 
-        >>> p1 = [[1, 2, 3, 4], [5, 6, 7], [8, 9, 10, 11, 12]]
-        >>> p2 = [[2, 4, 6, 8, 10], [3, 9, 12], [1, 5, 7], [11]]
-        >>> t = TableOfCounts.from_partitions(p1, p2)
-        >>> t.to_labels()
-        ([0, 0, 0, 0, 1, 1, 1, 2, 2, 2, 2, 2], [0, 0, 1, 2, 0, 2, 2, 0, 0, 1, 1, 3])
+        ::
+
+            >>> p1 = [[1, 2, 3, 4], [5, 6, 7], [8, 9, 10, 11, 12]]
+            >>> p2 = [[2, 4, 6, 8, 10], [3, 9, 12], [1, 5, 7], [11]]
+            >>> t = TableOfCounts.from_partitions(p1, p2)
+            >>> t.to_labels()
+            ([0, 0, 0, 0, 1, 1, 1, 2, 2, 2, 2, 2], [0, 0, 1, 2, 0, 2, 2, 0, 0, 1, 1, 3])
 
         """
         ltrue, lpred = partitions_to_labels(partitions1, partitions2)
@@ -268,11 +278,13 @@ class TableOfCounts(object):
 
         In the representations, clusters are lists, classes are integers
 
-        >>> p1 = [[1, 2, 3, 4], [5, 6, 7], [8, 9, 10, 11, 12]]
-        >>> p2 = [[2, 4, 6, 8, 10], [3, 9, 12], [1, 5, 7], [11]]
-        >>> t = TableOfCounts.from_partitions(p1, p2)
-        >>> t.to_clusters()
-        [[0, 0, 1, 2, 2], [0, 2, 2], [0, 1, 1], [2]]
+        ::
+
+            >>> p1 = [[1, 2, 3, 4], [5, 6, 7], [8, 9, 10, 11, 12]]
+            >>> p2 = [[2, 4, 6, 8, 10], [3, 9, 12], [1, 5, 7], [11]]
+            >>> t = TableOfCounts.from_partitions(p1, p2)
+            >>> t.to_clusters()
+            [[0, 0, 1, 2, 2], [0, 2, 2], [0, 1, 1], [2]]
         """
         ltrue, lpred = self.to_labels()
         return labels_to_clusters(ltrue, lpred)
@@ -281,10 +293,12 @@ class TableOfCounts(object):
     def from_clusters(cls, clusters):
         """Construct an instance from to_clusters() output
 
-        >>> clusters = [[2, 2, 0, 0, 1], [2, 2, 0], [0, 1, 1], [2]]
-        >>> t = TableOfCounts.from_clusters(clusters)
-        >>> t.to_clusters()
-        [[2, 2, 0, 0, 1], [2, 2, 0], [0, 1, 1], [2]]
+        ::
+
+            >>> clusters = [[2, 2, 0, 0, 1], [2, 2, 0], [0, 1, 1], [2]]
+            >>> t = TableOfCounts.from_clusters(clusters)
+            >>> t.to_clusters()
+            [[2, 2, 0, 0, 1], [2, 2, 0], [0, 1, 1], [2]]
         """
         ltrue = []
         lpred = []
@@ -332,12 +346,12 @@ def partitions_to_labels(p1, p2):
 
     """Convert partitions to two arrays of labels
 
-    Partitions are non-overlapping clusters
+    Partitions are non-overlapping clusters::
 
-    >>> p1 = [[1, 2, 3, 4], [5, 6, 7], [8, 9, 10, 11, 12]]
-    >>> p2 = [[2, 4, 6, 8, 10], [3, 9, 12], [1, 5, 7], [11]]
-    >>> partitions_to_labels(p1, p2)
-    ([0, 0, 1, 2, 2, 0, 2, 2, 0, 1, 1, 2], [0, 0, 0, 0, 0, 1, 1, 1, 2, 2, 2, 3])
+        >>> p1 = [[1, 2, 3, 4], [5, 6, 7], [8, 9, 10, 11, 12]]
+        >>> p2 = [[2, 4, 6, 8, 10], [3, 9, 12], [1, 5, 7], [11]]
+        >>> partitions_to_labels(p1, p2)
+        ([0, 0, 1, 2, 2, 0, 2, 2, 0, 1, 1, 2], [0, 0, 0, 0, 0, 1, 1, 1, 2, 2, 2, 3])
     """
 
     ltrue = []
@@ -376,12 +390,12 @@ def partitions_to_labels(p1, p2):
 def labels_to_clusters(labels_true, labels_pred):
     """Convert pair of label arrays to clusters of true labels
 
-    Exact inverse of ``clusters_to_labels``
+    Exact inverse of ``clusters_to_labels``::
 
-    >>> pair = ([1, 1, 1, 1, 1, 0, 0],
-    ...         [0, 0, 0, 1, 1, 2, 3])
-    >>> labels_to_clusters(*pair)
-    [[1, 1, 1], [1, 1], [0], [0]]
+        >>> pair = ([1, 1, 1, 1, 1, 0, 0],
+        ...         [0, 0, 0, 1, 1, 2, 3])
+        >>> labels_to_clusters(*pair)
+        [[1, 1, 1], [1, 1], [0], [0]]
 
     """
     result = defaultdict(list)
@@ -393,11 +407,11 @@ def labels_to_clusters(labels_true, labels_pred):
 def clusters_to_labels(iterable):
     """Convert clusters of true labels to pair of label arrays
 
-    Exact inverse of ``labels_to_clusters``
+    Exact inverse of ``labels_to_clusters``::
 
-    >>> clusters = [[1, 1, 1], [1, 1], [0], [0]]
-    >>> clusters_to_labels(clusters)
-    ([1, 1, 1, 1, 1, 0, 0], [0, 0, 0, 1, 1, 2, 3])
+        >>> clusters = [[1, 1, 1], [1, 1], [0], [0]]
+        >>> clusters_to_labels(clusters)
+        ([1, 1, 1, 1, 1, 0, 0], [0, 0, 0, 1, 1, 2, 3])
 
     """
     labels_true = []

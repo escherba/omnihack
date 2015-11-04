@@ -49,22 +49,24 @@ class Pipe(object):
     """
     Apply a series of steps to an iterator
 
-    >>> def deserialize(obj):
-    ...     yield int(obj)
-    ...
-    >>> def square(obj):
-    ...     yield obj * obj
-    ...
-    >>> class Sum(Step):
-    ...     def __init__(self):
-    ...         self.sum = 0
-    ...     def __call__(self, obj):
-    ...         self.sum += obj
-    ...
-    >>> sumsq = Pipe([deserialize, square, Sum()])
-    >>> sumsq.run(["1", "2", "3"])
-    >>> sumsq.steps[-1].sum
-    14
+    ::
+
+        >>> def deserialize(obj):
+        ...     yield int(obj)
+        ...
+        >>> def square(obj):
+        ...     yield obj * obj
+        ...
+        >>> class Sum(Step):
+        ...     def __init__(self):
+        ...         self.sum = 0
+        ...     def __call__(self, obj):
+        ...         self.sum += obj
+        ...
+        >>> sumsq = Pipe([deserialize, square, Sum()])
+        >>> sumsq.run(["1", "2", "3"])
+        >>> sumsq.steps[-1].sum
+        14
 
     """
 

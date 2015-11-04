@@ -24,15 +24,16 @@ def bitlist(num):
     :returns: list of bits
     :rtype: list
 
-    >>> import sys
-    >>> import random
-    >>> num = random.randint(0, sys.maxint)
-    >>> bitlist(num) == bitlist(-num)
-    True
-    >>> bitlist(0)
-    []
-    >>> bitlist(31)
-    [1, 1, 1, 1, 1]
+    ::
+        >>> import sys
+        >>> import random
+        >>> num = random.randint(0, sys.maxint)
+        >>> bitlist(num) == bitlist(-num)
+        True
+        >>> bitlist(0)
+        []
+        >>> bitlist(31)
+        [1, 1, 1, 1, 1]
     """
     vec = []
     if num < 0:
@@ -119,12 +120,14 @@ def packl_ctypes(bit_depth, num):
     :return: packed bitstring
     :rtype: str
 
-    >>> num, denom = 37, 6
-    >>> ((num + denom - 1) // denom) == 7
-    True
-    >>> num, denom = 36, 6
-    >>> ((num + denom - 1) // denom) == 6
-    True
+    ::
+
+        >>> num, denom = 37, 6
+        >>> ((num + denom - 1) // denom) == 7
+        True
+        >>> num, denom = 36, 6
+        >>> ((num + denom - 1) // denom) == 6
+        True
     """
     bytes_needed = (bit_depth + 7) // 8
     buf = ctypes.create_string_buffer(bytes_needed + 1)

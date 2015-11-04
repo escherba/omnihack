@@ -14,11 +14,13 @@ def ilen(iterable):
 
     Why doesn't this exist in itertools...
 
-    >>> g = (x for x in [1, 2, 3])
-    >>> ilen(g)
-    3
-    >>> ilen([1, 2, 3])
-    3
+    ::
+
+        >>> g = (x for x in [1, 2, 3])
+        >>> ilen(g)
+        3
+        >>> ilen([1, 2, 3])
+        3
     """
     if isinstance(iterable, Iterator):
         return sum(1 for _ in iterable)
@@ -31,12 +33,14 @@ def iter_items(iterable):
     :type iterable: collections.Iterable
     :rtype: collections.Iterator
 
-    >>> d = {"a": 10, "b": 20}
-    >>> list(iter_items(d)) == d.items()
-    True
-    >>> l = ["a", "b", "c"]
-    >>> list(iter_items(l))
-    [(0, 'a'), (1, 'b'), (2, 'c')]
+    ::
+
+        >>> d = {"a": 10, "b": 20}
+        >>> list(iter_items(d)) == d.items()
+        True
+        >>> l = ["a", "b", "c"]
+        >>> list(iter_items(l))
+        [(0, 'a'), (1, 'b'), (2, 'c')]
     """
     if isinstance(iterable, Mapping):
         return iterable.iteritems()
@@ -49,14 +53,16 @@ def iter_vals(iterable):
     :type iterable: collections.Iterable
     :rtype: collections.Iterator
 
-    >>> d = {"a": 10, "b": 20}
-    >>> list(iter_vals(d)) == d.values()
-    True
-    >>> l = ["a", "b", "c"]
-    >>> list(iter_vals(l))
-    ['a', 'b', 'c']
-    >>> list(iter_vals(iter(l)))
-    ['a', 'b', 'c']
+    ::
+
+        >>> d = {"a": 10, "b": 20}
+        >>> list(iter_vals(d)) == d.values()
+        True
+        >>> l = ["a", "b", "c"]
+        >>> list(iter_vals(l))
+        ['a', 'b', 'c']
+        >>> list(iter_vals(iter(l)))
+        ['a', 'b', 'c']
     """
     if isinstance(iterable, Mapping):
         return iterable.itervalues()
@@ -71,14 +77,16 @@ def iter_keys(iterable):
     :type iterable: collections.Iterable
     :rtype: collections.Iterator
 
-    >>> d = {"a": 10, "b": 20}
-    >>> list(iter_keys(d)) == d.keys()
-    True
-    >>> l = ["a", "b", "c"]
-    >>> list(iter_keys(l))
-    [0, 1, 2]
-    >>> list(iter_keys(iter(l)))
-    [0, 1, 2]
+    ::
+
+        >>> d = {"a": 10, "b": 20}
+        >>> list(iter_keys(d)) == d.keys()
+        True
+        >>> l = ["a", "b", "c"]
+        >>> list(iter_keys(l))
+        [0, 1, 2]
+        >>> list(iter_keys(iter(l)))
+        [0, 1, 2]
     """
     if isinstance(iterable, Mapping):
         return iterable.iterkeys()
@@ -91,10 +99,12 @@ def iter_keys(iterable):
 def iter2map(iterable):
     """Generalize maps to array types (index serves as key)
 
-    >>> sorted(iter2map([10, 20, 30]).items())
-    [(0, 10), (1, 20), (2, 30)]
-    >>> sorted(iter2map(iter2map([10, 20, 30])).items())
-    [(0, 10), (1, 20), (2, 30)]
+    ::
+
+        >>> sorted(iter2map([10, 20, 30]).items())
+        [(0, 10), (1, 20), (2, 30)]
+        >>> sorted(iter2map(iter2map([10, 20, 30])).items())
+        [(0, 10), (1, 20), (2, 30)]
     """
     if isinstance(iterable, Mapping):
         return iterable
@@ -110,12 +120,14 @@ def izip_with_cycles(*args):
     to be flexible color= parameter by letting it be an array when handling
     series of data inputs or a scalar string when handling single data input.
 
-    >>> list(izip_with_cycles(["Series_A", "Series_B"], ['red', 'blue']))
-    [('Series_A', 'red'), ('Series_B', 'blue')]
-    >>> list(izip_with_cycles(["Series_A", "Series_B"], 'red'))
-    [('Series_A', 'red'), ('Series_B', 'red')]
-    >>> list(izip_with_cycles("abc", "def"))
-    [('abc', 'def')]
+    ::
+
+        >>> list(izip_with_cycles(["Series_A", "Series_B"], ['red', 'blue']))
+        [('Series_A', 'red'), ('Series_B', 'blue')]
+        >>> list(izip_with_cycles(["Series_A", "Series_B"], 'red'))
+        [('Series_A', 'red'), ('Series_B', 'red')]
+        >>> list(izip_with_cycles("abc", "def"))
+        [('abc', 'def')]
     """
     iargs = []
     have_iterables = False
@@ -145,11 +157,13 @@ def aggregate_tuples(iterable):
     In order to achieve complete aggregation, the input iterable must be
     presorted on the first key.
 
-    >>> tuples = [(1, "b"), (1, "a"), (1, "c"), (3, "d")]
-    >>> list(aggregate_tuples(tuples))
-    [(1, ['b', 'a', 'c']), (3, ['d'])]
-    >>> list(aggregate_tuples([]))
-    []
+    ::
+
+        >>> tuples = [(1, "b"), (1, "a"), (1, "c"), (3, "d")]
+        >>> list(aggregate_tuples(tuples))
+        [(1, ['b', 'a', 'c']), (3, ['d'])]
+        >>> list(aggregate_tuples([]))
+        []
     """
     if not isinstance(iterable, Iterator):
         iterable = iter(iterable)
@@ -178,8 +192,10 @@ def intersperse(delimiter, seq):
     :returns: sequence interspersed with a delimiter
     :returns: collections.Iterable
 
-    >>> list(intersperse(" ", "abc"))
-    ['a', ' ', 'b', ' ', 'c']
+    ::
+
+        >>> list(intersperse(" ", "abc"))
+        ['a', ' ', 'b', ' ', 'c']
     """
     return islice(chain.from_iterable(izip(repeat(delimiter), seq)), 1, None)
 
@@ -207,14 +223,16 @@ def ismonotonic(oper, iterable):
 
     http://en.wikipedia.org/wiki/Monotonic_function
 
-    >>> ismonotonic(operator.le, [1, 2, 3, 3])
-    True
-    >>> ismonotonic(operator.le, ["a", "b", "aa"])
-    False
-    >>> ismonotonic(operator.ge, [4, 2])
-    True
-    >>> ismonotonic(operator.ge, [2, 4])
-    False
+    ::
+
+        >>> ismonotonic(operator.le, [1, 2, 3, 3])
+        True
+        >>> ismonotonic(operator.le, ["a", "b", "aa"])
+        False
+        >>> ismonotonic(operator.ge, [4, 2])
+        True
+        >>> ismonotonic(operator.ge, [2, 4])
+        False
     """
     return all(oper(x, y) for x, y in izip(iterable, iterable[1:]))
 
@@ -222,8 +240,10 @@ def ismonotonic(oper, iterable):
 def pyramid_slices(lst):
     """Treat input list as a hierarchical path and return all subpaths
 
-    >>> list(pyramid_slices([1, 2, 3]))
-    [[1], [1, 2], [1, 2, 3]]
+    ::
+
+        >>> list(pyramid_slices([1, 2, 3]))
+        [[1], [1, 2], [1, 2, 3]]
     """
     for i in xrange(len(lst)):
         yield lst[:i + 1]
@@ -241,27 +261,33 @@ def shinglify(iterable, span, skip=0):
     :returns: sequence of tuples (shingles)
     :rtype : list
 
-    >>> shingles = list(shinglify("abracadabra", 5, skip=1))
-    >>> len(shingles)
-    7
-    >>> ('d', 'b', 'a') in shingles
-    True
+    ::
 
-    Must return a single shingle when span > len(tokens)
-    >>> list(shinglify("abc", 4))
-    [('a', 'b', 'c')]
+        >>> shingles = list(shinglify("abracadabra", 5, skip=1))
+        >>> len(shingles)
+        7
+        >>> ('d', 'b', 'a') in shingles
+        True
 
-    Must return an empty list when span=0
-    >>> list(shinglify("abc", 0))
-    []
+    Must return a single shingle when span > len(tokens)::
 
-    Must return the last pair
-    >>> list(shinglify("abcde", 4, skip=1))
-    [('a', 'c'), ('b', 'd'), ('c', 'e')]
+        >>> list(shinglify("abc", 4))
+        [('a', 'b', 'c')]
 
-    Must also skip tokens when span > len(tokens)
-    >>> list(shinglify("abc", 4, skip=1))
-    [('a', 'c')]
+    Must return an empty list when span=0::
+
+        >>> list(shinglify("abc", 0))
+        []
+
+    Must return the last pair::
+
+        >>> list(shinglify("abcde", 4, skip=1))
+        [('a', 'c'), ('b', 'd'), ('c', 'e')]
+
+    Must also skip tokens when span > len(tokens)::
+
+        >>> list(shinglify("abc", 4, skip=1))
+        [('a', 'c')]
 
     """
     tokens = iterable if isinstance(iterable, list) else list(iterable)
@@ -276,8 +302,10 @@ def inverse_kvals(mapping):
 
     Resulting dict is sparse-key, dense-value
 
-    >>> {k: v for k, v in inverse_kvals({"a": [1, 2], "b": [3]})}
-    {1: 'a', 2: 'a', 3: 'b'}
+    ::
+
+        >>> {k: v for k, v in inverse_kvals({"a": [1, 2], "b": [3]})}
+        {1: 'a', 2: 'a', 3: 'b'}
     """
     for key, vals in mapping.iteritems():
         for val in vals:
@@ -294,10 +322,12 @@ def nskip(n, iterable):
     :returns: sequence with skipped items
     :rtype: generator
 
-    >>> list(nskip(2, "abcdefg"))
-    ['a', 'd', 'g']
-    >>> list(nskip(5, "abc"))
-    ['a']
+    ::
+
+        >>> list(nskip(2, "abcdefg"))
+        ['a', 'd', 'g']
+        >>> list(nskip(5, "abc"))
+        ['a']
     """
     n_1 = n + 1
     return (v for i, v in enumerate(iterable) if not i % n_1)
@@ -313,10 +343,12 @@ def ntuples(n, iterable):
     :returns: iterable of tuples
     :rtype: itertools.izip
 
-    >>> list(ntuples(2, "abcde"))
-    [('a', 'b'), ('c', 'd')]
-    >>> list(ntuples(2, "abcd"))
-    [('a', 'b'), ('c', 'd')]
+    ::
+
+        >>> list(ntuples(2, "abcde"))
+        [('a', 'b'), ('c', 'd')]
+        >>> list(ntuples(2, "abcd"))
+        [('a', 'b'), ('c', 'd')]
     """
     return izip(*[iterable[i::n] for i in xrange(n)])
 
@@ -324,8 +356,10 @@ def ntuples(n, iterable):
 def take(n, iterable):
     """Return first n items of the iterable as a list
 
-    >>> take(2, [1, 2, 3])
-    [1, 2]
+    ::
+
+        >>> take(2, [1, 2, 3])
+        [1, 2]
     """
     return list(islice(iterable, n))
 
@@ -333,9 +367,11 @@ def take(n, iterable):
 def tabulate(function, start=0):
     """Return function(0), function(1), ...
 
-    >>> foo = tabulate(lambda x: x + 5, 10)
-    >>> foo.next()
-    15
+    ::
+
+        >>> foo = tabulate(lambda x: x + 5, 10)
+        >>> foo.next()
+        15
     """
     return imap(function, count(start))
 
@@ -343,15 +379,16 @@ def tabulate(function, start=0):
 def consume(iterator, n):
     """Advance the iterator n-steps ahead. If n is none, consume entirely
 
-    >>> myiter = count(5)
-    >>> consume(myiter, 4)
-    >>> myiter.next()
-    9
+    ::
 
-    >>> myiter = iter([1, 2, 3])
-    >>> consume(myiter, None)
-    >>> list(myiter)
-    []
+        >>> myiter = count(5)
+        >>> consume(myiter, 4)
+        >>> myiter.next()
+        9
+        >>> myiter = iter([1, 2, 3])
+        >>> consume(myiter, None)
+        >>> list(myiter)
+        []
     """
     # Use functions that consume iterators at C speed.
     if n is None:
@@ -365,8 +402,10 @@ def consume(iterator, n):
 def nth(iterable, n, default=None):
     """Returns the nth item or a default value
 
-    >>> nth(count(5), 6)
-    11
+    ::
+
+        >>> nth(count(5), 6)
+        11
     """
     return next(islice(iterable, n, None), default)
 
@@ -374,9 +413,10 @@ def nth(iterable, n, default=None):
 def quantify(iterable, pred=bool):
     """Sum predicate output over a sequence
 
-    Example: count odd numbers
-    >>> quantify([1, 2, 3, 4, 5], pred=lambda x: x % 2)
-    3
+    Example with counting odd numbers::
+
+        >>> quantify([1, 2, 3, 4, 5], pred=lambda x: x % 2)
+        3
     """
     return sum(imap(pred, iterable))
 
@@ -386,8 +426,10 @@ def padnone(iterable):
 
     Useful for emulating the behavior of the built-in map() function.
 
-    >>> take(4, padnone([1,2,3]))
-    [1, 2, 3, None]
+    ::
+
+        >>> take(4, padnone([1,2,3]))
+        [1, 2, 3, None]
     """
     return chain(iterable, repeat(None))
 
@@ -395,8 +437,10 @@ def padnone(iterable):
 def ncycles(iterable, n):
     """Returns the sequence elements n times
 
-    >>> list(ncycles([1,2,3], 2))
-    [1, 2, 3, 1, 2, 3]
+    ::
+
+        >>> list(ncycles([1,2,3], 2))
+        [1, 2, 3, 1, 2, 3]
     """
     return chain.from_iterable(repeat(tuple(iterable), n))
 
@@ -404,8 +448,10 @@ def ncycles(iterable, n):
 def dotproduct(vec1, vec2):
     """Return a dot product of two vectors
 
-    >>> dotproduct([1, 2, 3], [2, 3, 4])
-    20
+    ::
+
+        >>> dotproduct([1, 2, 3], [2, 3, 4])
+        20
     """
     return sum(imap(operator.mul, vec1, vec2))
 
@@ -416,8 +462,10 @@ def flatten(iterable):
     :param iterable: a list of lists
     :type iterable: collections.Iterable
 
-    >>> list(flatten([[1,2,3],[3,4,5]]))
-    [1, 2, 3, 3, 4, 5]
+    ::
+
+        >>> list(flatten([[1,2,3],[3,4,5]]))
+        [1, 2, 3, 3, 4, 5]
     """
     return chain.from_iterable(iterable)
 
@@ -425,14 +473,16 @@ def flatten(iterable):
 def repeatfunc(func, times=None, *args):
     """Repeat calls to func with specified arguments.
 
-    Example: repeatfunc(random.random)
+    Example: ``repeatfunc(random.random)``
 
-    >>> s = set([1, 2, 3])
-    >>> list(repeatfunc(s.pop, 2))
-    [1, 2]
-    >>> list(repeatfunc(s.pop))
-    Traceback (most recent call last):
-    KeyError: 'pop from an empty set'
+    Another example::
+
+        >>> s = set([1, 2, 3])
+        >>> list(repeatfunc(s.pop, 2))
+        [1, 2]
+        >>> list(repeatfunc(s.pop))
+        Traceback (most recent call last):
+        KeyError: 'pop from an empty set'
     """
     if times is None:
         return starmap(func, repeat(args))
@@ -441,8 +491,11 @@ def repeatfunc(func, times=None, *args):
 
 def pairwise(iterable):
     """
-    >>> list(pairwise([1,2,3]))
-    [(1, 2), (2, 3)]
+
+    ::
+
+        >>> list(pairwise([1,2,3]))
+        [(1, 2), (2, 3)]
     """
     a, b = tee(iterable)
     next(b, None)
@@ -452,8 +505,10 @@ def pairwise(iterable):
 def grouper(iterable, n, fillvalue=None):
     """Collect data into fixed-length chunks or blocks
 
-    >>> list(grouper('ABCDEFG', 3, 'x'))
-    [('A', 'B', 'C'), ('D', 'E', 'F'), ('G', 'x', 'x')]
+    ::
+
+        >>> list(grouper('ABCDEFG', 3, 'x'))
+        [('A', 'B', 'C'), ('D', 'E', 'F'), ('G', 'x', 'x')]
     """
     args = [iter(iterable)] * n
     return izip_longest(fillvalue=fillvalue, *args)
@@ -463,8 +518,10 @@ def roundrobin(*iterables):
     """
     Recipe credited to George Sakkis
 
-    >>> list(roundrobin('ABC', 'D', 'EF'))
-    ['A', 'D', 'E', 'B', 'F', 'C']
+    ::
+
+        >>> list(roundrobin('ABC', 'D', 'EF'))
+        ['A', 'D', 'E', 'B', 'F', 'C']
     """
     pending = len(iterables)
     funs = cycle(iter(it).next for it in iterables)
@@ -480,8 +537,10 @@ def roundrobin(*iterables):
 def powerset(iterable):
     """ Return a power set of an iterable
 
-    >>> list(powerset([1,2,3]))
-    [(), (1,), (2,), (3,), (1, 2), (1, 3), (2, 3), (1, 2, 3)]
+    ::
+
+        >>> list(powerset([1,2,3]))
+        [(), (1,), (2,), (3,), (1, 2), (1, 3), (2, 3), (1, 2, 3)]
     """
     s = iterable if isinstance(iterable, list) else list(iterable)
     return chain.from_iterable(combinations(s, r) for r in range(len(s) + 1))
@@ -490,10 +549,12 @@ def powerset(iterable):
 def unique_everseen(iterable, key=None):
     """ List unique elements, preserving order. Remember all elements ever seen
 
-    >>> list(unique_everseen('AAAABBBCCDAABBB'))
-    ['A', 'B', 'C', 'D']
-    >>> list(unique_everseen('ABBCcAD', str.lower))
-    ['A', 'B', 'C', 'D']
+    ::
+
+        >>> list(unique_everseen('AAAABBBCCDAABBB'))
+        ['A', 'B', 'C', 'D']
+        >>> list(unique_everseen('ABBCcAD', str.lower))
+        ['A', 'B', 'C', 'D']
     """
     seen = set()
     seen_add = seen.add
@@ -513,10 +574,12 @@ def unique_justseen(iterable, key=None):
     """List unique elements, preserving order.
     Remember only the element just seen
 
-    >>> list(unique_justseen('AAAABBBCCDAABBB'))
-    ['A', 'B', 'C', 'D', 'A', 'B']
-    >>> list(unique_justseen('ABBCcAD', str.lower))
-    ['A', 'B', 'C', 'A', 'D']
+    ::
+
+        >>> list(unique_justseen('AAAABBBCCDAABBB'))
+        ['A', 'B', 'C', 'D', 'A', 'B']
+        >>> list(unique_justseen('ABBCcAD', str.lower))
+        ['A', 'B', 'C', 'A', 'D']
     """
     return imap(next, imap(operator.itemgetter(1), groupby(iterable, key)))
 
@@ -536,14 +599,16 @@ def iter_except(func, exception, first=None):
         queueiter = iter_except(q.get_nowait, Queue.Empty)
         setiter = iter_except(s.pop, KeyError)
 
-    >>> s = set([1, 2, 3])
-    >>> t = set([4, 5, 6])
-    >>> list(iter_except(t.pop, KeyError, first=s.pop))
-    [1, 4, 5, 6]
-    >>> len(s)
-    2
-    >>> len(t)
-    0
+    ::
+
+        >>> s = set([1, 2, 3])
+        >>> t = set([4, 5, 6])
+        >>> list(iter_except(t.pop, KeyError, first=s.pop))
+        [1, 4, 5, 6]
+        >>> len(s)
+        2
+        >>> len(t)
+        0
     """
     try:
         if first is not None:
@@ -559,10 +624,12 @@ def first_nonempty(iterable):
 
     after http://stackoverflow.com/a/18533669/597371
 
-    >>> first_nonempty([None, None, 78, None, 89])
-    78
-    >>> first_nonempty([]) is None
-    True
+    ::
+
+        >>> first_nonempty([None, None, 78, None, 89])
+        78
+        >>> first_nonempty([]) is None
+        True
     """
     try:
         return next(item for item in iterable if item is not None)
@@ -577,14 +644,16 @@ def tee_lookahead(t, i):
     Raise an IndexError if the underlying iterator doesn't
     have enough values.
 
-    >>> tee_obj = tee([10, 20, 30, 40])[0]
-    >>> tee_lookahead(tee_obj, 2)
-    30
-    >>> list(tee_obj)
-    [10, 20, 30, 40]
-    >>> tee_lookahead(tee([])[0], 1)
-    Traceback (most recent call last):
-    IndexError: 1
+    ::
+
+        >>> tee_obj = tee([10, 20, 30, 40])[0]
+        >>> tee_lookahead(tee_obj, 2)
+        30
+        >>> list(tee_obj)
+        [10, 20, 30, 40]
+        >>> tee_lookahead(tee([])[0], 1)
+        Traceback (most recent call last):
+        IndexError: 1
     """
     for value in islice(t.__copy__(), i, None):
         return value

@@ -27,13 +27,15 @@ class UnionFind(object):
       into a single larger set.  If any item is not yet part of a set
       in X, it is added to X as one of the members of the merged set.
 
-    >>> uf = UnionFind()
-    >>> uf.union(0, 1)
-    >>> uf.union(2, 3)
-    >>> uf.union(3, 0)
-    >>> uf.union(4, 5)
-    >>> uf.sets()
-    [[0, 1, 2, 3], [4, 5]]
+    ::
+
+        >>> uf = UnionFind()
+        >>> uf.union(0, 1)
+        >>> uf.union(2, 3)
+        >>> uf.union(3, 0)
+        >>> uf.union(4, 5)
+        >>> uf.sets()
+        [[0, 1, 2, 3], [4, 5]]
 
     """
 

@@ -1,5 +1,6 @@
 nose
 sphinx
+numpydoc
 Cython
 coverage==4.0.1
 nosexcover

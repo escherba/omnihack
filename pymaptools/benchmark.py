@@ -4,11 +4,13 @@ import time
 class PMTimer(object):
     """Context class for benchmarking
 
-    >>> period = 0.2
-    >>> with PMTimer() as timer:
-    ...     time.sleep(period)
-    >>> timer.wall_interval >= period
-    True
+    ::
+
+        >>> period = 0.2
+        >>> with PMTimer() as timer:
+        ...     time.sleep(period)
+        >>> timer.wall_interval >= period
+        True
     """
 
     def __init__(self, cpu_clock=time.clock, wall_clock=time.time):

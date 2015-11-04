@@ -40,24 +40,24 @@ class Bigraph(SimplePicklableMixin):
     Weights by default are assumed to be integers, and the default
     instances serve as edge counters.
 
-    Example usage:
+    Example usage::
 
-    >>> g = Bigraph()
-    >>> g.add_clique(([1, 2, 3], [-1, -2, -3]))
-    >>> h = Bigraph(g)
-    >>> g.add_clique(([4], [-4, -5]))
-    >>> g.add_clique(([5], [-5, -6]))
-    >>> g.add_edge(4, -1)
-    >>> h.add_edge(2, 100, weight=14)
-    >>> h.add_edge(5, -5, weight=10)
-    >>> j = g & h
-    >>> components = j.find_connected_components()
-    >>> curr = components.next()
-    >>> (sorted(curr.U), sorted(curr.V))
-    ([1, 2, 3], [-3, -2, -1])
-    >>> curr = components.next()
-    >>> (sorted(curr.U), sorted(curr.V))
-    ([5], [-5])
+        >>> g = Bigraph()
+        >>> g.add_clique(([1, 2, 3], [-1, -2, -3]))
+        >>> h = Bigraph(g)
+        >>> g.add_clique(([4], [-4, -5]))
+        >>> g.add_clique(([5], [-5, -6]))
+        >>> g.add_edge(4, -1)
+        >>> h.add_edge(2, 100, weight=14)
+        >>> h.add_edge(5, -5, weight=10)
+        >>> j = g & h
+        >>> components = j.find_connected_components()
+        >>> curr = components.next()
+        >>> (sorted(curr.U), sorted(curr.V))
+        ([1, 2, 3], [-3, -2, -1])
+        >>> curr = components.next()
+        >>> (sorted(curr.U), sorted(curr.V))
+        ([5], [-5])
     """
     def __init__(self, base=None, weight_type=int, min_edge_weight=None):
         self.weight_type = weight_type
