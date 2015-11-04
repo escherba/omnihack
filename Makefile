@@ -4,7 +4,7 @@ PYMODULE := pymaptools
 EXTENSION_EXT := .c
 PYPI_HOST := pypi
 DISTRIBUTE := sdist bdist_wheel
-SHELL_PRELOAD := $(PYMODULE)/__init__.py
+SHELL_PRELOAD := $(PYMODULE)/containers.py
 
 SRC_ROOT := $(patsubst %/,%,$(dir $(abspath $(lastword $(MAKEFILE_LIST)))))
 SHELL_PRELOAD := $(SRC_ROOT)/$(SHELL_PRELOAD)
@@ -62,13 +62,13 @@ nuke: clean
 	rm -rf *.egg *.egg-info env bin cover coverage.xml nosetests.xml
 
 clean:
-	python setup.py clean
+	-python setup.py clean
 	rm -rf dist build
 	rm -f $(EXTENSION_LIBS) $(EXTENSION_INTS)
 	find . -path ./env -prune -o -type f -name "*.pyc" -exec rm -f {} \;
 
 build_ext: env
-	$(PYTHON) setup.py build_ext --inplace
+	$(PYTHON) setup.py build_ext --with-cython --inplace
 
 $(EXTENSION_LIBS): build_ext
 	@echo "done building $@"

@@ -1,8 +1,24 @@
 import re
+import os
+import sys
+import warnings
 import itertools
 from setuptools import setup, find_packages
+from setuptools.extension import Extension
 from pkg_resources import resource_string
 from glob import glob
+
+
+NAME = "pymaptools"
+VERSION = '0.2.1'
+SRC_ROOT = "pymaptools"
+
+
+try:
+    from Cython.Build import cythonize
+    has_cython = True
+except ImportError:
+    has_cython = False
 
 
 # dependency links
@@ -70,6 +86,51 @@ def build_extras(glob_pattern):
     return result, dep_links
 
 
+# adapted from cytoolz: https://github.com/pytoolz/cytoolz/blob/master/setup.py
+
+is_dev = 'dev' in VERSION
+use_cython = is_dev or '--cython' in sys.argv or '--with-cython' in sys.argv
+if '--no-cython' in sys.argv:
+    use_cython = False
+    sys.argv.remove('--no-cython')
+if '--without-cython' in sys.argv:
+    use_cython = False
+    sys.argv.remove('--without-cython')
+if '--cython' in sys.argv:
+    sys.argv.remove('--cython')
+if '--with-cython' in sys.argv:
+    sys.argv.remove('--with-cython')
+
+
+if use_cython and not has_cython:
+    if is_dev:
+        raise RuntimeError('Cython required to build dev version of %s.' % NAME)
+    warnings.warn('Cython not installed. Building without Cython.')
+    use_cython = False
+
+
+def find_files(dir_path, extension):
+    for root, _, files in os.walk(dir_path):
+        for name in files:
+            if name.endswith(extension):
+                yield os.path.join(root, name)
+
+
+def import_string_from_path(path):
+    return os.path.splitext(path)[0].replace('/', '.')
+
+
+SRC_EXT = '.pyx' if use_cython else '.c'
+EXT_MODULES = [
+    Extension(import_string_from_path(filepath), [filepath], language='c',
+              extra_compile_args=['-O3', '-Wno-unused-function'])
+    for filepath in find_files(SRC_ROOT, SRC_EXT)
+]
+
+if use_cython:
+    EXT_MODULES = cythonize(EXT_MODULES)
+
+
 INSTALL_REQUIRES, INSTALL_DEPS = parse_reqs(
     resource_string(__name__, 'requirements.txt').splitlines())
 TESTS_REQUIRE, TESTS_DEPS = parse_reqs(
@@ -82,8 +143,8 @@ DEPENDENCY_LINKS = list(set(itertools.chain(
 )))
 
 setup(
-    name="pymaptools",
-    version="0.2.0",
+    name=NAME,
+    version=VERSION,
     author="Eugene Scherba",
     author_email="escherba@gmail.com",
     description=("A collection of Python containers for data analysis"),
@@ -93,7 +154,7 @@ setup(
     install_requires=INSTALL_REQUIRES,
     tests_require=TESTS_REQUIRE,
     dependency_links=DEPENDENCY_LINKS,
-    zip_safe=True,
+    ext_modules=EXT_MODULES,
     test_suite='nose.collector',
     classifiers=[
         'Development Status :: 3 - Alpha',
@@ -102,8 +163,14 @@ setup(
         'License :: OSI Approved :: MIT License',
         'Topic :: Software Development :: Libraries :: Python Modules',
         'Topic :: Text Processing',
-        'Programming Language :: Python :: 2.6',
+        'Programming Language :: Cython',
         'Programming Language :: Python :: 2.7',
+        'Topic :: Scientific/Engineering',
+        'Topic :: Scientific/Engineering :: Information Analysis',
+        'Topic :: Software Development',
+        'Topic :: Software Development :: Libraries',
+        'Topic :: Software Development :: Libraries :: Python Modules',
+        'Topic :: Utilities',
     ],
     long_description=resource_string(__name__, 'README.rst'),
 )
