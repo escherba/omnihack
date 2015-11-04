@@ -219,11 +219,11 @@ class DefaultOrderedDict(OrderedDict):
 
     Attribution: http://stackoverflow.com/a/6190500/562769
     """
-    def __init__(self, default_factory=None, *a, **kw):
+    def __init__(self, default_factory=None, *args, **kwargs):
         if (default_factory is not None and
                 not isinstance(default_factory, Callable)):
             raise TypeError('first argument must be callable')
-        OrderedDict.__init__(self, *a, **kw)
+        OrderedDict.__init__(self, *args, **kwargs)
         self.default_factory = default_factory
 
     def __getitem__(self, key):
@@ -287,7 +287,7 @@ class TableOfCounts(object):
         """
         _rows = self._rows
         if _rows is None:
-            _rows = self._rows = DefaultOrderedDict(OrderedCounter)
+            self._rows = _rows = DefaultOrderedDict(OrderedCounter)
             for cid, col in iter_items(self._cols):
                 for rid, cell in iter_items(col):
                     _rows[rid][cid] = cell
@@ -299,7 +299,7 @@ class TableOfCounts(object):
         """
         _cols = self._cols
         if _cols is None:
-            _cols = self._cols = DefaultOrderedDict(OrderedCounter)
+            self._cols = _cols = DefaultOrderedDict(OrderedCounter)
             for rid, row in iter_items(self._rows):
                 for cid, cell in iter_items(row):
                     _cols[cid][rid] = cell
@@ -320,7 +320,7 @@ class TableOfCounts(object):
         """
         _row_totals = self._row_totals
         if _row_totals is None:
-            _row_totals = self._row_totals = OrderedCounter()
+            self._row_totals = _row_totals = OrderedCounter()
             for rid, row in iter_items(self.rows):
                 _row_totals[rid] = sum(iter_vals(row))
         return _row_totals
@@ -340,7 +340,7 @@ class TableOfCounts(object):
         """
         _col_totals = self._col_totals
         if _col_totals is None:
-            _col_totals = self._col_totals = OrderedCounter()
+            self._col_totals = _col_totals = OrderedCounter()
             for rid, col in iter_items(self.cols):
                 _col_totals[rid] = sum(iter_vals(col))
         return _col_totals
@@ -349,7 +349,7 @@ class TableOfCounts(object):
     def grand_total(self):
         _grand_total = self._grand_total
         if _grand_total is None:
-            _grand_total = self._grand_total = sum(self.iter_row_totals())
+            self._grand_total = _grand_total = sum(self.iter_row_totals())
         return _grand_total
 
     def to_labels(self):
