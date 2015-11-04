@@ -2,8 +2,11 @@
 #
 
 # You can set these variables from the command line.
+PYENV := . ../env/bin/activate;
+PYTHON := $(PYENV) python
+
 SPHINXOPTS    =
-SPHINXBUILD   = sphinx-build
+SPHINXBUILD   = $(PYTHON) /usr/local/bin/sphinx-build
 PAPER         =
 BUILDDIR      = _build
 
