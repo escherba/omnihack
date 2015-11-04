@@ -39,138 +39,74 @@ cdef class OrderedSet(set):
         self._mapping = OrderedDict()
         self._maxlen = maxlen
         if iterable is not None:
-            self.__ior__(iterable)  # same as using |= operator
+            self.__ior__(iterable)
+
+    @classmethod
+    def _from_iterable(self, it):
+        return OrderedSet(it)
+
+    # non-prefixed operators return a new object
 
     def __or__(self, other):
-        """Set union between 'self' and 'other'. Returns a new set.
-
-        >>> s1, s2 = map(OrderedSet, ["abc", "bcd"])
-        >>> res = s1 | s2
-        >>> res
-        OrderedSet(['a', 'b', 'c', 'd'])
-        >>> (id(res) == id(s1)) or (id(res) == id(s2))
-        False
-        """
         s = OrderedSet(self)
-        for key in other:
-            s.add(key)
-        return s
+        return s.__ior__(other)
+
+    def __and__(self, other):
+        s = OrderedSet(self)
+        return s.__iand__(other)
+
+    def __xor__(self, other):
+        s = OrderedSet(self)
+        return s.__ixor__(other)
+
+    def __sub__(self, other):
+        s = OrderedSet(self)
+        return s.__isub__(other)
+
+    # i-prefixed operators are on self object
 
     def __ior__(self, other):
-        """Set union between 'self' and 'other'.
-
-        >>> s1, s2 = map(OrderedSet, ["abc", "bcd"])
-        >>> s1 |= s2
-        >>> s1
-        OrderedSet(['a', 'b', 'c', 'd'])
-        """
         for key in other:
             self.add(key)
         return self
 
-    def __and__(self, other):
-        """Set intersection between 'self' and 'other'. Returns a new set.
-
-        >>> s1, s2 = map(OrderedSet, ["abc", "bcd"])
-        >>> res = s1 & s2
-        >>> res
-        OrderedSet(['b', 'c'])
-        >>> (id(res) == id(s1)) or (id(res) == id(s2))
-        False
-        """
-        s = OrderedSet()
-        for key in self:
-            if key in other:
-                s.add(key)
-        return s
-
     def __iand__(self, other):
-        """Set intersection between 'self' and 'other'.
-
-        >>> s1, s2 = map(OrderedSet, ["abc", "bcd"])
-        >>> s1 &= s2
-        >>> s1
-        OrderedSet(['b', 'c'])
-        """
-        discarded = []
-        for key in self:
-            if key not in other:
-                discarded.append(key)
-        for key in discarded:
-            self.discard(key)
-        return self
-
-    def __xor__(self, other):
-        """Symmetric difference between 'self' and 'other'. Returns a new set.
-
-        >>> from operator import xor
-        >>> s1, s2 = map(OrderedSet, ["abc", "bcd"])
-        >>> res = xor(s1, s2)
-        >>> res
-        OrderedSet(['a', 'd'])
-        >>> (id(res) == id(s1)) or (id(res) == id(s2))
-        False
-        """
-        s = OrderedSet()
-        for key in self:
-            if key not in other:
-                s.add(key)
-        for key in other:
-            if key not in self:
-                s.add(key)
-        return s
-
-    def __ixor__(self, other):
-        """Symmetric difference between 'self' and 'other'.
-
-        >>> s1, s2 = map(OrderedSet, ["abc", "bcd"])
-        >>> s1.__ixor__(s2)
-        OrderedSet(['a', 'd'])
-        >>> s1
-        OrderedSet(['a', 'd'])
-        """
-        discarded = set()
-        for key in self:
-            if key in other:
-                discarded.add(key)
-        for key in other:
-            if key not in discarded:
-                self.add(key)
-        for key in discarded:
-            self.discard(key)
-        return self
-
-    def __sub__(self, other):
-        """Set difference between 'self' and 'other'. Returns a new set
-
-        >>> s1, s2 = OrderedSet("abc"), OrderedSet("bcd")
-        >>> res = s1 - s2
-        >>> res
-        OrderedSet(['a'])
-        >>> (id(res) == id(s1)) or (id(res) == id(s2))
-        False
-        """
-        s = OrderedSet()
-        for key in self:
-            if key not in other:
-                s.add(key)
-        return s
-
-    def __isub__(self, other):
-        """Remove keys found in 'other'
-
-        >>> s1, s2 = OrderedSet("abc"), OrderedSet("bcd")
-        >>> s1 -= s2
-        >>> s1
-        OrderedSet(['a'])
-        """
-        discarded = []
+        kept = set()
         for key in other:
             if key in self:
-                discarded.append(key)
+                kept.add(key)
+        for key in self:
+            if key not in kept:
+                self.discard(key)
+        return self
+
+    def __ixor__(self, other):
+        added = set()
+        discarded = set()
+        for key in other:
+            if key in self:
+                discarded.add(key)
+            else:
+                added.add(key)
+        for key in discarded:
+            self.discard(key)
+        for key in added:
+            self.add(key)
+        return self
+
+    def __isub__(self, other):
+        discarded = set()
+        for key in other:
+            if key in self:
+                discarded.add(key)
         for key in discarded:
             self.discard(key)
         return self
+
+    # other methods
+
+    def clear(self):
+        self._mapping.clear()
 
     def __len__(self):
         return len(self._mapping)
