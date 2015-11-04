@@ -27,3 +27,7 @@ coverage.xml
 nosetests.xml
 
 .cache/
+
+*.so
+
+docs/_build/

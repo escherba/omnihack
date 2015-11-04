@@ -126,15 +126,17 @@ class FileReader(collections.Iterator):
 
     This is basically a quirky reimplementation of FileInput
 
-    >>> reader = FileReader([[1, 2, 3], [4, 5], [], [6, 7]])
-    >>> list(reader)
-    [1, 2, 3, 4, 5, 6, 7]
-    >>> reader = FileReader([[], []])
-    >>> list(reader)
-    []
-    >>> reader = FileReader([])
-    >>> list(reader)
-    []
+    ::
+
+        >>> reader = FileReader([[1, 2, 3], [4, 5], [], [6, 7]])
+        >>> list(reader)
+        [1, 2, 3, 4, 5, 6, 7]
+        >>> reader = FileReader([[], []])
+        >>> list(reader)
+        []
+        >>> reader = FileReader([])
+        >>> list(reader)
+        []
     """
     def __init__(self, files, mode='r', openhook=None):
         self._files = iter(files)
@@ -362,7 +364,8 @@ class ResourceBundle(object):
 
     """Find and present resource paths in a convenient format
 
-    Usage:
+    Usage::
+
         >>> MY_RESOURCES = ResourceBundle(__name__, '.', '.py')
         >>> os.path.basename(MY_RESOURCES.io)
         'io.py'

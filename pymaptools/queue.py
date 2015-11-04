@@ -7,15 +7,17 @@ class Heap(Iterable):
 
     Allows one to easily maintain fixed-sized heaps
 
-    >>> h = Heap(maxlen=2)
-    >>> h.add(4, "woof")
-    >>> h.add(3, "meow")
-    >>> h.add(10, "moo")
-    (3, 'meow')
-    >>> list(h)
-    ['woof', 'moo']
-    >>> list(reversed(h))
-    ['moo', 'woof']
+    ::
+
+        >>> h = Heap(maxlen=2)
+        >>> h.add(4, "woof")
+        >>> h.add(3, "meow")
+        >>> h.add(10, "moo")
+        (3, 'meow')
+        >>> list(h)
+        ['woof', 'moo']
+        >>> list(reversed(h))
+        ['moo', 'woof']
     """
 
     def __init__(self, maxlen=None):
@@ -72,14 +74,16 @@ class RangeQueue(object):
     is hopefully a small number) untill all n items form a whole "run" without
     any lacking items in the middle and thus can be retrieved at once.
 
-    >>> queue = RangeQueue()
-    >>> queue.push(1, "a")
-    >>> list(queue.retrieve())
-    []
-    >>> queue.push(0, "b")
-    >>> queue.push(2, "c")
-    >>> list(queue.retrieve())
-    ['b', 'a', 'c']
+    ::
+
+        >>> queue = RangeQueue()
+        >>> queue.push(1, "a")
+        >>> list(queue.retrieve())
+        []
+        >>> queue.push(0, "b")
+        >>> queue.push(2, "c")
+        >>> list(queue.retrieve())
+        ['b', 'a', 'c']
     """
     def __init__(self, start=0, step=1):
         self._heap = []

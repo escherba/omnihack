@@ -27,9 +27,9 @@ class TestOrderedSet(unittest.TestCase):
         text1 = 'abracadabra'
         set1 = OrderedSet(text1)
         set2 = OrderedSet('simsalabim')
+
         self.assertNotEqual(set1, set2)
         self.assertNotEqual(set1, 9)
-        self.assertEqual(set1, set(text1))
 
         self.assertEqual(set1 & set2, OrderedSet(['a', 'b']))
         self.assertEqual(set1 | set2, OrderedSet(['a', 'b', 'r', 'c', 'd', 's', 'i', 'm', 'l']))
@@ -62,6 +62,56 @@ class TestOrderedSet(unittest.TestCase):
         self.assertEqual(len(set1), 3)
         set1.discard("b")
         self.assertEqual(len(set1), 2)
+
+
+from operator import xor
+
+
+class TestOrderedSetOps(unittest.TestCase):
+
+    def test_or(self):
+        s1, s2 = map(OrderedSet, ["abc", "bcd"])
+        res = s1 | s2
+        self.assertListEqual(list(res), ['a', 'b', 'c', 'd'])
+        self.assertFalse((id(res) == id(s1)) or (id(res) == id(s2)))
+
+    def test_ior(self):
+        s1, s2 = map(OrderedSet, ["abc", "bcd"])
+        s1 |= s2
+        self.assertListEqual(list(s1), ['a', 'b', 'c', 'd'])
+
+    def test_and(self):
+        s1, s2 = map(OrderedSet, ["abc", "bcd"])
+        res = s1 & s2
+        self.assertListEqual(list(res), ['b', 'c'])
+        self.assertFalse((id(res) == id(s1)) or (id(res) == id(s2)))
+
+    def test_iand(self):
+        s1, s2 = map(OrderedSet, ["abc", "bcd"])
+        s1 &= s2
+        self.assertListEqual(list(s1), ['b', 'c'])
+
+    def test_xor(self):
+        s1, s2 = map(OrderedSet, ["abc", "bcd"])
+        res = xor(s1, s2)
+        self.assertListEqual(list(res), ['a', 'd'])
+        self.assertFalse((id(res) == id(s1)) or (id(res) == id(s2)))
+
+    def test_ixor(self):
+        s1, s2 = map(OrderedSet, ["abc", "bcd"])
+        s1.__ixor__(s2)
+        self.assertListEqual(list(s1), ['a', 'd'])
+
+    def test_sub(self):
+        s1, s2 = map(OrderedSet, ["abc", "bcd"])
+        res = s1 - s2
+        self.assertListEqual(list(res), ['a'])
+        self.assertFalse((id(res) == id(s1)) or (id(res) == id(s2)))
+
+    def test_isub(self):
+        s1, s2 = map(OrderedSet, ["abc", "bcd"])
+        s1 -= s2
+        self.assertListEqual(list(s1), ['a'])
 
 
 class TestHeap(unittest.TestCase):

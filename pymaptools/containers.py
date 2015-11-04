@@ -1,13 +1,12 @@
-import copy
 from itertools import izip
 from functools import partial
-from cyordereddict import OrderedDict
-# from collections import OrderedDict
-from collections import MutableSet, Sequence, Callable, defaultdict
-from pymaptools.iter import iter_items, iter_vals, isiterable
+from collections import defaultdict
+from pymaptools.iter import iter_items, iter_vals
+from pymaptools._cyordereddict import OrderedDict
+from pymaptools._containers import OrderedSet, DefaultOrderedDict
 
 
-SLICE_ALL = slice(None)
+OrderedCounter = partial(DefaultOrderedDict, int)
 
 
 class Struct(object):
@@ -20,34 +19,34 @@ class Struct(object):
 
     bunch.Bunch object is very close to what we want, but it is not
     strict (it will not throw an error if we try to assign to it a
-    a property it does not know about)
+    a property it does not know about)::
 
-    >>> class Duck(Struct):
-    ...     readonly_attrs = frozenset(["description"])
-    ...     readwrite_attrs = frozenset(["vocalization", "locomotion"])
-    >>> duck = Duck(description="a medium-size bird")
-    >>> duck.vocalization
-    >>> duck.locomotion = "walk, swim, fly"
-    >>> duck.vocalization = "quack"
-    >>> duck.description = "an ostrich"
-    Traceback (most recent call last):
-    ...
-    AttributeError: Attribute 'description' of Duck instance is read-only
-    >>> duck.engine_type
-    Traceback (most recent call last):
-    ...
-    AttributeError: 'Duck' object has no attribute 'engine_type'
-    >>> duck.laden_speed = "40 mph"
-    Traceback (most recent call last):
-    ...
-    AttributeError: Duck instance has no attribute 'laden_speed'
-    >>> duck.to_dict()['vocalization']
-    'quack'
-    >>> another_duck = Duck.from_dict(duck.to_dict())
-    >>> another_duck.to_dict()['locomotion']
-    'walk, swim, fly'
-    >>> another_duck.locomotion
-    'walk, swim, fly'
+        >>> class Duck(Struct):
+        ...     readonly_attrs = frozenset(["description"])
+        ...     readwrite_attrs = frozenset(["vocalization", "locomotion"])
+        >>> duck = Duck(description="a medium-size bird")
+        >>> duck.vocalization
+        >>> duck.locomotion = "walk, swim, fly"
+        >>> duck.vocalization = "quack"
+        >>> duck.description = "an ostrich"
+        Traceback (most recent call last):
+        ...
+        AttributeError: Attribute 'description' of Duck instance is read-only
+        >>> duck.engine_type
+        Traceback (most recent call last):
+        ...
+        AttributeError: 'Duck' object has no attribute 'engine_type'
+        >>> duck.laden_speed = "40 mph"
+        Traceback (most recent call last):
+        ...
+        AttributeError: Duck instance has no attribute 'laden_speed'
+        >>> duck.to_dict()['vocalization']
+        'quack'
+        >>> another_duck = Duck.from_dict(duck.to_dict())
+        >>> another_duck.to_dict()['locomotion']
+        'walk, swim, fly'
+        >>> another_duck.locomotion
+        'walk, swim, fly'
 
     """
     readwrite_attrs = frozenset()
@@ -98,178 +97,17 @@ class Struct(object):
                     self.__class__.__name__, name))
 
 
-class OrderedSet(MutableSet, Sequence):
-    """
-    An OrderedSet is a custom MutableSet that remembers its order, so that
-    every entry has an index that can be looked up.
-
-    Based on version written by Luminoso Technologies:
-        https://github.com/LuminosoInsight/ordered-set
-
-    Unlike that implementation, this class uses OrderedDict as storage
-    and supports key removal. We drop support for indexing, and add support
-    for fixed-size sets with maxlen parameter.
-
-    With a small modification, this class can be made into an LRU cache.
-    """
-    def __init__(self, iterable=None, maxlen=None):
-        self._mapping = OrderedDict()
-        self._maxlen = maxlen
-        if iterable is not None:
-            self |= iterable
-
-    def __len__(self):
-        return len(self._mapping)
-
-    def __getitem__(self, index):
-        """
-        Get the item at a given index.
-
-        If `index` is a slice, you will get back that slice of items. If it's
-        the slice [:], exactly the same object is returned. (If you want an
-        independent copy of an OrderedSet, use `OrderedSet.copy()`.)
-
-        If `index` is an iterable, you'll get the OrderedSet of items
-        corresponding to those indices. This is similar to NumPy's
-        "fancy indexing".
-        """
-        if index == SLICE_ALL:
-            return self
-        elif hasattr(index, '__index__') or isinstance(index, slice):
-            result = self._mapping.keys()[index]
-            if isinstance(result, list):
-                return OrderedSet(result)
-            else:
-                return result
-        elif isiterable(index):
-            keys = self._mapping.keys()
-            return OrderedSet([keys[i] for i in index])
-        else:
-            raise TypeError("Don't know how to index an OrderedSet by %r" % index)
-
-    def copy(self):
-        return OrderedSet(self)
-
-    def __getstate__(self):
-        if len(self) == 0:
-            # The state can't be an empty list.
-            # We need to return a truthy value, or else __setstate__ won't be run.
-            #
-            # This could have been done more gracefully by always putting the state
-            # in a tuple, but this way is backwards- and forwards- compatible with
-            # previous versions of OrderedSet.
-            return (None,)
-        else:
-            return list(self)
-
-    def __setstate__(self, state):
-        if state == (None,):
-            self.__init__([])
-        else:
-            self.__init__(state)
-
-    def __contains__(self, key):
-        return key in self._mapping
-
-    def add(self, key):
-        """
-        Add `key` as an item to this OrderedSet, then return its index.
-
-        If `key` is already in the OrderedSet, return the index it already
-        had.
-        """
-        if key not in self._mapping:
-            if self._maxlen is None or len(self._mapping) < self._maxlen:
-                self._mapping[key] = 1
-            else:
-                self._mapping.popitem(last=False)
-                self._mapping[key] = 1
-
-    append = add
-
-    def discard(self, key):
-        del self._mapping[key]
-
-    def __iter__(self):
-        return self._mapping.iterkeys()
-
-    def __reversed__(self):
-        return reversed(self._mapping.keys())
-
-    def __repr__(self):
-        if not self:
-            return '%s()' % (self.__class__.__name__,)
-        return '%s(%r)' % (self.__class__.__name__, list(self))
-
-    def __eq__(self, other):
-        if isinstance(other, OrderedSet):
-            return len(self) == len(other) and \
-                self._mapping.keys() == other._mapping.keys()
-        try:
-            other_as_set = set(other)
-        except TypeError:
-            # If `other` can't be converted into a set, it's not equal.
-            return False
-        else:
-            return set(self) == other_as_set
-
-
-class DefaultOrderedDict(OrderedDict):
-    """Ordered dict with default constructors
-
-    Attribution: http://stackoverflow.com/a/6190500/562769
-    """
-    def __init__(self, default_factory=None, *a, **kw):
-        if (default_factory is not None and
-                not isinstance(default_factory, Callable)):
-            raise TypeError('first argument must be callable')
-        OrderedDict.__init__(self, *a, **kw)
-        self.default_factory = default_factory
-
-    def __getitem__(self, key):
-        try:
-            return OrderedDict.__getitem__(self, key)
-        except KeyError:
-            return self.__missing__(key)
-
-    def __missing__(self, key):
-        if self.default_factory is None:
-            raise KeyError(key)
-        self[key] = value = self.default_factory()
-        return value
-
-    def __reduce__(self):
-        if self.default_factory is None:
-            args = tuple()
-        else:
-            args = self.default_factory,
-        return type(self), args, None, None, self.items()
-
-    def copy(self):
-        return self.__copy__()
-
-    def __copy__(self):
-        return type(self)(self.default_factory, self)
-
-    def __deepcopy__(self, memo):
-        return type(self)(self.default_factory,
-                          copy.deepcopy(self.items(), memo=memo))
-
-
-OrderedCounter = partial(DefaultOrderedDict, int)
-
-
 class TableOfCounts(object):
 
     """
-    Example:
+    Example::
 
-    >>> table2 = TableOfCounts(cols=[(0, 0), (45, 0)])
-    >>> table2.grand_total
-    45
-    >>> table1 = TableOfCounts(rows=[(1, 5), (4, 6)])
-    >>> table1.col_totals.values()
-    [5, 11]
+        >>> table2 = TableOfCounts(cols=[(0, 0), (45, 0)])
+        >>> table2.grand_total
+        45
+        >>> table1 = TableOfCounts(rows=[(1, 5), (4, 6)])
+        >>> table1.col_totals.values()
+        [5, 11]
     """
     # TODO: use one of Scipy's sparse matrix representations instead of
     # a dict of dicts
@@ -287,7 +125,7 @@ class TableOfCounts(object):
         """
         _rows = self._rows
         if _rows is None:
-            _rows = self._rows = DefaultOrderedDict(OrderedCounter)
+            self._rows = _rows = DefaultOrderedDict(OrderedCounter)
             for cid, col in iter_items(self._cols):
                 for rid, cell in iter_items(col):
                     _rows[rid][cid] = cell
@@ -299,7 +137,7 @@ class TableOfCounts(object):
         """
         _cols = self._cols
         if _cols is None:
-            _cols = self._cols = DefaultOrderedDict(OrderedCounter)
+            self._cols = _cols = DefaultOrderedDict(OrderedCounter)
             for rid, row in iter_items(self._rows):
                 for cid, cell in iter_items(row):
                     _cols[cid][rid] = cell
@@ -309,18 +147,20 @@ class TableOfCounts(object):
     def row_totals(self):
         """Row Totals
 
-        >>> t = TableOfCounts.from_cells([1, 2, 3, 4, 5, 6], num_cols=2)
-        >>> t.row_totals.values()
-        [3, 7, 11]
+        ::
+
+            >>> t = TableOfCounts.from_cells([1, 2, 3, 4, 5, 6], num_cols=2)
+            >>> t.row_totals.values()
+            [3, 7, 11]
 
         Ensure attribute caching::
 
-        >>> t._row_totals[1]
-        7
+            >>> t._row_totals[1]
+            7
         """
         _row_totals = self._row_totals
         if _row_totals is None:
-            _row_totals = self._row_totals = OrderedCounter()
+            self._row_totals = _row_totals = OrderedCounter()
             for rid, row in iter_items(self.rows):
                 _row_totals[rid] = sum(iter_vals(row))
         return _row_totals
@@ -329,18 +169,20 @@ class TableOfCounts(object):
     def col_totals(self):
         """Column Totals
 
-        >>> t = TableOfCounts.from_cells([1, 2, 3, 4, 5, 6], num_cols=2)
-        >>> t.col_totals.values()
-        [9, 12]
+        ::
+
+            >>> t = TableOfCounts.from_cells([1, 2, 3, 4, 5, 6], num_cols=2)
+            >>> t.col_totals.values()
+            [9, 12]
 
         Ensure attribute caching::
 
-        >>> t._col_totals[1]
-        12
+            >>> t._col_totals[1]
+            12
         """
         _col_totals = self._col_totals
         if _col_totals is None:
-            _col_totals = self._col_totals = OrderedCounter()
+            self._col_totals = _col_totals = OrderedCounter()
             for rid, col in iter_items(self.cols):
                 _col_totals[rid] = sum(iter_vals(col))
         return _col_totals
@@ -349,7 +191,7 @@ class TableOfCounts(object):
     def grand_total(self):
         _grand_total = self._grand_total
         if _grand_total is None:
-            _grand_total = self._grand_total = sum(self.iter_row_totals())
+            self._grand_total = _grand_total = sum(self.iter_row_totals())
         return _grand_total
 
     def to_labels(self):
@@ -377,9 +219,11 @@ class TableOfCounts(object):
     def from_cells(cls, iterable, num_cols):
         """Instantiate class from a reshaped iterable of cells
 
-        >>> t = TableOfCounts.from_cells([1, 2, 3, 4, 5, 6], num_cols=2)
-        >>> t[1][1]
-        4
+        ::
+
+            >>> t = TableOfCounts.from_cells([1, 2, 3, 4, 5, 6], num_cols=2)
+            >>> t[1][1]
+            4
         """
         row_idx = 0
         rows = DefaultOrderedDict(OrderedCounter)
@@ -393,11 +237,13 @@ class TableOfCounts(object):
     def to_partitions(self):
         """Inverse to ``from_partitions`` constructor
 
-        >>> p1 = [[5, 6, 7, 8], [9, 10, 11], [0, 1, 2, 3, 4]]
-        >>> p2 = [[0, 1, 5, 6, 9], [2, 3, 7], [8, 10, 11], [4]]
-        >>> t = TableOfCounts.from_partitions(p1, p2)
-        >>> t.to_partitions()
-        ([[5, 6, 7, 8], [9, 10, 11], [0, 1, 2, 3, 4]], [[0, 1, 5, 6, 9], [2, 3, 7], [8, 10, 11], [4]])
+        ::
+
+            >>> p1 = [[5, 6, 7, 8], [9, 10, 11], [0, 1, 2, 3, 4]]
+            >>> p2 = [[0, 1, 5, 6, 9], [2, 3, 7], [8, 10, 11], [4]]
+            >>> t = TableOfCounts.from_partitions(p1, p2)
+            >>> t.to_partitions()
+            ([[5, 6, 7, 8], [9, 10, 11], [0, 1, 2, 3, 4]], [[0, 1, 5, 6, 9], [2, 3, 7], [8, 10, 11], [4]])
         """
         point = 0
         ptrue = defaultdict(list)
@@ -415,11 +261,13 @@ class TableOfCounts(object):
 
         Partitions are non-overlapping clusters.
 
-        >>> p1 = [[1, 2, 3, 4], [5, 6, 7], [8, 9, 10, 11, 12]]
-        >>> p2 = [[2, 4, 6, 8, 10], [3, 9, 12], [1, 5, 7], [11]]
-        >>> t = TableOfCounts.from_partitions(p1, p2)
-        >>> t.to_labels()
-        ([0, 0, 0, 0, 1, 1, 1, 2, 2, 2, 2, 2], [0, 0, 1, 2, 0, 2, 2, 0, 0, 1, 1, 3])
+        ::
+
+            >>> p1 = [[1, 2, 3, 4], [5, 6, 7], [8, 9, 10, 11, 12]]
+            >>> p2 = [[2, 4, 6, 8, 10], [3, 9, 12], [1, 5, 7], [11]]
+            >>> t = TableOfCounts.from_partitions(p1, p2)
+            >>> t.to_labels()
+            ([0, 0, 0, 0, 1, 1, 1, 2, 2, 2, 2, 2], [0, 0, 1, 2, 0, 2, 2, 0, 0, 1, 1, 3])
 
         """
         ltrue, lpred = partitions_to_labels(partitions1, partitions2)
@@ -430,11 +278,13 @@ class TableOfCounts(object):
 
         In the representations, clusters are lists, classes are integers
 
-        >>> p1 = [[1, 2, 3, 4], [5, 6, 7], [8, 9, 10, 11, 12]]
-        >>> p2 = [[2, 4, 6, 8, 10], [3, 9, 12], [1, 5, 7], [11]]
-        >>> t = TableOfCounts.from_partitions(p1, p2)
-        >>> t.to_clusters()
-        [[0, 0, 1, 2, 2], [0, 2, 2], [0, 1, 1], [2]]
+        ::
+
+            >>> p1 = [[1, 2, 3, 4], [5, 6, 7], [8, 9, 10, 11, 12]]
+            >>> p2 = [[2, 4, 6, 8, 10], [3, 9, 12], [1, 5, 7], [11]]
+            >>> t = TableOfCounts.from_partitions(p1, p2)
+            >>> t.to_clusters()
+            [[0, 0, 1, 2, 2], [0, 2, 2], [0, 1, 1], [2]]
         """
         ltrue, lpred = self.to_labels()
         return labels_to_clusters(ltrue, lpred)
@@ -443,10 +293,12 @@ class TableOfCounts(object):
     def from_clusters(cls, clusters):
         """Construct an instance from to_clusters() output
 
-        >>> clusters = [[2, 2, 0, 0, 1], [2, 2, 0], [0, 1, 1], [2]]
-        >>> t = TableOfCounts.from_clusters(clusters)
-        >>> t.to_clusters()
-        [[2, 2, 0, 0, 1], [2, 2, 0], [0, 1, 1], [2]]
+        ::
+
+            >>> clusters = [[2, 2, 0, 0, 1], [2, 2, 0], [0, 1, 1], [2]]
+            >>> t = TableOfCounts.from_clusters(clusters)
+            >>> t.to_clusters()
+            [[2, 2, 0, 0, 1], [2, 2, 0], [0, 1, 1], [2]]
         """
         ltrue = []
         lpred = []
@@ -494,12 +346,12 @@ def partitions_to_labels(p1, p2):
 
     """Convert partitions to two arrays of labels
 
-    Partitions are non-overlapping clusters
+    Partitions are non-overlapping clusters::
 
-    >>> p1 = [[1, 2, 3, 4], [5, 6, 7], [8, 9, 10, 11, 12]]
-    >>> p2 = [[2, 4, 6, 8, 10], [3, 9, 12], [1, 5, 7], [11]]
-    >>> partitions_to_labels(p1, p2)
-    ([0, 0, 1, 2, 2, 0, 2, 2, 0, 1, 1, 2], [0, 0, 0, 0, 0, 1, 1, 1, 2, 2, 2, 3])
+        >>> p1 = [[1, 2, 3, 4], [5, 6, 7], [8, 9, 10, 11, 12]]
+        >>> p2 = [[2, 4, 6, 8, 10], [3, 9, 12], [1, 5, 7], [11]]
+        >>> partitions_to_labels(p1, p2)
+        ([0, 0, 1, 2, 2, 0, 2, 2, 0, 1, 1, 2], [0, 0, 0, 0, 0, 1, 1, 1, 2, 2, 2, 3])
     """
 
     ltrue = []
@@ -538,12 +390,12 @@ def partitions_to_labels(p1, p2):
 def labels_to_clusters(labels_true, labels_pred):
     """Convert pair of label arrays to clusters of true labels
 
-    Exact inverse of ``clusters_to_labels``
+    Exact inverse of ``clusters_to_labels``::
 
-    >>> pair = ([1, 1, 1, 1, 1, 0, 0],
-    ...         [0, 0, 0, 1, 1, 2, 3])
-    >>> labels_to_clusters(*pair)
-    [[1, 1, 1], [1, 1], [0], [0]]
+        >>> pair = ([1, 1, 1, 1, 1, 0, 0],
+        ...         [0, 0, 0, 1, 1, 2, 3])
+        >>> labels_to_clusters(*pair)
+        [[1, 1, 1], [1, 1], [0], [0]]
 
     """
     result = defaultdict(list)
@@ -555,11 +407,11 @@ def labels_to_clusters(labels_true, labels_pred):
 def clusters_to_labels(iterable):
     """Convert clusters of true labels to pair of label arrays
 
-    Exact inverse of ``labels_to_clusters``
+    Exact inverse of ``labels_to_clusters``::
 
-    >>> clusters = [[1, 1, 1], [1, 1], [0], [0]]
-    >>> clusters_to_labels(clusters)
-    ([1, 1, 1, 1, 1, 0, 0], [0, 0, 0, 1, 1, 2, 3])
+        >>> clusters = [[1, 1, 1], [1, 1], [0], [0]]
+        >>> clusters_to_labels(clusters)
+        ([1, 1, 1, 1, 1, 0, 0], [0, 0, 0, 1, 1, 2, 3])
 
     """
     labels_true = []

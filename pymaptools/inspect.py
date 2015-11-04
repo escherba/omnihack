@@ -34,16 +34,18 @@ def hasmethod(obj, method):
 def iter_methods(obj, names):
     """Return all methods from list of names supported by object
 
-    >>> from pymaptools.iter import first_nonempty
-    >>> class Foo(object):
-    ...     def bar(self):
-    ...         return "bar called"
-    >>> foo = Foo()
-    >>> method = first_nonempty(iter_methods(foo, ['missing', 'bar']))
-    >>> hasmethod(foo, method.__name__)
-    True
-    >>> method()
-    'bar called'
+    ::
+
+        >>> from pymaptools.iter import first_nonempty
+        >>> class Foo(object):
+        ...     def bar(self):
+        ...         return "bar called"
+        >>> foo = Foo()
+        >>> method = first_nonempty(iter_methods(foo, ['missing', 'bar']))
+        >>> hasmethod(foo, method.__name__)
+        True
+        >>> method()
+        'bar called'
     """
     for method_name in names:
         if hasattr(obj, method_name):
