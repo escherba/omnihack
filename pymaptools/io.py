@@ -301,19 +301,19 @@ class PathArgumentParser(argparse.ArgumentParser):
 class DumperFacade(object):
     """Provides a consistent interface to dumper objects"""
 
-    MODEL_DUMP_TYPES = {
+    _dump_types = {
         'pickle': dict(load=pickle.load, dump='_dump_pickle'),
         'joblib': dict(load=joblib.load, dump='_dump_joblib')
     }
 
     def __init__(self, dumper_type='joblib'):
-        dumper_props = self.MODEL_DUMP_TYPES[dumper_type]
+        dumper_props = self._dump_types[dumper_type]
         self.load = dumper_props['load']
         self.dump = getattr(self, dumper_props['dump'])
 
     @classmethod
     def keys(cls):
-        return cls.MODEL_DUMP_TYPES.keys()
+        return cls._dump_types.keys()
 
     @staticmethod
     def _dump_joblib(estimator, fname):
