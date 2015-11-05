@@ -460,7 +460,7 @@ static const char *__pyx_filename;
 
 static const char *__pyx_f[] = {
   "pymaptools/_cyordereddict.pyx",
-  "env/lib/python2.7/site-packages/Cython/Includes/cpython/type.pxd",
+  "type.pxd",
 };
 
 /*--- Type declarations ---*/

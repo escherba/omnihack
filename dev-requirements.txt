@@ -5,5 +5,5 @@ Cython
 coverage==4.0.1
 nosexcover
 mock
-pytest
 ipdb>=0.8
+ipython>=2.2.0
