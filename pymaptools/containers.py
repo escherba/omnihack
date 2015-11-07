@@ -1,7 +1,7 @@
 from itertools import izip
 from functools import partial
-from collections import defaultdict
-from pymaptools.iter import iter_items, iter_vals
+from collections import defaultdict, Mapping
+from pymaptools.iter import iter_items, iter_keys, iter_vals
 from pymaptools._cyordereddict import OrderedDict
 from pymaptools._containers import OrderedSet, DefaultOrderedDict
 
@@ -193,6 +193,40 @@ class TableOfCounts(object):
         if _grand_total is None:
             self._grand_total = _grand_total = sum(self.iter_row_totals())
         return _grand_total
+
+    def to_rows(self):
+        """
+
+        Example with dense matrices::
+
+            >>> TableOfCounts(rows=[(1, 5), (4, 6)]).to_rows()
+            [[1, 5], [4, 6]]
+            >>> TableOfCounts(cols=[(0, 0), (45, 0)]).to_rows()
+            [[0, 45], [0, 0]]
+
+        Example with a sparse matrix::
+
+            >>> a = [0, 2, 1, 1, 0, 3, 1, 3, 0, 1]
+            >>> b = [0, 1, 1, 1, 0, 2, 1, 2, 3, 1]
+            >>> t = TableOfCounts.from_labels(a, b)
+            >>> t.to_rows()
+            [[2, 1, 0, 0], [0, 0, 1, 0], [0, 0, 4, 0], [0, 0, 0, 2]]
+
+        """
+        row_form = []
+        all_cols = list(iter_keys(self.col_totals))
+        for row in iter_vals(self.rows):
+            if isinstance(row, Mapping):
+                row_vals = []
+                for col in all_cols:
+                    if col in row:
+                        row_vals.append(row[col])
+                    else:
+                        row_vals.append(0)
+                row_form.append(row_vals)
+            else:
+                row_form.append(list(row))
+        return row_form
 
     def to_labels(self):
         """Returns a tuple (ltrue, lpred). Inverse of ``from_labels``
