@@ -97,7 +97,7 @@ class Struct(object):
                     self.__class__.__name__, name))
 
 
-class UnorderedCrossTab(object):
+class CrossTab(object):
 
     """Represents a RxC contigency table (cross-tabulation)
 
@@ -109,7 +109,7 @@ class UnorderedCrossTab(object):
     contingency table where rows and columns have the same cardinality and
     represent two different mesurements of the same vector of variables.
 
-    You can construct a dense ``UnorderedCrossTab`` instance given either rows or
+    You can construct a dense ``CrossTab`` instance given either rows or
     columns (in a 2D-array format)::
 
         >>> t1 = OrderedCrossTab(rows=[(1, 5), (4, 6)])
@@ -119,10 +119,10 @@ class UnorderedCrossTab(object):
         >>> t2.to_rows()
         [[0, 45], [0, 0]]
 
-    Given mapping containers, the contstructed instances of ``UnorderedCrossTab``
+    Given mapping containers, the contstructed instances of ``CrossTab``
     class will be sparse::
 
-        >>> t3 = UnorderedCrossTab(rows={"a": {"x": 2, "y": 3}, "b": {"x": 4, "y": 5}})
+        >>> t3 = CrossTab(rows={"a": {"x": 2, "y": 3}, "b": {"x": 4, "y": 5}})
         >>> t3.grand_total
         14
 
@@ -236,9 +236,9 @@ class UnorderedCrossTab(object):
 
         Example with dense matrices::
 
-            >>> UnorderedCrossTab(rows=[(1, 5), (4, 6)]).to_rows()
+            >>> CrossTab(rows=[(1, 5), (4, 6)]).to_rows()
             [[1, 5], [4, 6]]
-            >>> UnorderedCrossTab(cols=[(0, 0), (45, 0)]).to_rows()
+            >>> CrossTab(cols=[(0, 0), (45, 0)]).to_rows()
             [[0, 45], [0, 0]]
 
         Example with a sparse matrix::
@@ -292,7 +292,7 @@ class UnorderedCrossTab(object):
 
         ::
 
-            >>> t = UnorderedCrossTab.from_cells([1, 2, 3, 4, 5, 6], num_cols=2)
+            >>> t = CrossTab.from_cells([1, 2, 3, 4, 5, 6], num_cols=2)
             >>> t[1][1]
             4
         """
@@ -413,13 +413,13 @@ class UnorderedCrossTab(object):
         return iter_vals(self.row_totals)
 
 
-class OrderedRowCrossTab(UnorderedCrossTab):
+class OrderedRowCrossTab(CrossTab):
 
-    """Specialization of ``UnorderedCrossTab`` for ordinal row variable
+    """Specialization of ``CrossTab`` for ordinal row variable
 
     See Also
     --------
-    UnorderedCrossTab
+    CrossTab
     """
     _col_type_1d = Counter
     _row_type_1d = OrderedCounter
@@ -427,13 +427,13 @@ class OrderedRowCrossTab(UnorderedCrossTab):
     _row_type_2d = partial(DefaultOrderedDict, _col_type_1d)
 
 
-class OrderedColCrossTab(UnorderedCrossTab):
+class OrderedColCrossTab(CrossTab):
 
-    """Specialization of ``UnorderedCrossTab`` for ordinal column variable
+    """Specialization of ``CrossTab`` for ordinal column variable
 
     See Also
     --------
-    UnorderedCrossTab
+    CrossTab
     """
     _col_type_1d = OrderedCounter
     _row_type_1d = Counter
@@ -441,13 +441,13 @@ class OrderedColCrossTab(UnorderedCrossTab):
     _row_type_2d = partial(defaultdict, _col_type_1d)
 
 
-class OrderedCrossTab(UnorderedCrossTab):
+class OrderedCrossTab(CrossTab):
 
-    """Specialization of ``UnorderedCrossTab`` for ordinal variables
+    """Specialization of ``CrossTab`` for ordinal variables
 
     See Also
     --------
-    UnorderedCrossTab
+    CrossTab
     """
     _col_type_1d = OrderedCounter
     _row_type_1d = OrderedCounter
