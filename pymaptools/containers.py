@@ -1,6 +1,6 @@
 from itertools import izip
 from functools import partial
-from collections import defaultdict, Mapping
+from collections import defaultdict, Counter, Mapping
 from pymaptools.iter import iter_items, iter_keys, iter_vals
 from pymaptools._cyordereddict import OrderedDict
 from pymaptools._containers import OrderedSet, DefaultOrderedDict
@@ -97,20 +97,55 @@ class Struct(object):
                     self.__class__.__name__, name))
 
 
-class TableOfCounts(object):
+class UnorderedCrossTab(object):
 
-    """
-    Example::
+    """Represents a RxC contigency table (cross-tabulation)
 
-        >>> table2 = TableOfCounts(cols=[(0, 0), (45, 0)])
-        >>> table2.grand_total
-        45
-        >>> table1 = TableOfCounts(rows=[(1, 5), (4, 6)])
-        >>> table1.col_totals.values()
-        [5, 11]
+    A contingency table represents a cross-tabulation of either categorical
+    (nominal) or ordinal variables [1]_. A related concept is a 2D histogram
+    except a histogram represents bins drawn from a continuous distribution,
+    while a contingency table can also represent discrete distributions.
+    Another related concept is correlation matrix, which is a special case of a
+    contingency table where rows and columns have the same cardinality and
+    represent two different mesurements of the same vector of variables.
+
+    You can construct a dense ``UnorderedCrossTab`` instance given either rows or
+    columns (in a 2D-array format)::
+
+        >>> t1 = OrderedCrossTab(rows=[(1, 5), (4, 6)])
+        >>> t1.to_rows()
+        [[1, 5], [4, 6]]
+        >>> t2 = OrderedCrossTab(cols=[(0, 0), (45, 0)])
+        >>> t2.to_rows()
+        [[0, 45], [0, 0]]
+
+    Given mapping containers, the contstructed instances of ``UnorderedCrossTab``
+    class will be sparse::
+
+        >>> t3 = UnorderedCrossTab(rows={"a": {"x": 2, "y": 3}, "b": {"x": 4, "y": 5}})
+        >>> t3.grand_total
+        14
+
+    Note that the order of rows and columns in the "dict of dicts" case is not
+    guaranteed. To guarantee row and column order, use ``OrderedCrossTab``
+    subclass.
+
+    See Also
+    --------
+    OrderedCrossTab, OrderedRowCrossTab, OrderedColCrossTab
+
+    References
+    ----------
+    .. [1] `Wikipedia entry for Contingency Table
+           <https://en.wikipedia.org/wiki/Contingency_table>`_
     """
     # TODO: use one of Scipy's sparse matrix representations instead of
     # a dict of dicts
+
+    _col_type_1d = Counter
+    _row_type_1d = Counter
+    _col_type_2d = partial(defaultdict, _row_type_1d)
+    _row_type_2d = partial(defaultdict, _col_type_1d)
 
     def __init__(self, rows=None, cols=None):
         self._rows = rows
@@ -121,11 +156,11 @@ class TableOfCounts(object):
 
     @property
     def rows(self):
-        """Rows
+        """Table rows
         """
         _rows = self._rows
         if _rows is None:
-            self._rows = _rows = DefaultOrderedDict(OrderedCounter)
+            self._rows = _rows = self._row_type_2d()
             for cid, col in iter_items(self._cols):
                 for rid, cell in iter_items(col):
                     _rows[rid][cid] = cell
@@ -133,11 +168,11 @@ class TableOfCounts(object):
 
     @property
     def cols(self):
-        """Columns
+        """Table columns
         """
         _cols = self._cols
         if _cols is None:
-            self._cols = _cols = DefaultOrderedDict(OrderedCounter)
+            self._cols = _cols = self._col_type_2d()
             for rid, row in iter_items(self._rows):
                 for cid, cell in iter_items(row):
                     _cols[cid][rid] = cell
@@ -145,11 +180,11 @@ class TableOfCounts(object):
 
     @property
     def row_totals(self):
-        """Row Totals
+        """Row totals (right margin)
 
         ::
 
-            >>> t = TableOfCounts.from_cells([1, 2, 3, 4, 5, 6], num_cols=2)
+            >>> t = OrderedCrossTab.from_cells([1, 2, 3, 4, 5, 6], num_cols=2)
             >>> t.row_totals.values()
             [3, 7, 11]
 
@@ -160,18 +195,18 @@ class TableOfCounts(object):
         """
         _row_totals = self._row_totals
         if _row_totals is None:
-            self._row_totals = _row_totals = OrderedCounter()
+            self._row_totals = _row_totals = self._col_type_1d()
             for rid, row in iter_items(self.rows):
                 _row_totals[rid] = sum(iter_vals(row))
         return _row_totals
 
     @property
     def col_totals(self):
-        """Column Totals
+        """Column totals (bottom margin)
 
         ::
 
-            >>> t = TableOfCounts.from_cells([1, 2, 3, 4, 5, 6], num_cols=2)
+            >>> t = OrderedCrossTab.from_cells([1, 2, 3, 4, 5, 6], num_cols=2)
             >>> t.col_totals.values()
             [9, 12]
 
@@ -182,13 +217,15 @@ class TableOfCounts(object):
         """
         _col_totals = self._col_totals
         if _col_totals is None:
-            self._col_totals = _col_totals = OrderedCounter()
+            self._col_totals = _col_totals = self._row_type_1d()
             for rid, col in iter_items(self.cols):
                 _col_totals[rid] = sum(iter_vals(col))
         return _col_totals
 
     @property
     def grand_total(self):
+        """Grand total of all counts
+        """
         _grand_total = self._grand_total
         if _grand_total is None:
             self._grand_total = _grand_total = sum(self.iter_row_totals())
@@ -199,16 +236,16 @@ class TableOfCounts(object):
 
         Example with dense matrices::
 
-            >>> TableOfCounts(rows=[(1, 5), (4, 6)]).to_rows()
+            >>> UnorderedCrossTab(rows=[(1, 5), (4, 6)]).to_rows()
             [[1, 5], [4, 6]]
-            >>> TableOfCounts(cols=[(0, 0), (45, 0)]).to_rows()
+            >>> UnorderedCrossTab(cols=[(0, 0), (45, 0)]).to_rows()
             [[0, 45], [0, 0]]
 
         Example with a sparse matrix::
 
             >>> a = [0, 2, 1, 1, 0, 3, 1, 3, 0, 1]
             >>> b = [0, 1, 1, 1, 0, 2, 1, 2, 3, 1]
-            >>> t = TableOfCounts.from_labels(a, b)
+            >>> t = OrderedCrossTab.from_labels(a, b)
             >>> t.to_rows()
             [[2, 1, 0, 0], [0, 0, 1, 0], [0, 0, 4, 0], [0, 0, 0, 2]]
 
@@ -241,7 +278,7 @@ class TableOfCounts(object):
 
     @classmethod
     def from_labels(cls, labels_true, labels_pred):
-        rows = DefaultOrderedDict(OrderedCounter)
+        rows = cls._row_type_2d()
         for c, k in izip(labels_true, labels_pred):
             rows[c][k] += 1
         return cls(rows=rows)
@@ -255,12 +292,12 @@ class TableOfCounts(object):
 
         ::
 
-            >>> t = TableOfCounts.from_cells([1, 2, 3, 4, 5, 6], num_cols=2)
+            >>> t = UnorderedCrossTab.from_cells([1, 2, 3, 4, 5, 6], num_cols=2)
             >>> t[1][1]
             4
         """
         row_idx = 0
-        rows = DefaultOrderedDict(OrderedCounter)
+        rows = cls._row_type_2d()
         for idx, cell in enumerate(iterable):
             col_idx = idx % num_cols
             rows[row_idx][col_idx] = cell
@@ -275,7 +312,7 @@ class TableOfCounts(object):
 
             >>> p1 = [[5, 6, 7, 8], [9, 10, 11], [0, 1, 2, 3, 4]]
             >>> p2 = [[0, 1, 5, 6, 9], [2, 3, 7], [8, 10, 11], [4]]
-            >>> t = TableOfCounts.from_partitions(p1, p2)
+            >>> t = OrderedCrossTab.from_partitions(p1, p2)
             >>> t.to_partitions()
             ([[5, 6, 7, 8], [9, 10, 11], [0, 1, 2, 3, 4]], [[0, 1, 5, 6, 9], [2, 3, 7], [8, 10, 11], [4]])
         """
@@ -299,7 +336,7 @@ class TableOfCounts(object):
 
             >>> p1 = [[1, 2, 3, 4], [5, 6, 7], [8, 9, 10, 11, 12]]
             >>> p2 = [[2, 4, 6, 8, 10], [3, 9, 12], [1, 5, 7], [11]]
-            >>> t = TableOfCounts.from_partitions(p1, p2)
+            >>> t = OrderedCrossTab.from_partitions(p1, p2)
             >>> t.to_labels()
             ([0, 0, 0, 0, 1, 1, 1, 2, 2, 2, 2, 2], [0, 0, 1, 2, 0, 2, 2, 0, 0, 1, 1, 3])
 
@@ -316,7 +353,7 @@ class TableOfCounts(object):
 
             >>> p1 = [[1, 2, 3, 4], [5, 6, 7], [8, 9, 10, 11, 12]]
             >>> p2 = [[2, 4, 6, 8, 10], [3, 9, 12], [1, 5, 7], [11]]
-            >>> t = TableOfCounts.from_partitions(p1, p2)
+            >>> t = OrderedCrossTab.from_partitions(p1, p2)
             >>> t.to_clusters()
             [[0, 0, 1, 2, 2], [0, 2, 2], [0, 1, 1], [2]]
         """
@@ -330,7 +367,7 @@ class TableOfCounts(object):
         ::
 
             >>> clusters = [[2, 2, 0, 0, 1], [2, 2, 0], [0, 1, 1], [2]]
-            >>> t = TableOfCounts.from_clusters(clusters)
+            >>> t = OrderedCrossTab.from_clusters(clusters)
             >>> t.to_clusters()
             [[2, 2, 0, 0, 1], [2, 2, 0], [0, 1, 1], [2]]
         """
@@ -374,6 +411,48 @@ class TableOfCounts(object):
 
     def iter_row_totals(self):
         return iter_vals(self.row_totals)
+
+
+class OrderedRowCrossTab(UnorderedCrossTab):
+
+    """Specialization of ``UnorderedCrossTab`` for ordinal row variable
+
+    See Also
+    --------
+    UnorderedCrossTab
+    """
+    _col_type_1d = Counter
+    _row_type_1d = OrderedCounter
+    _col_type_2d = partial(defaultdict, _row_type_1d)
+    _row_type_2d = partial(DefaultOrderedDict, _col_type_1d)
+
+
+class OrderedColCrossTab(UnorderedCrossTab):
+
+    """Specialization of ``UnorderedCrossTab`` for ordinal column variable
+
+    See Also
+    --------
+    UnorderedCrossTab
+    """
+    _col_type_1d = OrderedCounter
+    _row_type_1d = Counter
+    _col_type_2d = partial(DefaultOrderedDict, _row_type_1d)
+    _row_type_2d = partial(defaultdict, _col_type_1d)
+
+
+class OrderedCrossTab(UnorderedCrossTab):
+
+    """Specialization of ``UnorderedCrossTab`` for ordinal variables
+
+    See Also
+    --------
+    UnorderedCrossTab
+    """
+    _col_type_1d = OrderedCounter
+    _row_type_1d = OrderedCounter
+    _col_type_2d = partial(DefaultOrderedDict, _row_type_1d)
+    _row_type_2d = partial(DefaultOrderedDict, _col_type_1d)
 
 
 def partitions_to_labels(p1, p2):
