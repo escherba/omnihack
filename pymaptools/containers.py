@@ -97,17 +97,19 @@ class Struct(object):
                     self.__class__.__name__, name))
 
 
-class CrossTab(object):
+class CrossTab(Mapping):
 
     """Represents a RxC contingency table (cross-tabulation)
 
     A contingency table represents a cross-tabulation of either categorical
-    (nominal) or ordinal variables [1]_. A related concept is a 2D histogram
-    except a histogram represents bins drawn from a continuous distribution,
-    while a contingency table can also represent discrete distributions.
-    Another related concept is correlation matrix, which is a special case of a
-    contingency table where rows and columns have the same cardinality and
-    represent two different measurements of the same vector of variables.
+    (nominal) or ordinal variables [1]_. A contingency table is distinguished
+    from the related concept of a 2D-histogram in that histogram's bins are
+    drawn from a continuous distribution, while a contingency table can also
+    represent discrete distributions.  Another related concept is correlation
+    matrix, which is a special case of a contingency table where rows and
+    columns have the same cardinality and represent two different measurements
+    of the same vector of variables. To represent correlation matrices, use
+    ``OrderedCrossTab`` variant.
 
     You can construct a dense ``CrossTab`` instance given either rows or
     columns (in a 2D-array format)::
@@ -126,9 +128,11 @@ class CrossTab(object):
         >>> t3.grand_total
         14
 
-    Note that the order of rows and columns in the "dict of dicts" case is not
-    guaranteed. To guarantee row and column order, use ``OrderedCrossTab``
-    subclass.
+    Note that the order of rows and columns in the "dict of dicts" case will
+    not be guaranteed. To guarantee row and column order, either pass ordered
+    mapping structures such as ``OrderedDict`` to the ``rows`` parameter, or,
+    if relying on other constructors, use the ``OrderedCrossTab``
+    specialization.
 
     See Also
     --------
@@ -184,7 +188,7 @@ class CrossTab(object):
 
         ::
 
-            >>> t = OrderedCrossTab.from_cells([1, 2, 3, 4, 5, 6], num_cols=2)
+            >>> t = OrderedCrossTab.from_vals([1, 2, 3, 4, 5, 6], num_cols=2)
             >>> t.row_totals.values()
             [3, 7, 11]
 
@@ -206,7 +210,7 @@ class CrossTab(object):
 
         ::
 
-            >>> t = OrderedCrossTab.from_cells([1, 2, 3, 4, 5, 6], num_cols=2)
+            >>> t = OrderedCrossTab.from_vals([1, 2, 3, 4, 5, 6], num_cols=2)
             >>> t.col_totals.values()
             [9, 12]
 
@@ -270,7 +274,7 @@ class CrossTab(object):
         """
         ltrue = []
         lpred = []
-        for ri, ci, count in self.iter_cells_with_indices():
+        for (ri, ci), count in self.iteritems():
             for _ in xrange(count):
                 ltrue.append(ri)
                 lpred.append(ci)
@@ -278,22 +282,21 @@ class CrossTab(object):
 
     @classmethod
     def from_labels(cls, labels_true, labels_pred):
+        """Instantiate from two arrays of observations (labels)
+        """
         rows = cls._row_type_2d()
         for c, k in izip(labels_true, labels_pred):
             rows[c][k] += 1
         return cls(rows=rows)
 
-    def __getitem__(self, key):
-        return self.rows[key]
-
     @classmethod
-    def from_cells(cls, iterable, num_cols):
-        """Instantiate class from a reshaped iterable of cells
+    def from_vals(cls, iterable, num_cols):
+        """Instantiate from a reshaped iterable of vals
 
         ::
 
-            >>> t = CrossTab.from_cells([1, 2, 3, 4, 5, 6], num_cols=2)
-            >>> t[1][1]
+            >>> t = CrossTab.from_vals([1, 2, 3, 4, 5, 6], num_cols=2)
+            >>> t[1, 1]
             4
         """
         row_idx = 0
@@ -319,7 +322,7 @@ class CrossTab(object):
         point = 0
         ptrue = defaultdict(list)
         ppred = defaultdict(list)
-        for ri, ci, count in self.iter_cells_with_indices():
+        for (ri, ci), count in self.iteritems():
             for _ in xrange(count):
                 ptrue[ri].append(point)
                 ppred[ci].append(point)
@@ -328,7 +331,7 @@ class CrossTab(object):
 
     @classmethod
     def from_partitions(cls, partitions1, partitions2):
-        """Construct a coincidence table from two import partitionings
+        """Instantiate from two partitionings
 
         Partitions are non-overlapping clusters.
 
@@ -362,7 +365,7 @@ class CrossTab(object):
 
     @classmethod
     def from_clusters(cls, clusters):
-        """Construct an instance from to_clusters() output
+        """Instantiate from class-coded clustering representation
 
         ::
 
@@ -379,12 +382,72 @@ class CrossTab(object):
                 lpred.append(k)
         return cls.from_labels(ltrue, lpred)
 
-    def iter_cells_with_indices(self):
+    # Mapping methods
+    def iterkeys(self):
+        for ri, row in iter_items(self.rows):
+            for ci in iter_keys(row):
+                yield ri, ci
+
+    __iter__ = iterkeys
+
+    def __getitem__(self, key):
+        ri, ci = key
+        if ri not in self.rows:
+            raise KeyError(key)
+        row = self.rows[ri]
+        if ci not in row:
+            raise KeyError(key)
+        return row[ci]
+
+    def get(self, key, default=0):
+        try:
+            return self[key]
+        except KeyError:
+            return default
+
+    def __eq__(self, other):
+        if len(self) != len(other):
+            return False
+        for k, v in other.iteritems():
+            try:
+                this_val = self[k]
+            except KeyError:
+                return False
+            if v != this_val:
+                return False
+        return True
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
+    def __len__(self):
+        return len(self.values())
+
+    def itervalues(self):
+        for row in self.iter_rows():
+            for cell in row:
+                yield cell
+
+    def iteritems(self):
         for ri, row in iter_items(self.rows):
             for ci, cell in iter_items(row):
-                yield ri, ci, cell
+                yield (ri, ci), cell
 
-    def iter_cells_with_margins(self):
+    def keys(self):
+        return list(self.iterkeys())
+
+    def values(self):
+        return list(self.itervalues())
+
+    def items(self):
+        return list(self.iteteritems())
+
+    def __contains__(self, item):
+        ri, ci = item
+        return ri in self.rows and ci in self.rows[ri]
+
+    # Other
+    def iter_vals_with_margins(self):
         col_totals = self.col_totals
         row_totals = self.row_totals
         for ri, row in iter_items(self.rows):
@@ -392,11 +455,6 @@ class CrossTab(object):
             for ci, cell in iter_items(row):
                 cm = col_totals[ci]
                 yield rm, cm, cell
-
-    def iter_cells(self):
-        for row in self.iter_rows():
-            for cell in row:
-                yield cell
 
     def iter_cols(self):
         for col in iter_vals(self.cols):
