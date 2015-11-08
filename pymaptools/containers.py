@@ -14,10 +14,10 @@ class Struct(object):
 
     Note:
 
-    collections.namedtuple is similar in concept but is too strict
+    ``collections.namedtuple`` is similar in concept but is too strict
     (requires all the keys every time you instantiate)
 
-    bunch.Bunch object is very close to what we want, but it is not
+    ``bunch.Bunch`` object is very close to what we want, but it is not
     strict (it will not throw an error if we try to assign to it a
     a property it does not know about)::
 
@@ -75,7 +75,7 @@ class Struct(object):
         """Set an attribute
 
         Note that this also creates an attribute if one does not exist
-        but is listed among the readwrite attribute names
+        but is listed among the read-write attribute names
         """
         if name in self.readwrite_attrs:
             self.__dict__[name] = value
@@ -99,7 +99,7 @@ class Struct(object):
 
 class CrossTab(object):
 
-    """Represents a RxC contigency table (cross-tabulation)
+    """Represents a RxC contingency table (cross-tabulation)
 
     A contingency table represents a cross-tabulation of either categorical
     (nominal) or ordinal variables [1]_. A related concept is a 2D histogram
@@ -107,7 +107,7 @@ class CrossTab(object):
     while a contingency table can also represent discrete distributions.
     Another related concept is correlation matrix, which is a special case of a
     contingency table where rows and columns have the same cardinality and
-    represent two different mesurements of the same vector of variables.
+    represent two different measurements of the same vector of variables.
 
     You can construct a dense ``CrossTab`` instance given either rows or
     columns (in a 2D-array format)::
@@ -119,7 +119,7 @@ class CrossTab(object):
         >>> t2.to_rows()
         [[0, 45], [0, 0]]
 
-    Given mapping containers, the contstructed instances of ``CrossTab``
+    Given mapping containers, the constructed instances of ``CrossTab``
     class will be sparse::
 
         >>> t3 = CrossTab(rows={"a": {"x": 2, "y": 3}, "b": {"x": 4, "y": 5}})
@@ -266,7 +266,7 @@ class CrossTab(object):
         return row_form
 
     def to_labels(self):
-        """Returns a tuple (ltrue, lpred). Inverse of ``from_labels``
+        """Returns a tuple ([a], [b]). Inverse of ``from_labels``
         """
         ltrue = []
         lpred = []
