@@ -638,7 +638,7 @@ def first_nonempty(iterable):
 
 
 def tee_lookahead(t, i):
-    """Inspect the i-th upcomping value from a tee object
+    """Inspect the i-th upcoming value from a tee object
        while leaving the tee object at its current position.
 
     Raise an IndexError if the underlying iterator doesn't
