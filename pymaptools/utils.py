@@ -5,6 +5,25 @@ from copy import deepcopy
 from contextlib import contextmanager
 
 
+def doc(s):
+    """Decorator to extract docstrings
+
+    Lets one write::
+
+        @doc(dict.__getitem__)
+        def __getitem__(self, item):
+            # method definition
+
+    """
+    if hasattr(s, '__call__'):
+        s = s.__doc__
+
+    def f(g):
+        g.__doc__ = s
+        return g
+    return f
+
+
 class SetComparisonMixin(object):
     """Mixin to unittest.TestCase that provides set subset comparison
     """
@@ -79,8 +98,12 @@ def joint_context(*args):
     """Generic empty context wrapper
 
     Allows constructions like:
-    with joint_context(open("filename.txt", "r")) as fhandle:
-    with joint_context(open("file1.txt", "r"), open("file2.txt", "r")) as (fh1, fh2):
+
+    ::
+
+        with joint_context(open("filename.txt", "r")) as fhandle:
+        with joint_context(open("file1.txt", "r"), open("file2.txt", "r")) as (fh1, fh2):
+
     """
     try:
         yield args[0] if len(args) == 1 else args

@@ -3,7 +3,7 @@ from heapq import heappush, heapreplace, nsmallest, nlargest, heappop
 
 
 class Heap(Iterable):
-    """Super-simple object-oriented interface for python's heap queue
+    """A simple object-oriented interface for Python's heap queue
 
     Allows one to easily maintain fixed-sized heaps
 
@@ -63,16 +63,16 @@ class Heap(Iterable):
 class RangeQueue(object):
     """Rank objects according to consistently-spaced index
 
-    Motivation: Sometimes an ordered stream of items becomes disordered (for example,
-    due to several workers operating on it). In that case, one may still decide
-    to return items in order (i.e. do not wait until all items are
-    processed to start the sorting phase and instead finish in one pass).
-    The idea is that the workers hopefully will not disorganize the list
-    *too much* (i.e.  will not introduce *very* large distances between
-    former neighboring items). If so, one may take adavantage of this partial
-    order and try to return all items in order by caching n items (where n
-    is hopefully a small number) untill all n items form a whole "run" without
-    any lacking items in the middle and thus can be retrieved at once.
+    Sometimes an ordered stream of items becomes disordered (for example, due
+    to several workers operating on it). In that case, one may still decide to
+    return items in order (i.e. not wait until all items are processed).
+
+    The idea is that the workers hopefully will not disorganize the list *too
+    much* (i.e.  will not introduce large distances between former neighboring
+    items). If so, one may take adavantage of this partial order and try to
+    return all items in-order by caching n items (where n is hopefully small)
+    until all n items form a complete "run" without any lacking items in the
+    middle and thus can be retrieved at once.
 
     ::
 

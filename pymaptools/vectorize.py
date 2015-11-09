@@ -1,23 +1,12 @@
-"""
-``enumerator`` is a key-value mapping that maps keys to numeric indices
-assigned in the order of first access. You can use it to vectorize strings.
-"""
 import collections
-
-
-def doc(s):
-    if hasattr(s, '__call__'):
-        s = s.__doc__
-
-    def f(g):
-        g.__doc__ = s
-        return g
-    return f
+from pymaptools.utils import doc
 
 
 class enumerator(collections.Mapping):
-    """
-    A simple vectorizer for text tokens
+    """A simple vectorizer for text tokens
+
+    ``enumerator`` is a key-value mapping that maps keys to numeric indices
+    assigned in the order of first access. You can use it to vectorize strings.
 
     ::
 
@@ -55,5 +44,6 @@ class enumerator(collections.Mapping):
     def __len__(self):
         return len(self.d)
 
-
-del doc
+    @doc(dict.get)
+    def get(self, key, default=None):
+        return self.d.get(key, default)
