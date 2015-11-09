@@ -1,8 +1,8 @@
 """
 Many definitions here are from https://docs.python.org/2/library/itertools.html
 """
-from collections import Mapping, Iterator, deque
 import operator
+from collections import Mapping, Iterator, deque
 from itertools import islice, imap, chain, starmap, ifilterfalse, count, \
     repeat, izip, izip_longest, groupby, cycle, tee, combinations
 
@@ -203,19 +203,23 @@ def intersperse(delimiter, seq):
 def isiterable(obj):
     """
     Are we being asked to look up a list of things, instead of a single thing?
-    We check for the `__iter__` attribute so that this can cover types that
-    don't have to be known by this module, such as NumPy arrays.
+    We check for the ``__iter__`` attribute so that this can cover types that
+    don't have to be known by this module, such as NumPy arrays. We consider
+    stirngs to be atomic values, not iterables.
 
-    Strings, however, should be considered as atomic values to look up, not
-    iterables.
+    We don't need to check for the Python 2 ``unicode`` type, because it
+    doesn't have an ``__iter__`` attribute anyway, but for the sake of
+    completeness, we call isinstance on ``basestring`` type.
 
-    We don't need to check for the Python 2 `unicode` type, because it doesn't
-    have an `__iter__` attribute anyway.
+    This method was originally written by Luminoso Technologies [1]_.
 
-    This method was written by Luminoso Technologies
-        https://github.com/LuminosoInsight/ordered-set
+    References
+    ----------
+
+    .. [1] `Github repository by LuminosoInsight
+           <https://github.com/LuminosoInsight/ordered-set>`_
     """
-    return hasattr(obj, '__iter__') and not isinstance(obj, str)
+    return hasattr(obj, '__iter__') and not isinstance(obj, basestring)
 
 
 def ismonotonic(oper, iterable):
@@ -234,6 +238,8 @@ def ismonotonic(oper, iterable):
         >>> ismonotonic(operator.ge, [2, 4])
         False
     """
+    if not hasattr(iterable, '__getitem__'):
+        iterable = list(iterable)  # probably a generator
     return all(oper(x, y) for x, y in izip(iterable, iterable[1:]))
 
 
@@ -259,7 +265,7 @@ def shinglify(iterable, span, skip=0):
     :param skip: How many words to skip
     :type skip: int
     :returns: sequence of tuples (shingles)
-    :rtype : list
+    :rtype: generator
 
     ::
 
@@ -289,12 +295,18 @@ def shinglify(iterable, span, skip=0):
         >>> list(shinglify("abc", 4, skip=1))
         [('a', 'c')]
 
+    For very short iterables, returns a short tuple:
+
+        >>> list(shinglify("a", 3))
+        [('a',)]
+
     """
-    tokens = iterable if isinstance(iterable, list) else list(iterable)
-    if len(tokens) >= span:
-        return izip(*nskip(skip, (tokens[i:] for i in xrange(span))))
+    if not hasattr(iterable, '__getitem__'):
+        iterable = list(iterable)  # probably a generator
+    if len(iterable) >= span:
+        return izip(*nskip(skip, (iterable[i:] for i in xrange(span))))
     else:
-        return [tuple(nskip(skip, tokens))]
+        return iter([tuple(nskip(skip, iterable))])
 
 
 def inverse_kvals(mapping):
@@ -350,6 +362,8 @@ def ntuples(n, iterable):
         >>> list(ntuples(2, "abcd"))
         [('a', 'b'), ('c', 'd')]
     """
+    if not hasattr(iterable, '__getitem__'):
+        iterable = list(iterable)  # probably a generator
     return izip(*[iterable[i::n] for i in xrange(n)])
 
 
@@ -592,6 +606,9 @@ def iter_except(func, exception, first=None):
     of a sentinel to end the loop.
 
     Examples:
+
+    .. code-block:: python
+
         bsddbiter = iter_except(db.next, bsddb.error, db.first)
         heapiter = iter_except(functools.partial(heappop, h), IndexError)
         dictiter = iter_except(d.popitem, KeyError)
