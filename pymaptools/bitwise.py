@@ -108,7 +108,6 @@ def hamming(num1, num2):
     :returns: hamming distance between two numbers
     :rtype: int
     """
-
     return bitlist(num1 ^ num2).count(1)
 
 

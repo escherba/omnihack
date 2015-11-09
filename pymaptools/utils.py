@@ -6,14 +6,15 @@ from contextlib import contextmanager
 
 
 def doc(s):
-    """Decorator to extract docstrings
+    """Decorator to extract docstrings from existing methods
 
-    Lets one write::
+    Example usage:
+
+    .. code-block:: python
 
         @doc(dict.__getitem__)
         def __getitem__(self, item):
-            # method definition
-
+            ...
     """
     if hasattr(s, '__call__'):
         s = s.__doc__
@@ -25,7 +26,7 @@ def doc(s):
 
 
 class SetComparisonMixin(object):
-    """Mixin to unittest.TestCase that provides set subset comparison
+    """Mixin to ``unittest.TestCase`` to provide subset comparisons
     """
     def assertSetContainsSubset(self, expected, actual, msg=None):
         """Checks whether actual is a superset of expected."""
@@ -42,11 +43,6 @@ class SetComparisonMixin(object):
             sorted(set(not_expected) - set(actual)),
             msg=msg
         )
-
-    def assertListAlmostEqual(self, expected, actual, num_digits, msg=None):
-        expected = [round(x, num_digits) for x in expected]
-        actual = [round(x, num_digits) for x in actual]
-        self.assertListEqual(expected, actual, msg=msg)
 
 
 def uuid1_to_posix(uuid1):
@@ -99,11 +95,12 @@ def joint_context(*args):
 
     Allows constructions like:
 
-    ::
+    .. code-block:: python
 
-        with joint_context(open("filename.txt", "r")) as fhandle:
-        with joint_context(open("file1.txt", "r"), open("file2.txt", "r")) as (fh1, fh2):
-
+        with joint_context(open("foo.txt", "r")) as fhandle:
+            ...
+        with joint_context(open("foo.txt", "r"), open("bar.txt", "r")) as (fh1, fh2):
+            ...
     """
     try:
         yield args[0] if len(args) == 1 else args

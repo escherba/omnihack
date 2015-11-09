@@ -606,6 +606,9 @@ def iter_except(func, exception, first=None):
     of a sentinel to end the loop.
 
     Examples:
+
+    .. code-block:: python
+
         bsddbiter = iter_except(db.next, bsddb.error, db.first)
         heapiter = iter_except(functools.partial(heappop, h), IndexError)
         dictiter = iter_except(d.popitem, KeyError)
