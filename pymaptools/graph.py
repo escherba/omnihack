@@ -1,3 +1,54 @@
+"""
+This module provides basic set arithmetic on graphs where graphs are
+represented as collections of edges, and a few basic algorithms for graph
+analysis, including an implementation of MBEA algorithm for fast finding of
+maximal bicliques in bipartite graphs described in [1]_.
+
+
+.. code-block:: python
+
+    >>> from pymaptools.graph import Bigraph
+    >>> g = Bigraph()
+    >>> g.add_clique(([1, 2, 3], [-1, -2, -3]))
+    >>> h = Bigraph(g)
+    >>> g.add_clique(([4], [-4, -5]))
+    >>> g.add_clique(([5], [-5, -5]))
+    >>> g.add_edge(4, -1)
+    >>> h.add_edge(2, 100, weight=14)
+    >>> h.add_edge(5, -5, weight=10)
+    >>> j = g & h
+    >>> components = j.find_connected_components()
+    >>> curr = components.next()
+    >>> (sorted(curr.U), sorted(curr.V))
+    ([1, 2, 3], [-3, -2, -1])
+    >>> curr = components.next()
+    >>> (sorted(curr.U), sorted(curr.V))
+    ([5], [-5])
+
+
+In addition to standard operations, this module is designed with the common use
+case in mind when edges are assigned integer weights. One can do things like
+
+
+.. code-block:: python
+
+    >>> from pymaptools.graph import Bigraph
+    >>> b = Bigraph()
+    >>> b.add_edge("a", "b", 4)
+    >>> b.add_edge("b", "c", 1)
+    >>> b.get_weight()
+    5
+
+
+References
+----------
+
+.. [1] `Zhang, Y., Chesler, E. J. & Langston, M. A. "On finding bicliques in
+        bipartite graphs: a novel algorithm with application to the
+        integration of diverse biological data types." HICSS 0, 473+ (2008).
+        <http://dx.doi.org/10.1109/HICSS.2008.507>`_
+"""
+
 import operator
 from copy import deepcopy
 from collections import defaultdict

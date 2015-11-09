@@ -1,3 +1,19 @@
+"""
+``UnionFind`` is a method for creating, maintainig, and retrieving disjoint
+clusters from a graph. An example:
+
+.. code-block:: python
+
+    >>> uf = UnionFind()
+    >>> uf.union(0, 1)
+    >>> uf.union(2, 3)
+    >>> uf.union(3, 0)
+    >>> uf.union(4, 5)
+    >>> uf.sets()
+    [[0, 1, 2, 3], [4, 5]]
+
+"""
+
 from collections import defaultdict
 
 
