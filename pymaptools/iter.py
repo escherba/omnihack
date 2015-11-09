@@ -211,12 +211,12 @@ def isiterable(obj):
     doesn't have an ``__iter__`` attribute anyway, but for the sake of
     completeness, we call isinstance on ``basestring`` type.
 
-    This method was originally written by Luminoso Technologies [1]_.
+    This method was originally written by Luminoso Technologies [10]_.
 
     References
     ----------
 
-    .. [1] `Github repository by LuminosoInsight
+    .. [10] `Github repository by LuminosoInsight
            <https://github.com/LuminosoInsight/ordered-set>`_
     """
     return hasattr(obj, '__iter__') and not isinstance(obj, basestring)

@@ -16,17 +16,22 @@ SLICE_ALL = slice(None)
 
 cdef class OrderedSet(set):
     """
-    An OrderedSet is a custom MutableSet that remembers its order, so that
-    every entry has an index that can be looked up.
+    An OrderedSet is an object complying to MutableSet interface and which
+    remembers its order, so that every entry has an index that can be looked
+    up.
 
-    Based on version written by Luminoso Technologies:
-        https://github.com/LuminosoInsight/ordered-set
-
-    Unlike that implementation, this class uses OrderedDict as storage
-    and supports key removal. We drop support for indexing, and add support
-    for fixed-size sets with maxlen parameter.
+    This version is based on version written by Luminoso Technologies [11]_
+    with the following changes: this class uses OrderedDict as storage and
+    supports key removal. We drop support for indexing, and add support for
+    fixed-size sets with maxlen parameter.
 
     With a small modification, this class can be made into an LRU cache.
+
+    References
+    ----------
+
+    .. [11] `Github repository by LuminosoInsight
+           <https://github.com/LuminosoInsight/ordered-set>`_
     """
 
     # Note: a pure Python version of this class originally inherited from

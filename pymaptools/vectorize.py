@@ -1,3 +1,20 @@
+"""
+``Enumerator`` is a key-value mapping that maps keys to numeric indices
+assigned in the order of first access. You can use it to vectorize strings.
+
+.. code-block:: python
+
+    >>> enum = Enumerator()
+    >>> enum["cat"]
+    0
+    >>> enum["dog"]
+    1
+    >>> enum["cat"]
+    0
+    >>> len(enum)
+    2
+"""
+
 import collections
 from pymaptools.utils import doc
 
