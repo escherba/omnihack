@@ -68,14 +68,11 @@ def reservoir_iter(iterator, K, random_state=None):
 def reservoir_dict(iterator, field, Kdict, random_state=None):
     """Reservoir sampling over a list of dicts
 
-    Given a field, and a mapping of field values to integers K,
-    return a sample from the iterator such that for the field specified,
-    each value occurs at most K times.  For example, for a binary ouput
-    value Y, we would request
-
-        field='Y', Kdict={0: 500, 1: 1000}
-
-    to return 500 instances of Y=0 and 1000 instances of Y=1
+    Given a field, and a mapping of field values to integers K, return a sample
+    from the iterator such that for the field specified, each value occurs at
+    most K times.  For example, for a binary ouput value Y, we would request
+    ``field='Y', Kdict={0: 500, 1: 1000}`` to obtain 500 instances of Y=0 and
+    1000 instances of Y=1.
     """
     if Kdict is None:
         return iterator

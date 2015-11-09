@@ -1,13 +1,3 @@
-"""
-UnionFind.py
-
-Source: http://www.ics.uci.edu/~eppstein/PADS/UnionFind.py
-
-Union-find data structure. Based on Josiah Carlson's code,
-http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/215912
-with significant additional changes by D. Eppstein.
-"""
-
 from collections import defaultdict
 
 
@@ -36,6 +26,16 @@ class UnionFind(object):
         >>> uf.union(4, 5)
         >>> uf.sets()
         [[0, 1, 2, 3], [4, 5]]
+
+    Source code based on [1]_ and [2]_, with modifications.
+
+    References
+    ----------
+
+    .. [1] `Source code by D. Eppstein
+        <http://www.ics.uci.edu/~eppstein/PADS/UnionFind.py>`_
+    .. [2] `Source code by J. Carlson
+        <http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/215912>`_
 
     """
 

@@ -7,11 +7,6 @@ from contextlib import closing
 from pymaptools.io import SimplePicklableMixin
 
 
-class GraphError(Exception):
-    """Usually fatal"""
-    pass
-
-
 class SkipEdge(Exception):
     """Raise to skip adding edge during misc graph operations"""
     pass
@@ -226,7 +221,7 @@ class Bigraph(SimplePicklableMixin):
     def map_edge(self, edge):
         u, v = edge
         if u is None or v is None:
-            raise GraphError("An edge must connect two nodes")
+            raise ValueError("An edge must connect two nodes")
         self.U2V[u].add(v)
         self.V2U[v].add(u)
 
@@ -269,13 +264,13 @@ class Bigraph(SimplePicklableMixin):
 
     @property
     def U(self):
-        '''Returns a set of all "left" nodes
+        '''a set of all "left" nodes
         '''
         return self.U2V.keys()
 
     @property
     def V(self):
-        '''A set of all "right" nodes
+        '''a set of all "right" nodes
         '''
         return self.V2U.keys()
 
@@ -340,18 +335,25 @@ class Bigraph(SimplePicklableMixin):
         '''Find cliques (maximally connected components)
 
         Enumerate all maximal bicliques in an undirected bipartite graph.
+        Adapted from [1]_.
 
-        Adapted from: Zhang, Y., Chesler, E. J. & Langston, M. A.
-        "On finding bicliques in bipartite graphs: a novel algorithm with
-        application to the integration of diverse biological data types."
-        Hawaii International Conference on System Sciences 0, 473+ (2008).
-        URL http://dx.doi.org/10.1109/HICSS.2008.507.
+        Terminology of variables and parameters:
 
-        Terminology:
-            L - a set of vertices in U that are common neighbors of vertices in R
-            R - a set of vertices in V belonging to the current biclique
-            P - a set of vertices in V that can be added to R
-            Q - a set of vertices in V that have been previously added to R
+        = ===============================================================
+        L set of vertices in U that are common neighbors of vertices in R
+        R set of vertices in V belonging to the current biclique
+        P set of vertices in V that can be added to R
+        Q set of vertices in V that have been previously added to R
+        = ===============================================================
+
+        References
+        ----------
+
+        .. [1] `Zhang, Y., Chesler, E. J., & Langston, M. A. (2008, July). On
+               Finding bicliques in bipartite graphs: a novel algorithm with
+               application to the integration of diverse biological data types. In
+               HICSS (p. 473). IEEE.
+               <http://dx.doi.org/10.1109/HICSS.2008.507>`_
         '''
         v2u = self.V2U
         L = set(self.U) if L is None else set(L)
@@ -517,8 +519,16 @@ class Graph(Bigraph):
     def find_cliques(self, nodes=None, min_clique_size=3):
         '''Return maximal cliques in a graph
 
-        Implements Bron-Kerbosch algorithm, Version 2
-        (implementation a modified version of http://www.kuchaev.com/files/graph.py)
+        Implements Bron-Kerbosch algorithm [1]_.
+
+        .. codeauthor:: Oleksii Kuchaiev
+        .. codeauthor:: Eugene Scherba
+
+        References
+        ----------
+
+        .. [1] `Wikipedia entry for Bron-Kerbosch algorithm
+               <https://en.wikipedia.org/wiki/Bron-Kerbosch_algorithm>`_
         '''
         # subset to search
         search_space = set(self.V) if nodes is None else set(nodes)

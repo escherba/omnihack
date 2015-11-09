@@ -4,7 +4,7 @@ from collections import defaultdict, Counter, Mapping
 from pymaptools.iter import iter_items, iter_keys, iter_vals
 from pymaptools._cyordereddict import OrderedDict
 from pymaptools._containers import OrderedSet, DefaultOrderedDict
-
+from pymaptools.utils import doc
 
 OrderedCounter = partial(DefaultOrderedDict, int)
 
@@ -114,24 +114,72 @@ class CrossTab(Mapping):
     You can construct a dense ``CrossTab`` instance given either rows or
     columns (in a 2D-array format)::
 
-        >>> t1 = OrderedCrossTab(rows=[(1, 5), (4, 6)])
-        >>> t1.to_rows()
+        >>> t1 = CrossTab(rows=[(1, 5), (4, 6)])
+        >>> sorted(t1.to_rows())
         [[1, 5], [4, 6]]
-        >>> t2 = OrderedCrossTab(cols=[(0, 0), (45, 0)])
-        >>> t2.to_rows()
-        [[0, 45], [0, 0]]
+        >>> t1.grand_total
+        16
+
+        >>> t2 = CrossTab(cols=[(0, 1), (45, 1)])
+        >>> sorted(t2.to_rows())
+        [[0, 45], [1, 1]]
 
     Given mapping containers, the constructed instances of ``CrossTab``
     class will be sparse::
 
-        >>> t3 = CrossTab(rows={"a": {"x": 2, "y": 3}, "b": {"x": 4, "y": 5}})
-        >>> t3.grand_total
-        14
+        >>> t3 = CrossTab(rows={'a': {'x': 2, 'y': 3}, 'b': {'x': 4}})
+        >>> t3['a', 'x']
+        2
+        >>> t3['b', 'y']
+        0
+
+    In the example above, the ``CrossTab`` instance doesn't store zero count
+    for the ('b', 'y') key path, however it implicitly assumes that the count
+    is zero because the 'y' column is present in ``t3.col_totals``.  Trying the
+    same with a completely unknown column value 'z' results in a ``KeyError``
+    exception (use standard ``get`` method if you don't want this behavior)::
+
+        >>> t3['b', 'z']
+        Traceback (most recent call last):
+        KeyError: ('b', 'z')
+        >>> t3.get(('b', 'z'), 0)
+        0
+        >>> t3.get(('a', 'x'), 0)
+        2
+        >>> t3['c', 'x']
+        Traceback (most recent call last):
+        KeyError: ('c', 'x')
+
+    Iterating over the entire table doesn't return items corresponding to zero
+    counts to gain efficiency in the case of very large and very sparse
+    tables::
+
+        >>> sorted(t3.keys())
+        [('a', 'x'), ('a', 'y'), ('b', 'x')]
+        >>> sorted(t3.values())
+        [2, 3, 4]
+        >>> sorted(t3.items())
+        [(('a', 'x'), 2), (('a', 'y'), 3), (('b', 'x'), 4)]
+
+    The length of a ``CrossTab`` is defined to be as the number of non-zero
+    entries (this becomes important for efficient equality comparisons)::
+
+        >>> map(len, [t1, t2, t3])
+        [4, 3, 3]
+        >>> t1 != t2
+        True
+        >>> t2 == t2
+        True
+        >>> t2 == t3
+        False
+        >>> t3 == CrossTab(rows={'a': {'x': 2, 'y': 3}, 'b': {'x': 5}})
+        False
 
     Note that the order of rows and columns in the "dict of dicts" case will
-    not be guaranteed. To guarantee row and column order, either pass ordered
-    mapping structures such as ``OrderedDict`` to the ``rows`` parameter, or,
-    if relying on other constructors, use the ``OrderedCrossTab``
+    not be guaranteed (the last comparisons compares two ``CrossTabs``
+    instances with switched rows). To guarantee row and column order, either
+    pass ordered mapping structures such as ``OrderedDict`` to the ``rows``
+    parameter, or, if relying on other constructors, use the ``OrderedCrossTab``
     specialization.
 
     See Also
@@ -291,7 +339,7 @@ class CrossTab(Mapping):
 
     @classmethod
     def from_vals(cls, iterable, num_cols):
-        """Instantiate from a reshaped iterable of vals
+        """Instantiate from a reshaped iterable of values
 
         ::
 
@@ -383,26 +431,33 @@ class CrossTab(Mapping):
         return cls.from_labels(ltrue, lpred)
 
     # Mapping methods
-    def iterkeys(self):
-        for ri, row in iter_items(self.rows):
-            for ci in iter_keys(row):
-                yield ri, ci
 
-    __iter__ = iterkeys
+    def __contains__(self, item):
+        ri, ci = item
+        # a row may not contain all columns, but self.col_totals
+        # always does
+        return ri in self.rows and ci in self.col_totals
 
     def __getitem__(self, key):
         ri, ci = key
         if ri not in self.rows:
+            # self.rows contains *all* rows
             raise KeyError(key)
         row = self.rows[ri]
         if ci not in row:
-            raise KeyError(key)
+            # a row may not contain all columns, in which case
+            # refer to self.col_totals
+            if ci in self.col_totals:
+                return 0
+            else:
+                raise KeyError(key)
         return row[ci]
 
-    def get(self, key, default=0):
-        try:
+    @doc(dict.get)
+    def get(self, key, default=None):
+        if key in self:
             return self[key]
-        except KeyError:
+        else:
             return default
 
     def __eq__(self, other):
@@ -421,33 +476,51 @@ class CrossTab(Mapping):
         return not self.__eq__(other)
 
     def __len__(self):
-        return len(self.values())
+        return sum(1 for v in self.itervalues() if v != 0)
 
+    @doc(dict.iterkeys)
+    def iterkeys(self):
+        for ri, row in iter_items(self.rows):
+            for ci in iter_keys(row):
+                yield ri, ci
+
+    __iter__ = iterkeys
+
+    @doc(dict.itervalues)
     def itervalues(self):
         for row in self.iter_rows():
             for cell in row:
                 yield cell
 
+    @doc(dict.iteritems)
     def iteritems(self):
         for ri, row in iter_items(self.rows):
             for ci, cell in iter_items(row):
                 yield (ri, ci), cell
 
+    @doc(dict.keys)
     def keys(self):
         return list(self.iterkeys())
 
+    @doc(dict.values)
     def values(self):
         return list(self.itervalues())
 
+    @doc(dict.items)
     def items(self):
-        return list(self.iteteritems())
-
-    def __contains__(self, item):
-        ri, ci = item
-        return ri in self.rows and ci in self.rows[ri]
+        return list(self.iteritems())
 
     # Other
     def iter_vals_with_margins(self):
+        """Similar to itervalues except prepend row and column margins
+
+        ::
+
+            >>> t1 = OrderedCrossTab(rows=[(1, 5), (4, 6)])
+            >>> sorted(t1.iter_vals_with_margins())
+            [(6, 5, 1), (6, 11, 5), (10, 5, 4), (10, 11, 6)]
+
+        """
         col_totals = self.col_totals
         row_totals = self.row_totals
         for ri, row in iter_items(self.rows):
@@ -457,14 +530,32 @@ class CrossTab(Mapping):
                 yield rm, cm, cell
 
     def iter_cols(self):
+        """Iterate over table values column-wise
+
+        ::
+
+            >>> t1 = OrderedCrossTab(rows=[(1, 5), (4, 6)])
+            >>> sorted(list(col) for col in t1.iter_cols())
+            [[1, 4], [5, 6]]
+        """
         for col in iter_vals(self.cols):
             yield iter_vals(col)
 
     def iter_rows(self):
+        """Iterate over values in the right margin
+        """
         for row in iter_vals(self.rows):
             yield iter_vals(row)
 
     def iter_col_totals(self):
+        """Iterate over values in the bottom margin
+
+        ::
+
+            >>> t1 = OrderedCrossTab(rows=[(1, 5), (4, 6)])
+            >>> sorted(t1.iter_col_totals())
+            [5, 11]
+        """
         return iter_vals(self.col_totals)
 
     def iter_row_totals(self):

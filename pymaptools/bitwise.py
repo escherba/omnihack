@@ -25,6 +25,7 @@ def bitlist(num):
     :rtype: list
 
     ::
+
         >>> import sys
         >>> import random
         >>> num = random.randint(0, sys.maxint)
