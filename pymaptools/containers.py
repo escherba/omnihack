@@ -136,7 +136,7 @@ class CrossTab(Mapping):
     In the example above, the ``CrossTab`` instance doesn't store zero count
     for the ('b', 'y') key path, however it implicitly assumes that the count
     is zero because the 'y' column is present in ``t3.col_totals``.  Trying the
-    same with a completely unknown column calue 'z' results in a ``KeyError``
+    same with a completely unknown column value 'z' results in a ``KeyError``
     exception (use standard ``get`` method if you don't want this behavior)::
 
         >>> t3['b', 'z']
@@ -339,7 +339,7 @@ class CrossTab(Mapping):
 
     @classmethod
     def from_vals(cls, iterable, num_cols):
-        """Instantiate from a reshaped iterable of vals
+        """Instantiate from a reshaped iterable of values
 
         ::
 
