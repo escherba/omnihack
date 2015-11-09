@@ -176,10 +176,9 @@ class CrossTab(Mapping):
         False
 
     Note that the order of rows and columns in the "dict of dicts" case will
-    not be guaranteed (the last comparisons compares two ``CrossTabs``
-    instances with switched rows). To guarantee row and column order, either
-    pass ordered mapping structures such as ``OrderedDict`` to the ``rows``
-    parameter, or, if relying on other constructors, use the ``OrderedCrossTab``
+    not be guaranteed. To guarantee row and column order, either pass ordered
+    mapping structures such as ``OrderedDict`` to the ``rows`` parameter, or,
+    if relying on other constructors, use the ``OrderedCrossTab``
     specialization.
 
     See Also
