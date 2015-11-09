@@ -2,15 +2,15 @@ import collections
 from pymaptools.utils import doc
 
 
-class enumerator(collections.Mapping):
+class Enumerator(collections.Mapping):
     """A simple vectorizer for text tokens
 
-    ``enumerator`` is a key-value mapping that maps keys to numeric indices
+    ``Enumerator`` is a key-value mapping that maps keys to numeric indices
     assigned in the order of first access. You can use it to vectorize strings.
 
     ::
 
-        >>> enum = enumerator()
+        >>> enum = Enumerator()
         >>> enum["cat"]
         0
         >>> enum["dog"]

@@ -1,8 +1,8 @@
-Tools and algorithms for data wrangling
-=======================================
+Various tools for data wrangling
+================================
 
-PyMapTools are a collection of miscellaneous containers that
-make it easier to analyze data sets.
+This repository contains an eclectic collection of algorithm and container
+implementations that I have been using in data analysis.
 
 enumerator
 ----------
@@ -12,9 +12,9 @@ indices assigned in the order of first access. You can use it to vectorize strin
 
 .. code-block:: python
 
-    >>> from pymaptools.vectorize import enumerator
+    >>> from pymaptools.vectorize import Enumerator
     ...
-    >>> enum = enumerator()
+    >>> enum = Enumerator()
     >>> enum["cat"]
     0
     >>> enum["dog"]
