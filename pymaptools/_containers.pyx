@@ -32,11 +32,11 @@ cdef class OrderedSet(set):
     # Note: a pure Python version of this class originally inherited from
     # collections.MutableSet and collections.Sequence
 
-    cdef object _mapping
+    cdef object _map
     cdef object _maxlen
 
     def __init__(self, iterable=None, maxlen=None):
-        self._mapping = OrderedDict()
+        self._map = OrderedDict()
         self._maxlen = maxlen
         if iterable is not None:
             self.__ior__(iterable)
@@ -77,39 +77,39 @@ cdef class OrderedSet(set):
                 kept.add(key)
         for key in self:
             if key not in kept:
-                self.discard(key)
+                self.remove(key)
         return self
 
     def __ixor__(self, other):
         added = set()
-        discarded = set()
+        removed = set()
         for key in other:
             if key in self:
-                discarded.add(key)
+                removed.add(key)
             else:
                 added.add(key)
-        for key in discarded:
-            self.discard(key)
+        for key in removed:
+            self.remove(key)
         for key in added:
             self.add(key)
         return self
 
     def __isub__(self, other):
-        discarded = set()
+        removed = set()
         for key in other:
             if key in self:
-                discarded.add(key)
-        for key in discarded:
-            self.discard(key)
+                removed.add(key)
+        for key in removed:
+            self.remove(key)
         return self
 
     # other methods
 
     def clear(self):
-        self._mapping.clear()
+        self._map.clear()
 
     def __len__(self):
-        return len(self._mapping)
+        return len(self._map)
 
     def __getitem__(self, index):
         """
@@ -126,13 +126,13 @@ cdef class OrderedSet(set):
         if index == SLICE_ALL:
             return self
         elif hasattr(index, '__index__') or isinstance(index, slice):
-            result = self._mapping.keys()[index]
+            result = self._map.keys()[index]
             if isinstance(result, list):
                 return OrderedSet(result)
             else:
                 return result
         elif isiterable(index):
-            keys = self._mapping.keys()
+            keys = self._map.keys()
             return OrderedSet([keys[i] for i in index])
         else:
             raise TypeError("Don't know how to index an OrderedSet by %r" % index)
@@ -159,11 +159,11 @@ cdef class OrderedSet(set):
             self.__init__(state)
 
     def __contains__(self, key):
-        return key in self._mapping
+        return key in self._map
 
     def add(self, key):
         maxlen = self._maxlen
-        mapping = self._mapping
+        mapping = self._map
         if key not in mapping:
             if maxlen is None or len(mapping) < maxlen:
                 mapping[key] = 1
@@ -174,15 +174,20 @@ cdef class OrderedSet(set):
     append = add
 
     def discard(self, key):
-        self._mapping.__delitem__(key)
+        # unlike ``remove``, ``discard`` does not raise KeyError
+        # in case of missing key
+        mapping  = self._map
+        if key in mapping:
+            self._map.__delitem__(key)
 
-    remove = discard
+    def remove(self, key):
+        self._map.__delitem__(key)
 
     def __iter__(self):
-        return self._mapping.iterkeys()
+        return self._map.iterkeys()
 
     def __reversed__(self):
-        return reversed(self._mapping.keys())
+        return reversed(self._map.keys())
 
     def __repr__(self):
         if not self:
