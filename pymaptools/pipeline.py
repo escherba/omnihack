@@ -69,7 +69,7 @@ A more complex example:
             self.handle = handle
 
         def __call__(self, obj):
-            self.handle.write(str(obj) + "\n")
+            self.handle.write(str(obj) + "\\n")
 
 
     # process a sequence of possible JSON strings
