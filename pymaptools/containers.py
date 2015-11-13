@@ -610,36 +610,42 @@ def partitions_to_labels(p1, p2):
 
     """Convert partitions to two arrays of labels
 
-    Partitions are non-overlapping clusters::
+        A partition of N is a set of disjoint clusters s.t. every point in N
+        belongs to one and only one cluster and every cluster consits of at
+        least one point.
 
-        >>> Y1 = [(1, 2, 3), (4, 5, 6)]
-        >>> Y2 = [(1, 2), (3, 4, 5), (6,)]
-        >>> partitions_to_labels(Y1, Y2)
-        ([0, 0, 0, 1, 1, 1], [0, 0, 1, 1, 1, 2])
+        An example of a valid partition::
 
-        >>> Y1 = [(1, 2, 3), (4, 5, 6, 3)]
-        >>> Y2 = [(1, 2), (3, 4, 5), (6,)]
-        >>> partitions_to_labels(Y1, Y2)
-        Traceback (most recent call last):
-        ValueError: Element '3' found in more than one cluster in p1
+            >>> Y1 = [(1, 2, 3), (4, 5, 6)]
+            >>> Y2 = [(1, 2), (3, 4, 5), (6,)]
+            >>> partitions_to_labels(Y1, Y2)
+            ([0, 0, 0, 1, 1, 1], [0, 0, 1, 1, 1, 2])
 
-        >>> Y1 = [(1, 2, 3), (4, 5, 6)]
-        >>> Y2 = [(1, 2), (3, 4, 5), (6, 3)]
-        >>> partitions_to_labels(Y1, Y2)
-        Traceback (most recent call last):
-        ValueError: Element '3' found in more than one cluster in p2
+        Four different examples of a invalid partitions::
 
-        >>> Y1 = [(1, 2, 3), (4, 5, 6)]
-        >>> Y2 = [(1, 2), (3, 4, 5), (6, 30)]
-        >>> partitions_to_labels(Y1, Y2)
-        Traceback (most recent call last):
-        ValueError: Element '30' of p2 is not in p1
+            >>> Y1 = [(1, 2, 3), (4, 5, 6, 3)]
+            >>> Y2 = [(1, 2), (3, 4, 5), (6,)]
+            >>> partitions_to_labels(Y1, Y2)
+            Traceback (most recent call last):
+            ValueError: Element '3' is in more than one cluster in p1
 
-        >>> Y1 = [(1, 2, 3), (4, 5, 6, 30)]
-        >>> Y2 = [(1, 2), (3, 4, 5), (6,)]
-        >>> partitions_to_labels(Y1, Y2)
-        Traceback (most recent call last):
-        ValueError: 1 element(s) of p1 not in p2
+            >>> Y1 = [(1, 2, 3), (4, 5, 6)]
+            >>> Y2 = [(1, 2), (3, 4, 5), (6, 3)]
+            >>> partitions_to_labels(Y1, Y2)
+            Traceback (most recent call last):
+            ValueError: Element '3' is in more than one cluster in p2
+
+            >>> Y1 = [(1, 2, 3), (4, 5, 6)]
+            >>> Y2 = [(1, 2), (3, 4, 5), (6, 30)]
+            >>> partitions_to_labels(Y1, Y2)
+            Traceback (most recent call last):
+            ValueError: Element '30' of p2 is not in p1
+
+            >>> Y1 = [(1, 2, 3), (4, 5, 6, 30)]
+            >>> Y2 = [(1, 2), (3, 4, 5), (6,)]
+            >>> partitions_to_labels(Y1, Y2)
+            Traceback (most recent call last):
+            ValueError: 1 element(s) of p1 not in p2
     """
 
     ltrue = []
@@ -650,7 +656,7 @@ def partitions_to_labels(p1, p2):
     for cid1, points in iter_items(p1):
         for point in points:
             if point in points_to_cids_1:
-                raise ValueError("Element '%s' found in more than one cluster in p1" % point)
+                raise ValueError("Element '%s' is in more than one cluster in p1" % point)
             else:
                 points_to_cids_1[point] = cid1
 
@@ -658,7 +664,7 @@ def partitions_to_labels(p1, p2):
     for cid2, points in iter_items(p2):
         for point in points:
             if point in seen_p2:
-                raise ValueError("Element '%s' found in more than one cluster in p2" % point)
+                raise ValueError("Element '%s' is in more than one cluster in p2" % point)
             try:
                 cid1 = points_to_cids_1[point]
             except KeyError:
