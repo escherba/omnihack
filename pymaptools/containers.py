@@ -608,20 +608,20 @@ class OrderedCrossTab(CrossTab):
 
 def partitions_to_labels(p1, p2):
 
-    """Convert partitions to two arrays of labels
+    """Jointly encode a pair of partitions as arrays of labels
 
         A partition of N is a set of disjoint clusters s.t. every point in N
         belongs to one and only one cluster, and every cluster in N consists of
         at least one point.
 
-        An example of a valid partition::
+        A valid partition pair::
 
             >>> Y1 = [(1, 2, 3), (4, 5, 6)]
             >>> Y2 = [(1, 2), (3, 4, 5), (6,)]
             >>> partitions_to_labels(Y1, Y2)
             ([0, 0, 0, 1, 1, 1], [0, 0, 1, 1, 1, 2])
 
-        Four different examples of a invalid partitions::
+        Four different examples of invalid partition pairs::
 
             >>> Y1 = [(1, 2, 3), (4, 5, 6, 3)]
             >>> Y2 = [(1, 2), (3, 4, 5), (6,)]
@@ -648,8 +648,8 @@ def partitions_to_labels(p1, p2):
             ValueError: 1 element(s) of p1 not in p2
     """
 
-    ltrue = []
-    lpred = []
+    a = []
+    b = []
 
     els_to_cids_1 = {}
 
@@ -671,14 +671,14 @@ def partitions_to_labels(p1, p2):
                 raise ValueError("Element '%s' of p2 is not in p1" % el)
             else:
                 del els_to_cids_1[el]
-            ltrue.append(cid1)
-            lpred.append(cid2)
+            a.append(cid1)
+            b.append(cid2)
             seen_p2.add(el)
 
     if els_to_cids_1:
         raise ValueError("%d element(s) of p1 not in p2" % len(els_to_cids_1))
 
-    return ltrue, lpred
+    return a, b
 
 
 def labels_to_clusters(labels_true, labels_pred):
