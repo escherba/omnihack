@@ -382,8 +382,8 @@ class CrossTab(dict):
         """Instantiate from two partitions
 
         A partition of N is a set of disjoint clusters s.t. every point in N
-        belongs to one and only one cluster and every cluster consits of at
-        least one point.
+        belongs to one and only one cluster, and every cluster in N consists of
+        at least one point.
 
         ::
 
@@ -611,8 +611,8 @@ def partitions_to_labels(p1, p2):
     """Convert partitions to two arrays of labels
 
         A partition of N is a set of disjoint clusters s.t. every point in N
-        belongs to one and only one cluster and every cluster consits of at
-        least one point.
+        belongs to one and only one cluster, and every cluster in N consists of
+        at least one point.
 
         An example of a valid partition::
 
