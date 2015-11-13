@@ -651,32 +651,32 @@ def partitions_to_labels(p1, p2):
     ltrue = []
     lpred = []
 
-    points_to_cids_1 = {}
+    els_to_cids_1 = {}
 
-    for cid1, points in iter_items(p1):
-        for point in points:
-            if point in points_to_cids_1:
-                raise ValueError("Element '%s' is in more than one cluster in p1" % point)
+    for cid1, els in iter_items(p1):
+        for el in els:
+            if el in els_to_cids_1:
+                raise ValueError("Element '%s' is in more than one cluster in p1" % el)
             else:
-                points_to_cids_1[point] = cid1
+                els_to_cids_1[el] = cid1
 
     seen_p2 = set()
-    for cid2, points in iter_items(p2):
-        for point in points:
-            if point in seen_p2:
-                raise ValueError("Element '%s' is in more than one cluster in p2" % point)
+    for cid2, els in iter_items(p2):
+        for el in els:
+            if el in seen_p2:
+                raise ValueError("Element '%s' is in more than one cluster in p2" % el)
             try:
-                cid1 = points_to_cids_1[point]
+                cid1 = els_to_cids_1[el]
             except KeyError:
-                raise ValueError("Element '%s' of p2 is not in p1" % point)
+                raise ValueError("Element '%s' of p2 is not in p1" % el)
             else:
-                del points_to_cids_1[point]
+                del els_to_cids_1[el]
             ltrue.append(cid1)
             lpred.append(cid2)
-            seen_p2.add(point)
+            seen_p2.add(el)
 
-    if points_to_cids_1:
-        raise ValueError("%d element(s) of p1 not in p2" % len(points_to_cids_1))
+    if els_to_cids_1:
+        raise ValueError("%d element(s) of p1 not in p2" % len(els_to_cids_1))
 
     return ltrue, lpred
 
