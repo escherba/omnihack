@@ -24,29 +24,30 @@ class Struct(object):
         >>> class Duck(Struct):
         ...     readonly_attrs = frozenset(["description"])
         ...     readwrite_attrs = frozenset(["vocalization", "locomotion"])
+
         >>> duck = Duck(description="a medium-size bird")
         >>> duck.vocalization
         >>> duck.locomotion = "walk, swim, fly"
         >>> duck.vocalization = "quack"
         >>> duck.description = "an ostrich"
         Traceback (most recent call last):
-        ...
         AttributeError: Attribute 'description' of Duck instance is read-only
-        >>> duck.engine_type
+
+        >>> duck.engine
         Traceback (most recent call last):
-        ...
-        AttributeError: 'Duck' object has no attribute 'engine_type'
+        AttributeError: 'Duck' object has no attribute 'engine'
+
         >>> duck.laden_speed = "40 mph"
         Traceback (most recent call last):
-        ...
         AttributeError: Duck instance has no attribute 'laden_speed'
+
         >>> duck.to_dict()['vocalization']
         'quack'
+
         >>> another_duck = Duck.from_dict(duck.to_dict())
-        >>> another_duck.to_dict()['locomotion']
-        'walk, swim, fly'
-        >>> another_duck.locomotion
-        'walk, swim, fly'
+        >>> another_duck = Duck(engine='RD-180', **duck.to_dict())
+        Traceback (most recent call last):
+        AttributeError: Duck instance has no attribute 'engine'
 
     """
     readwrite_attrs = frozenset()
