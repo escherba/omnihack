@@ -97,7 +97,7 @@ class Struct(object):
                     self.__class__.__name__, name))
 
 
-class CrossTab(Mapping):
+class CrossTab(dict):
 
     """Represents a RxC contingency table (cross-tabulation)
 
@@ -199,6 +199,7 @@ class CrossTab(Mapping):
     _row_type_2d = partial(defaultdict, _col_type_1d)
 
     def __init__(self, rows=None, cols=None):
+        super(CrossTab, self).__init__()
         self._rows = rows
         self._cols = cols
         self._row_totals = None
@@ -378,17 +379,19 @@ class CrossTab(Mapping):
 
     @classmethod
     def from_partitions(cls, partitions1, partitions2):
-        """Instantiate from two partitionings
+        """Instantiate from two partitions
 
-        Partitions are non-overlapping clusters.
+        A partition of N is a set of disjoint clusters s.t. every point in N
+        belongs to one and only one cluster and every cluster consits of at
+        least one point.
 
         ::
 
-            >>> p1 = [[1, 2, 3, 4], [5, 6, 7], [8, 9, 10, 11, 12]]
-            >>> p2 = [[2, 4, 6, 8, 10], [3, 9, 12], [1, 5, 7], [11]]
+            >>> p1 = [(1, 2, 3), (4, 5, 6)]
+            >>> p2 = [(1, 2), (3, 4, 5), (6,)]
             >>> t = OrderedCrossTab.from_partitions(p1, p2)
             >>> t.to_labels()
-            ([0, 0, 0, 0, 1, 1, 1, 2, 2, 2, 2, 2], [0, 0, 1, 2, 0, 2, 2, 0, 0, 1, 1, 3])
+            ([0, 0, 0, 1, 1, 1], [0, 0, 1, 1, 1, 2])
 
         """
         ltrue, lpred = partitions_to_labels(partitions1, partitions2)
@@ -607,43 +610,73 @@ def partitions_to_labels(p1, p2):
 
     """Convert partitions to two arrays of labels
 
-    Partitions are non-overlapping clusters::
+        A partition of N is a set of disjoint clusters s.t. every point in N
+        belongs to one and only one cluster and every cluster consits of at
+        least one point.
 
-        >>> p1 = [[1, 2, 3, 4], [5, 6, 7], [8, 9, 10, 11, 12]]
-        >>> p2 = [[2, 4, 6, 8, 10], [3, 9, 12], [1, 5, 7], [11]]
-        >>> partitions_to_labels(p1, p2)
-        ([0, 0, 1, 2, 2, 0, 2, 2, 0, 1, 1, 2], [0, 0, 0, 0, 0, 1, 1, 1, 2, 2, 2, 3])
+        An example of a valid partition::
+
+            >>> Y1 = [(1, 2, 3), (4, 5, 6)]
+            >>> Y2 = [(1, 2), (3, 4, 5), (6,)]
+            >>> partitions_to_labels(Y1, Y2)
+            ([0, 0, 0, 1, 1, 1], [0, 0, 1, 1, 1, 2])
+
+        Four different examples of a invalid partitions::
+
+            >>> Y1 = [(1, 2, 3), (4, 5, 6, 3)]
+            >>> Y2 = [(1, 2), (3, 4, 5), (6,)]
+            >>> partitions_to_labels(Y1, Y2)
+            Traceback (most recent call last):
+            ValueError: Element '3' is in more than one cluster in p1
+
+            >>> Y1 = [(1, 2, 3), (4, 5, 6)]
+            >>> Y2 = [(1, 2), (3, 4, 5), (6, 3)]
+            >>> partitions_to_labels(Y1, Y2)
+            Traceback (most recent call last):
+            ValueError: Element '3' is in more than one cluster in p2
+
+            >>> Y1 = [(1, 2, 3), (4, 5, 6)]
+            >>> Y2 = [(1, 2), (3, 4, 5), (6, 30)]
+            >>> partitions_to_labels(Y1, Y2)
+            Traceback (most recent call last):
+            ValueError: Element '30' of p2 is not in p1
+
+            >>> Y1 = [(1, 2, 3), (4, 5, 6, 30)]
+            >>> Y2 = [(1, 2), (3, 4, 5), (6,)]
+            >>> partitions_to_labels(Y1, Y2)
+            Traceback (most recent call last):
+            ValueError: 1 element(s) of p1 not in p2
     """
 
     ltrue = []
     lpred = []
 
-    points_to_pids_1 = {}
+    els_to_cids_1 = {}
 
-    for pid1, points in iter_items(p1):
-        for point in points:
-            if point in points_to_pids_1:
-                raise ValueError("Non-unique element found: not a partitioning")
+    for cid1, els in iter_items(p1):
+        for el in els:
+            if el in els_to_cids_1:
+                raise ValueError("Element '%s' is in more than one cluster in p1" % el)
             else:
-                points_to_pids_1[point] = pid1
+                els_to_cids_1[el] = cid1
 
     seen_p2 = set()
-    for pid2, points in iter_items(p2):
-        for point in points:
-            if point in seen_p2:
-                raise ValueError("Non-unique element found: not a partitioning")
+    for cid2, els in iter_items(p2):
+        for el in els:
+            if el in seen_p2:
+                raise ValueError("Element '%s' is in more than one cluster in p2" % el)
             try:
-                pid1 = points_to_pids_1[point]
+                cid1 = els_to_cids_1[el]
             except KeyError:
-                raise ValueError("Second partitioning had an element not in first")
+                raise ValueError("Element '%s' of p2 is not in p1" % el)
             else:
-                del points_to_pids_1[point]
-            ltrue.append(pid1)
-            lpred.append(pid2)
-            seen_p2.add(point)
+                del els_to_cids_1[el]
+            ltrue.append(cid1)
+            lpred.append(cid2)
+            seen_p2.add(el)
 
-    if points_to_pids_1:
-        raise ValueError("Second partitioning did not cover all elements in first")
+    if els_to_cids_1:
+        raise ValueError("%d element(s) of p1 not in p2" % len(els_to_cids_1))
 
     return ltrue, lpred
 
