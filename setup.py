@@ -10,7 +10,7 @@ from glob import glob
 
 
 NAME = "pymaptools"
-VERSION = '0.2.9'
+VERSION = '0.2.10'
 SRC_ROOT = "pymaptools"
 
 
