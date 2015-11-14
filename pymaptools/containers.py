@@ -8,6 +8,8 @@ from pymaptools.utils import doc
 
 OrderedCounter = partial(DefaultOrderedDict, int)
 
+COLON = slice(None, None, None)
+
 
 class Struct(object):
     """An abstract class with namespace-like properties
@@ -133,6 +135,19 @@ class CrossTab(object):
         2
         >>> t3['b', 'y']
         0
+
+    CrossTab also supports NumPy-like slice indexing::
+
+        >>> sorted(t3['a', :])
+        [2, 3]
+        >>> sorted(t3[:, 'x'])
+        [2, 4]
+
+    For missing rows or columns, a KeyError is raised::
+
+        >>> t3[:, 'z']
+        Traceback (most recent call last):
+        KeyError: (slice(None, None, None), 'z')
 
     In the example above, the ``CrossTab`` instance doesn't store zero count
     for the ('b', 'y') key path, however it implicitly assumes that the count
@@ -443,18 +458,29 @@ class CrossTab(object):
 
     def __getitem__(self, key):
         ri, ci = key
-        if ri not in self.rows:
+        if ri == COLON:
+            if ci in self.col_totals:
+                # return values from entire column
+                col = self.cols[ci]
+                return list(iter_vals(col))
+            else:
+                raise KeyError(key)
+        elif ri not in self.row_totals:
             # self.rows contains *all* rows
             raise KeyError(key)
         row = self.rows[ri]
-        if ci not in row:
-            # a row may not contain all columns, in which case
-            # refer to self.col_totals
-            if ci in self.col_totals:
+        if ci == COLON:
+            # return values from entire row
+            return list(iter_vals(row))
+        elif ci in self.col_totals:
+            # a row may not contain all columns, in which case refer to
+            # self.col_totals
+            try:
+                return row[ci]
+            except KeyError:
                 return 0
-            else:
-                raise KeyError(key)
-        return row[ci]
+        else:
+            raise KeyError(key)
 
     @doc(dict.get)
     def get(self, key, default=None):
