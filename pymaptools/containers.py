@@ -98,7 +98,7 @@ class Struct(object):
                     self.__class__.__name__, name))
 
 
-class CrossTab(dict):
+class CrossTab(object):
 
     """Represents a RxC contingency table (cross-tabulation)
 
