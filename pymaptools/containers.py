@@ -122,6 +122,8 @@ class CrossTab(object):
         [[1, 5], [4, 6]]
         >>> t1.grand_total
         16
+        >>> t1[1, 0]
+        4
 
         >>> t2 = CrossTab(cols=[(0, 1), (45, 1)])
         >>> t2.to_rows()
@@ -468,7 +470,7 @@ class CrossTab(object):
         ri, ci = item
         # a row may not contain all columns, but self.col_totals
         # always does
-        return ri in self.rows and ci in self.col_totals
+        return ri in self.row_totals and ci in self.col_totals
 
     def _column_slice(self, ci, cslice=SLICE_ALL):
         if ci not in self.col_totals:
@@ -509,9 +511,7 @@ class CrossTab(object):
         elif isinstance(ci, slice):
             # return values from entire row
             return self._row_slice(ri, ci)
-        elif ri in self.rows and ci in self.col_totals:
-            # self.rows contains *all* rows but a row
-            # may not contain all columns
+        elif key in self:
             row = self.rows[ri]
             if isinstance(row, Mapping):
                 return row.get(ci, 0)
