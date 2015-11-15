@@ -135,6 +135,8 @@ class CrossTab(object):
         [45, 1]
         >>> t2[:, :]
         [[0, 45], [1, 1]]
+        >>> t2[1:, :]
+        [[1, 1]]
 
     Given mapping containers, the constructed instances of ``CrossTab``
     class will be sparse::
@@ -311,7 +313,7 @@ class CrossTab(object):
             self._grand_total = _grand_total = sum(self.iter_row_totals())
         return _grand_total
 
-    def to_rows(self):
+    def to_rows(self, rslice=SLICE_ALL, cslice=SLICE_ALL):
         """
 
         Example with dense matrices::
@@ -331,8 +333,8 @@ class CrossTab(object):
 
         """
         row_form = []
-        all_cols = list(iter_keys(self.col_totals))
-        for row in iter_vals(self.rows):
+        all_cols = list(iter_keys(self.col_totals))[cslice]
+        for row in list(iter_vals(self.rows))[rslice]:
             if isinstance(row, Mapping):
                 row_vals = []
                 for col in all_cols:
@@ -468,7 +470,7 @@ class CrossTab(object):
         # always does
         return ri in self.rows and ci in self.col_totals
 
-    def _entire_column(self, ci):
+    def _column_slice(self, ci, cslice=SLICE_ALL):
         if ci not in self.col_totals:
             raise KeyError(ci)
         else:
@@ -478,11 +480,11 @@ class CrossTab(object):
                 for ri in self.row_totals:
                     # calling ``get`` does not invoke defaultfactory
                     result.append(col.get(ri, 0))
-                return result
+                return result[cslice]
             else:
-                return list(col)
+                return list(col[cslice])
 
-    def _entire_row(self, ri):
+    def _row_slice(self, ri, rslice=SLICE_ALL):
         if ri not in self.row_totals:
             raise KeyError(ri)
         else:
@@ -492,21 +494,21 @@ class CrossTab(object):
                 for ci in self.col_totals:
                     # calling ``get`` does not invoke defaultfactory
                     result.append(row.get(ci, 0))
-                return result
+                return result[rslice]
             else:
-                return list(row)
+                return list(row[rslice])
 
     def __getitem__(self, key):
         ri, ci = key
-        if ri == SLICE_ALL:
-            if ci == SLICE_ALL:
-                return self.to_rows()
+        if isinstance(ri, slice):
+            if isinstance(ci, slice):
+                return self.to_rows(ri, ci)
             else:
                 # return values from entire column
-                return self._entire_column(ci)
-        elif ci == SLICE_ALL:
+                return self._column_slice(ci, ri)
+        elif isinstance(ci, slice):
             # return values from entire row
-            return self._entire_row(ri)
+            return self._row_slice(ri, ci)
         elif ri in self.rows and ci in self.col_totals:
             # self.rows contains *all* rows but a row
             # may not contain all columns
