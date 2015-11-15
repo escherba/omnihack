@@ -513,7 +513,10 @@ class CrossTab(object):
             # self.rows contains *all* rows but a row
             # may not contain all columns
             row = self.rows[ri]
-            return row.get(ci, 0)
+            if isinstance(row, Mapping):
+                return row.get(ci, 0)
+            else:
+                return row[ci]
         else:
             raise KeyError(key)
 
