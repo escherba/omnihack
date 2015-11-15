@@ -8,7 +8,7 @@ from pymaptools.utils import doc
 
 OrderedCounter = partial(DefaultOrderedDict, int)
 
-COLON = slice(None, None, None)
+SLICE_ALL = slice(None, None, None)
 
 
 class Struct(object):
@@ -118,14 +118,25 @@ class CrossTab(object):
     columns (in a 2D-array format)::
 
         >>> t1 = CrossTab(rows=[(1, 5), (4, 6)])
-        >>> sorted(t1.to_rows())
+        >>> t1.to_rows()
         [[1, 5], [4, 6]]
         >>> t1.grand_total
         16
 
         >>> t2 = CrossTab(cols=[(0, 1), (45, 1)])
-        >>> sorted(t2.to_rows())
+        >>> t2.to_rows()
         [[0, 45], [1, 1]]
+
+    You can use NumPy-like slice indexing to access entire rows/columns::
+
+        >>> t1[0, :]
+        [1, 5]
+        >>> t2[:, 1]
+        [45, 1]
+        >>> t2[:, :]
+        [[0, 45], [1, 1]]
+        >>> t2[1:, :]
+        [[1, 1]]
 
     Given mapping containers, the constructed instances of ``CrossTab``
     class will be sparse::
@@ -136,7 +147,7 @@ class CrossTab(object):
         >>> t3['b', 'y']
         0
 
-    CrossTab also supports NumPy-like slice indexing::
+    Sparse CrossTabs also support slice indexing::
 
         >>> sorted(t3['a', :])
         [2, 3]
@@ -145,9 +156,12 @@ class CrossTab(object):
 
     For missing rows or columns, a KeyError is raised::
 
+        >>> t3['z', :]
+        Traceback (most recent call last):
+        KeyError: 'z'
         >>> t3[:, 'z']
         Traceback (most recent call last):
-        KeyError: (slice(None, None, None), 'z')
+        KeyError: 'z'
 
     In the example above, the ``CrossTab`` instance doesn't store zero count
     for the ('b', 'y') key path, however it implicitly assumes that the count
@@ -299,7 +313,7 @@ class CrossTab(object):
             self._grand_total = _grand_total = sum(self.iter_row_totals())
         return _grand_total
 
-    def to_rows(self):
+    def to_rows(self, rslice=SLICE_ALL, cslice=SLICE_ALL):
         """
 
         Example with dense matrices::
@@ -319,8 +333,8 @@ class CrossTab(object):
 
         """
         row_form = []
-        all_cols = list(iter_keys(self.col_totals))
-        for row in iter_vals(self.rows):
+        all_cols = list(iter_keys(self.col_totals))[cslice]
+        for row in list(iter_vals(self.rows))[rslice]:
             if isinstance(row, Mapping):
                 row_vals = []
                 for col in all_cols:
@@ -456,29 +470,53 @@ class CrossTab(object):
         # always does
         return ri in self.rows and ci in self.col_totals
 
+    def _column_slice(self, ci, cslice=SLICE_ALL):
+        if ci not in self.col_totals:
+            raise KeyError(ci)
+        else:
+            col = self.cols[ci]
+            if isinstance(col, Mapping):
+                result = []
+                for ri in self.row_totals:
+                    # calling ``get`` does not invoke defaultfactory
+                    result.append(col.get(ri, 0))
+                return result[cslice]
+            else:
+                return list(col[cslice])
+
+    def _row_slice(self, ri, rslice=SLICE_ALL):
+        if ri not in self.row_totals:
+            raise KeyError(ri)
+        else:
+            row = self.rows[ri]
+            if isinstance(row, Mapping):
+                result = []
+                for ci in self.col_totals:
+                    # calling ``get`` does not invoke defaultfactory
+                    result.append(row.get(ci, 0))
+                return result[rslice]
+            else:
+                return list(row[rslice])
+
     def __getitem__(self, key):
         ri, ci = key
-        if ri == COLON:
-            if ci in self.col_totals:
-                # return values from entire column
-                col = self.cols[ci]
-                return list(iter_vals(col))
+        if isinstance(ri, slice):
+            if isinstance(ci, slice):
+                return self.to_rows(ri, ci)
             else:
-                raise KeyError(key)
-        elif ri not in self.row_totals:
-            # self.rows contains *all* rows
-            raise KeyError(key)
-        row = self.rows[ri]
-        if ci == COLON:
+                # return values from entire column
+                return self._column_slice(ci, ri)
+        elif isinstance(ci, slice):
             # return values from entire row
-            return list(iter_vals(row))
-        elif ci in self.col_totals:
-            # a row may not contain all columns, in which case refer to
-            # self.col_totals
-            try:
+            return self._row_slice(ri, ci)
+        elif ri in self.rows and ci in self.col_totals:
+            # self.rows contains *all* rows but a row
+            # may not contain all columns
+            row = self.rows[ri]
+            if isinstance(row, Mapping):
+                return row.get(ci, 0)
+            else:
                 return row[ci]
-            except KeyError:
-                return 0
         else:
             raise KeyError(key)
 
