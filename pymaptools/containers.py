@@ -578,6 +578,35 @@ class CrossTab(object):
         return list(self.iteritems())
 
     # Other
+    def iter_all_with_margins(self):
+        """Iterate over all cells while emitting row and column margins
+
+        ::
+
+            >>> t1 = OrderedCrossTab(rows=[(0, 5), (4, 6)])
+            >>> sorted(t1.iter_all_with_margins())
+            [(5, 4, 0), (5, 11, 5), (10, 4, 4), (10, 11, 6)]
+
+            >>> t3 = CrossTab(rows={'a': {'x': 2, 'y': 3}, 'b': {'x': 4}})
+            >>> sorted(t3.iter_all_with_margins())
+            [(4, 3, 0), (4, 6, 4), (5, 3, 3), (5, 6, 2)]
+
+            >>> sorted(t3.iter_vals_with_margins())
+            [(4, 6, 4), (5, 3, 3), (5, 6, 2)]
+
+        """
+        col_totals = self.col_totals
+        row_totals = self.row_totals
+        for ri, row in iter_items(self.rows):
+            rm = row_totals[ri]
+            for ci in iter_keys(col_totals):
+                if isinstance(row, Mapping):
+                    cell = row.get(ci, 0)
+                else:
+                    cell = row[ci]
+                cm = col_totals[ci]
+                yield rm, cm, cell
+
     def iter_vals_with_margins(self):
         """Similar to itervalues except prepend row and column margins
 
