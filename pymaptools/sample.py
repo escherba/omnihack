@@ -15,13 +15,14 @@ def random_seed():
 
 
 def random_product(*args, **kwds):
-    """Random selection from itertools.product(*args, **kwds)"""
+    """Random selection from ``itertools.product()``
+    """
     pools = map(tuple, args) * kwds.get('repeat', 1)
     return tuple(random.choice(pool) for pool in pools)
 
 
 def random_permutation(iterable, r=None):
-    """Random selection from itertools.permutations()
+    """Random selection from ``itertools.permutations()``
     """
     pool = tuple(iterable)
     r = len(pool) if r is None else r
@@ -29,7 +30,7 @@ def random_permutation(iterable, r=None):
 
 
 def random_combination(iterable, r):
-    """Random selection from itertools.combinations()
+    """Random selection from ``itertools.combinations()``
     """
     pool = tuple(iterable)
     num = len(pool)
@@ -38,7 +39,7 @@ def random_combination(iterable, r):
 
 
 def random_combination_with_replacement(iterable, r):
-    """Random selection from itertools.combinations_with_replacement()
+    """Random selection from ``itertools.combinations_with_replacement()``
     """
     pool = tuple(iterable)
     num = len(pool)
@@ -98,9 +99,12 @@ def reservoir_dict(iterator, field, Kdict, random_state=None):
 
 def discrete_sample(prob_dist, random_state=None):
     """Sample a random value from a discrete probability distribution
-    represented as a dict: P(x=value) = prob_dist[value].
 
-    Note: the prob_dist parameter doesn't have to be an ordered dict,
+    The probability distribution is represented as a dict::
+
+        P(x=value) = prob_dist[value].
+
+    Note that the prob_dist parameter doesn't have to be an ordered dict,
     however for performance reasons it is best if it is.
 
     :param prob_dist: the probability distribution
