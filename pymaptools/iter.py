@@ -7,10 +7,22 @@ from itertools import islice, imap, chain, starmap, ifilterfalse, count, \
     repeat, izip, izip_longest, groupby, cycle, tee, combinations
 
 
-def ilen(iterable):
-    """Consumes an iterator and returns its length.
+def plen(iterable, predicate=bool):
+    """Count values in an iterable/iterator matching predicate
 
-    Also works on all iterables.
+    ::
+
+        >>> g = (x for x in [0, 1, 2, 3])
+        >>> plen(g)
+        3
+        >>> plen([0, 1, 2, 3])
+        3
+    """
+    return sum(predicate(el) for el in iterable)
+
+
+def ilen(iterable):
+    """Length of an iterable/iterator
 
     Why doesn't this exist in itertools...
 

@@ -1,7 +1,7 @@
 from itertools import izip
 from functools import partial
 from collections import defaultdict, Counter, Mapping
-from pymaptools.iter import iter_items, iter_keys, iter_vals
+from pymaptools.iter import plen, iter_items, iter_keys, iter_vals
 from pymaptools._cyordereddict import OrderedDict
 from pymaptools._containers import OrderedSet, DefaultOrderedDict
 from pymaptools.utils import doc
@@ -144,6 +144,8 @@ class CrossTab(object):
     class will be sparse::
 
         >>> t3 = CrossTab(rows={'a': {'x': 2, 'y': 3}, 'b': {'x': 4}})
+        >>> t3.shape
+        (2, 2)
         >>> t3['a', 'x']
         2
         >>> t3['b', 'y']
@@ -314,6 +316,10 @@ class CrossTab(object):
         if _grand_total is None:
             self._grand_total = _grand_total = sum(self.iter_row_totals())
         return _grand_total
+
+    @property
+    def shape(self):
+        return plen(self.iter_row_totals()), plen(self.iter_col_totals())
 
     def to_rows(self, rslice=SLICE_ALL, cslice=SLICE_ALL):
         """
@@ -543,7 +549,7 @@ class CrossTab(object):
         return not self.__eq__(other)
 
     def __len__(self):
-        return sum(1 for v in self.itervalues() if v != 0)
+        return plen(self.itervalues())
 
     @doc(dict.iterkeys)
     def iterkeys(self):
