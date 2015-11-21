@@ -1,7 +1,7 @@
 from itertools import izip
 from functools import partial
 from collections import defaultdict, Counter, Mapping
-from pymaptools.iter import iter_items, iter_keys, iter_vals
+from pymaptools.iter import plen, iter_items, iter_keys, iter_vals
 from pymaptools._cyordereddict import OrderedDict
 from pymaptools._containers import OrderedSet, DefaultOrderedDict
 from pymaptools.utils import doc
@@ -144,6 +144,8 @@ class CrossTab(object):
     class will be sparse::
 
         >>> t3 = CrossTab(rows={'a': {'x': 2, 'y': 3}, 'b': {'x': 4}})
+        >>> t3.shape
+        (2, 2)
         >>> t3['a', 'x']
         2
         >>> t3['b', 'y']
@@ -315,7 +317,11 @@ class CrossTab(object):
             self._grand_total = _grand_total = sum(self.iter_row_totals())
         return _grand_total
 
-    def to_rows(self, rslice=SLICE_ALL, cslice=SLICE_ALL):
+    @property
+    def shape(self):
+        return plen(self.iter_row_totals()), plen(self.iter_col_totals())
+
+    def to_rows(self, rslice=SLICE_ALL, cslice=SLICE_ALL, default=0, rpad=False, cpad=False):
         """
 
         Example with dense matrices::
@@ -333,21 +339,40 @@ class CrossTab(object):
             >>> t.to_rows()
             [[2, 1, 0, 0], [0, 0, 1, 0], [0, 0, 4, 0], [0, 0, 0, 2]]
 
+        Example with padding::
+
+            >>> rows = [[10, 3, 8, 11], [9, 9, 3, 10], [9, 7, 7, 14]]
+            >>> t = CrossTab(rows=rows)
+            >>> t.to_rows(cpad=True)
+            [[10, 3, 8, 11], [9, 9, 3, 10], [9, 7, 7, 14], [0, 0, 0, 0]]
+
+            >>> rows = [[7, 9, 6], [10, 7, 15], [11, 11, 7], [9, 4, 4]]
+            >>> t = CrossTab(rows=rows)
+            >>> t.to_rows(rpad=True)
+            [[7, 9, 6, 0], [10, 7, 15, 0], [11, 11, 7, 0], [9, 4, 4, 0]]
+
         """
-        row_form = []
-        all_cols = list(iter_keys(self.col_totals))[cslice]
-        for row in list(iter_vals(self.rows))[rslice]:
-            if isinstance(row, Mapping):
-                row_vals = []
-                for col in all_cols:
-                    if col in row:
-                        row_vals.append(row[col])
-                    else:
-                        row_vals.append(0)
-                row_form.append(row_vals)
-            else:
-                row_form.append(list(row))
-        return row_form
+
+        R = len(self.row_totals)
+        C = len(self.col_totals)
+        rpadding = [default] * ((R - C) if rpad else 0)
+        cpadding = [{}] * ((C - R) if cpad else 0)
+
+        all_rows = list(iter_vals(self.rows))
+        all_rows.extend(cpadding)
+
+        cols = list(iter_keys(self.col_totals))[cslice]
+
+        result = []
+
+        for row in all_rows[rslice]:
+            output_row = [row.get(col, default) for col in cols] \
+                if isinstance(row, Mapping) \
+                else list(row)
+            output_row.extend(rpadding)
+            result.append(output_row)
+
+        return result
 
     def to_labels(self):
         """Returns a tuple ([a], [b]). Inverse of ``from_labels``
@@ -543,7 +568,7 @@ class CrossTab(object):
         return not self.__eq__(other)
 
     def __len__(self):
-        return sum(1 for v in self.itervalues() if v != 0)
+        return plen(self.itervalues())
 
     @doc(dict.iterkeys)
     def iterkeys(self):
