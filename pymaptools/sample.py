@@ -2,7 +2,8 @@ import time
 import os
 import random
 from itertools import chain
-from collections import Counter, defaultdict
+from collections import Counter, defaultdict, Mapping
+from pymaptools.iter import iter_items
 
 
 def random_seed():
@@ -116,7 +117,23 @@ def discrete_sample(prob_dist, random_state=None):
     if random_state is not None:
         random.seed(random_state)
     r = random.random()
-    for key, val in prob_dist.iteritems():
+    for key, val in iter_items(prob_dist):
         limit += val
         if r <= limit:
             return key
+
+
+def freqs2probas(freqs):
+    """Convert frequency distribution to probability distribution
+
+    >>> freqs2probas([2, 2])
+    [0.5, 0.5]
+    >>> freqs2probas({'x': 20})
+    {'x': 1.0}
+    """
+    if isinstance(freqs, Mapping):
+        total = float(sum(freqs.itervalues()))
+        return {k: v / total for k, v in freqs.iteritems()}
+    else:
+        total = float(sum(freqs))
+        return [v / total for v in freqs]
