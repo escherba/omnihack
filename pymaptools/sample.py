@@ -137,3 +137,15 @@ def freqs2probas(freqs):
     else:
         total = float(sum(freqs))
         return [v / total for v in freqs]
+
+
+def randround(num):
+    """Round a number by drawing from a continuous distribution
+
+    >>> randround(0.0)
+    0
+    """
+    whole = int(num)
+    p_whole1 = num - float(whole)
+    whole += discrete_sample({0: 1.0 - p_whole1, 1: p_whole1})
+    return whole
