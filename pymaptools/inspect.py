@@ -31,7 +31,7 @@ def hasmethod(obj, method):
     return hasattr(obj, method) and callable(getattr(obj, method))
 
 
-def iter_methods(obj, names):
+def iter_methods(obj, names=None, private=False):
     """Return all methods from list of names supported by object
 
     ::
@@ -47,8 +47,39 @@ def iter_methods(obj, names):
         >>> method()
         'bar called'
     """
+    if names is None:
+        names = dir(obj)
+    if not private:
+        names = [name for name in names if not name.startswith('_')]
     for method_name in names:
         if hasattr(obj, method_name):
             method = getattr(obj, method_name)
             if callable(method):
                 yield method
+
+
+def iter_method_names(obj, names=None, private=False):
+    """Return all methods from list of names supported by object
+
+    ::
+
+        >>> from pymaptools.iter import first_nonempty
+        >>> class Foo(object):
+        ...     def bar(self):
+        ...         return "bar called"
+        >>> foo = Foo()
+        >>> method = first_nonempty(iter_methods(foo, ['missing', 'bar']))
+        >>> hasmethod(foo, method.__name__)
+        True
+        >>> method()
+        'bar called'
+    """
+    if names is None:
+        names = dir(obj)
+    if not private:
+        names = [name for name in names if not name.startswith('_')]
+    for method_name in names:
+        if hasattr(obj, method_name):
+            method = getattr(obj, method_name)
+            if callable(method):
+                yield method_name
