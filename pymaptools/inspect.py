@@ -68,11 +68,9 @@ def iter_method_names(obj, names=None, private=False):
         ...     def bar(self):
         ...         return "bar called"
         >>> foo = Foo()
-        >>> method = first_nonempty(iter_methods(foo, ['missing', 'bar']))
-        >>> hasmethod(foo, method.__name__)
+        >>> method = first_nonempty(iter_method_names(foo, ['missing', 'bar']))
+        >>> hasmethod(foo, method)
         True
-        >>> method()
-        'bar called'
     """
     if names is None:
         names = dir(obj)
