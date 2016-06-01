@@ -45,7 +45,7 @@ coverage: test
 	open cover/index.html
 endif
 
-test: env build_ext
+test: extras build_ext
 	# make sure package can be pip-installed from local directory
 	$(PIP) install -e .
 	# run tests
