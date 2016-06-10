@@ -21,4 +21,4 @@ def dd2coo(dd):
             row_indices.append(row_map[row_key])
             col_indices.append(col_map[col_key])
 
-    return coo_matrix((values, (row_indices, col_indices)))
+    return row_map, col_map, coo_matrix((values, (row_indices, col_indices)))
