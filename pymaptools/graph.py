@@ -243,7 +243,7 @@ class Bigraph(SimplePicklableMixin):
         return g
 
     def get_dot(self, name="bipartite graph", bipartite=True, unode_decorator=None,
-                vnode_decorator=None, edge_decorator=None):
+                vnode_decorator=None, edge_decorator=None, **kwargs):
         """Get a Graphviz representation
         """
         import pygraphviz as pgv
@@ -253,7 +253,7 @@ class Bigraph(SimplePicklableMixin):
             vnode_decorator = lambda g, v: (v, {})
         if edge_decorator is None:
             edge_decorator = lambda g, u, v, weight: ((u, v), {})
-        g = pgv.AGraph(name=name, size='10,8')
+        g = pgv.AGraph(name=name, **kwargs)
         cluster_prefix = 'cluster_' if bipartite else ''
         sU = g.subgraph(name=cluster_prefix + "U", style="dotted")
         for node in self.U:
@@ -557,7 +557,7 @@ class Graph(Bigraph):
             edge_decorator = lambda g, u, v, weight: ((u, v), {})
         if vnode_decorator is None:
             vnode_decorator = lambda g, v: (v, {})
-        g = pgv.AGraph(name=name)
+        g = pgv.AGraph(name=name, **kwargs)
         for node in self.V:
             node_name, attrs = vnode_decorator(self, node)
             g.add_node(node_name, **attrs)
