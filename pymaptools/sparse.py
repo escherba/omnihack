@@ -1,3 +1,5 @@
+from collections import defaultdict
+from funcy import partial
 from scipy.sparse import coo_matrix
 
 
@@ -22,3 +24,24 @@ def dd2coo(dd):
             col_indices.append(col_map[col_key])
 
     return row_map, col_map, coo_matrix((values, (row_indices, col_indices)))
+
+
+class CooBuilder(object):
+
+    """A simple demonstration of dd2coo usage
+    """
+    def __init__(self, dtype):
+
+        self._dict = defaultdict(partial(defaultdict, dtype))
+
+    def add(self, x, y, val):
+
+        self._dict[x][y] += val
+
+    def assign(self, x, y, val):
+
+        self._dict[x][y] = val
+
+    def get_coo(self):
+
+        return dd2coo(self._dict)
