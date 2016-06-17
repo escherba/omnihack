@@ -1,6 +1,6 @@
-from collections import defaultdict
 from funcy import partial
 from scipy.sparse import coo_matrix
+from pymaptools.containers import DefaultOrderedDict
 
 
 def dd2coo(dd):
@@ -32,7 +32,7 @@ class CooBuilder(object):
     """
     def __init__(self, dtype):
 
-        self._dict = defaultdict(partial(defaultdict, dtype))
+        self._dict = DefaultOrderedDict(partial(DefaultOrderedDict, dtype))
 
     def add(self, x, y, val):
 
