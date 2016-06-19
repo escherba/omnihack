@@ -2,7 +2,7 @@
 Many definitions here are from https://docs.python.org/2/library/itertools.html
 """
 import operator
-from collections import Mapping, Iterator, deque
+from collections import Mapping, Iterator, deque, defaultdict
 from itertools import islice, imap, chain, starmap, ifilterfalse, count, \
     repeat, izip, izip_longest, groupby, cycle, tee, combinations
 
@@ -482,6 +482,42 @@ def dotproduct(vec1, vec2):
     return sum(imap(operator.mul, vec1, vec2))
 
 
+def symmetric_diff(s1, s2):
+    """Symmetric (outer) difference between sets
+    """
+    if not isinstance(s1, set):
+        s1 = set(s1)
+    if not isinstance(s2, set):
+        s2 = set(s2)
+    ab = s1 - s2
+    ba = s2 - s1
+    return (ab | ba)
+
+
+def prod_dict(arr, inverse=False, identity=False):
+    """Create a dict from an array of pairs of iterables s.t. the every key
+    on the left side maps to every value on the right side.
+
+    For flexibility, treat scalar values as iterables of size one.
+    """
+    result = defaultdict(list)
+    for ks, vs in arr:
+        if not isiterable(vs):
+            vs = [vs]
+        if not isiterable(ks):
+            ks = [ks]
+        fkeys, fvals = (vs, ks) if inverse else (ks, vs)
+        for fkey in fkeys:
+            result[fkey].extend(([fkey] + fvals) if identity else fvals)
+    return result
+
+
+def prodmap(d, xs):
+    """Like flatmap except applies prod_dict result to array
+    """
+    return flatten(d.get(x, [x]) for x in xs)
+
+
 def flatten(iterable):
     """Flatten one level of nesting
 
@@ -494,6 +530,19 @@ def flatten(iterable):
         [1, 2, 3, 3, 4, 5]
     """
     return chain.from_iterable(iterable)
+
+
+def flatmap(func, iterable):
+    """Like flatMap
+
+    ::
+
+        >>> arr = [[1, 2], [2, 3]]
+        >>> f = lambda xs: (x ** 2 for x in xs)
+        >>> list(flatmap(f, arr))
+        [1, 4, 4, 9]
+    """
+    return flatten(func(item) for item in iterable)
 
 
 def repeatfunc(func, times=None, *args):
@@ -646,6 +695,15 @@ def iter_except(func, exception, first=None):
             yield func()
     except exception:
         pass
+
+
+def nonempty(xs):
+    """Filter to non-empty members
+
+    Can be easily accomplished with filter, however this operation is common
+    enough that a defined function can be more clear sometimes.
+    """
+    return (x for x in xs if len(x) > 0)
 
 
 def first_nonempty(iterable):
