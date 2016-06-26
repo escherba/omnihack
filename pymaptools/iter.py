@@ -331,9 +331,19 @@ def inverse_kvals(mapping):
         >>> {k: v for k, v in inverse_kvals({"a": [1, 2], "b": [3]})}
         {1: 'a', 2: 'a', 3: 'b'}
     """
-    for key, vals in mapping.iteritems():
+    for key, vals in iter_items(mapping):
         for val in vals:
             yield val, key
+
+
+def inverse_kvals_collect(mapping):
+    """Like inverse_kvals except collects values
+    """
+    result = defaultdict(set)
+    for k, vs in iter_items(mapping):
+        for v in vs:
+            result[v].add(k)
+    return result
 
 
 def nskip(n, iterable):

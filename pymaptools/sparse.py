@@ -10,9 +10,10 @@ def dd2coo(dd):
     # first create maps from key values to rows and columns
 
     # first level
-    row_map = {k: idx for idx, k in enumerate(dd.iterkeys())}
-    col_map = {k: idx for idx, k in enumerate(
-        set(k for row in dd.itervalues() for k in row.iterkeys()))}
+    row_list = dd.keys()
+    col_list = list(set(k for row in dd.itervalues() for k in row.iterkeys()))
+    row_map = {k: idx for idx, k in enumerate(row_list)}
+    col_map = {k: idx for idx, k in enumerate(col_list)}
 
     values = []
     row_indices = []
@@ -23,7 +24,7 @@ def dd2coo(dd):
             row_indices.append(row_map[row_key])
             col_indices.append(col_map[col_key])
 
-    return row_map, col_map, coo_matrix((values, (row_indices, col_indices)))
+    return row_list, col_list, coo_matrix((values, (row_indices, col_indices)))
 
 
 class CooBuilder(object):
@@ -42,6 +43,10 @@ class CooBuilder(object):
 
         self._dict[x][y] = val
 
-    def get_coo(self):
+    def get_coo(self, transpose=False):
 
-        return dd2coo(self._dict)
+        rows, cols, mat = dd2coo(self._dict)
+        if transpose:
+            return cols, rows, mat.T
+        else:
+            return rows, cols, mat
