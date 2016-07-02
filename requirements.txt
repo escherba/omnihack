@@ -1,4 +1,4 @@
 funcy>=1.2
 argparse>=1.2.0
-joblib==0.8.4
+joblib
 PyYAML>=3.10
