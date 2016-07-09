@@ -1,4 +1,6 @@
 from funcy import partial
+from itertools import izip
+from tqdm import tqdm
 from scipy.sparse import coo_matrix
 from pymaptools.containers import DefaultOrderedDict
 
@@ -50,3 +52,16 @@ class CooBuilder(object):
             return cols, rows, mat.T
         else:
             return rows, cols, mat
+
+
+def iter_csr(csr, show_progress=False):
+    """Iterate over CSR matrix in memory-efficient way
+
+    Converting to COO may be faster, but this is more memory-efficient (useful
+    for huge matrices)
+    """
+    iterator = izip(*csr.nonzero())
+    if show_progress:
+        iterator = tqdm(iterator, total=csr.nnz)
+    for i, j in iterator:
+        yield i, j, csr[i, j]
