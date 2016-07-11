@@ -3,6 +3,7 @@ from itertools import izip
 from tqdm import tqdm
 from scipy.sparse import coo_matrix
 from pymaptools.containers import DefaultOrderedDict
+from collections import defaultdict
 
 
 def dd2coo(dd):
@@ -27,6 +28,15 @@ def dd2coo(dd):
             col_indices.append(col_map[col_key])
 
     return row_list, col_list, coo_matrix((values, (row_indices, col_indices)))
+
+
+def csr2dd(mat, transpose=False, show_progress=False):
+    """Convert a CSR sparse matrix to dict-of-dicts format
+    """
+    dd = defaultdict(partial(dict))
+    for i, j, v in iter_csr(mat, transpose=transpose, show_progress=show_progress):
+        dd[i][j] = v
+    return dd
 
 
 class CooBuilder(object):
@@ -54,14 +64,14 @@ class CooBuilder(object):
             return rows, cols, mat
 
 
-def iter_csr(csr, show_progress=False):
+def iter_csr(mat, transpose=False, show_progress=False):
     """Iterate over CSR matrix in memory-efficient way
-
-    Converting to COO may be faster, but this is more memory-efficient (useful
-    for huge matrices)
     """
-    iterator = izip(*csr.nonzero())
+    indices = mat.nonzero()
+    data = mat.data
+    assert indices[0].shape[0] == indices[1].shape[0] == data.shape[0]
+    li, ri = (1, 0) if transpose else (0, 1)
+    iterator = izip(indices[li], indices[ri], data)
     if show_progress:
-        iterator = tqdm(iterator, total=csr.nnz)
-    for i, j in iterator:
-        yield i, j, csr[i, j]
+        iterator = tqdm(iterator)
+    return iterator
