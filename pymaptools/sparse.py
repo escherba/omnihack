@@ -73,5 +73,5 @@ def iter_csr(mat, transpose=False, show_progress=False):
     li, ri = (1, 0) if transpose else (0, 1)
     iterator = izip(indices[li], indices[ri], data)
     if show_progress:
-        iterator = tqdm(iterator)
+        iterator = tqdm(iterator, total=mat.nnz)
     return iterator
