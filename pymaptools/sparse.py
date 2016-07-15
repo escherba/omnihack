@@ -22,9 +22,10 @@ def dd2coo(dd):
     row_indices = []
     col_indices = []
     for row_key, row in dd.iteritems():
+        row_idx = row_map[row_key]
         for col_key, val in row.iteritems():
             values.append(val)
-            row_indices.append(row_map[row_key])
+            row_indices.append(row_idx)
             col_indices.append(col_map[col_key])
 
     return row_list, col_list, coo_matrix((values, (row_indices, col_indices)))

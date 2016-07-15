@@ -23,6 +23,15 @@ class TestOrderedSet(unittest.TestCase):
         self.assertEqual(set1, OrderedSet(['a', 'b', 'r', 'c', 'd']))
         self.assertEqual(list(reversed(set1)), ['d', 'c', 'r', 'b', 'a'])
 
+    def test_update(self):
+        set1 = OrderedSet()
+        l1 = [1, 2, 3]
+        set1.update(l1)
+        self.assertListEqual(l1, list(set1))
+        l2 = [-1, 4, 0]
+        set1.update(l2)
+        self.assertListEqual(list(set1), l1 + l2)
+
     def test_binary_operations(self):
         text1 = 'abracadabra'
         set1 = OrderedSet(text1)

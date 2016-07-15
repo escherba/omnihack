@@ -176,6 +176,10 @@ cdef class OrderedSet(set):
                 mapping.popitem(last=False)
                 mapping[key] = 1
 
+    def update(self, iterable):
+        for item in iterable:
+            self.add(item)
+
     append = add
 
     def discard(self, key):
