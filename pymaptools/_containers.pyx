@@ -180,6 +180,10 @@ cdef class OrderedSet(set):
         for item in iterable:
             self.add(item)
 
+    def update_(self, iterable):
+        for item in iterable:
+            self.add(item)
+
     append = add
 
     def discard(self, key):
