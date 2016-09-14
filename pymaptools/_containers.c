@@ -534,7 +534,7 @@ struct __pyx_obj_10pymaptools_11_containers_OrderedSet {
 };
 
 
-/* "pymaptools/_containers.pyx":226
+/* "pymaptools/_containers.pyx":222
  * 
  * 
  * cdef class DefaultOrderedDict(OrderedDict):             # <<<<<<<<<<<<<<
@@ -971,15 +971,14 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_30__setstate__
 static int __pyx_pf_10pymaptools_11_containers_10OrderedSet_32__contains__(struct __pyx_obj_10pymaptools_11_containers_OrderedSet *__pyx_v_self, PyObject *__pyx_v_key); /* proto */
 static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_34add(struct __pyx_obj_10pymaptools_11_containers_OrderedSet *__pyx_v_self, PyObject *__pyx_v_key); /* proto */
 static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_36update(struct __pyx_obj_10pymaptools_11_containers_OrderedSet *__pyx_v_self, PyObject *__pyx_v_iterable); /* proto */
-static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_38update_(struct __pyx_obj_10pymaptools_11_containers_OrderedSet *__pyx_v_self, PyObject *__pyx_v_iterable); /* proto */
-static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_40discard(struct __pyx_obj_10pymaptools_11_containers_OrderedSet *__pyx_v_self, PyObject *__pyx_v_key); /* proto */
-static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_42remove(struct __pyx_obj_10pymaptools_11_containers_OrderedSet *__pyx_v_self, PyObject *__pyx_v_key); /* proto */
-static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_44__iter__(struct __pyx_obj_10pymaptools_11_containers_OrderedSet *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_46__reversed__(struct __pyx_obj_10pymaptools_11_containers_OrderedSet *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_48__repr__(struct __pyx_obj_10pymaptools_11_containers_OrderedSet *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_50_eq__(struct __pyx_obj_10pymaptools_11_containers_OrderedSet *__pyx_v_self, PyObject *__pyx_v_other); /* proto */
-static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_52_ne__(struct __pyx_obj_10pymaptools_11_containers_OrderedSet *__pyx_v_self, PyObject *__pyx_v_other); /* proto */
-static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_54__richcmp__(PyObject *__pyx_v_self, PyObject *__pyx_v_other, int __pyx_v_op); /* proto */
+static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_38discard(struct __pyx_obj_10pymaptools_11_containers_OrderedSet *__pyx_v_self, PyObject *__pyx_v_key); /* proto */
+static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_40remove(struct __pyx_obj_10pymaptools_11_containers_OrderedSet *__pyx_v_self, PyObject *__pyx_v_key); /* proto */
+static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_42__iter__(struct __pyx_obj_10pymaptools_11_containers_OrderedSet *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_44__reversed__(struct __pyx_obj_10pymaptools_11_containers_OrderedSet *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_46__repr__(struct __pyx_obj_10pymaptools_11_containers_OrderedSet *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_48_eq__(struct __pyx_obj_10pymaptools_11_containers_OrderedSet *__pyx_v_self, PyObject *__pyx_v_other); /* proto */
+static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_50_ne__(struct __pyx_obj_10pymaptools_11_containers_OrderedSet *__pyx_v_self, PyObject *__pyx_v_other); /* proto */
+static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_52__richcmp__(PyObject *__pyx_v_self, PyObject *__pyx_v_other, int __pyx_v_op); /* proto */
 static int __pyx_pf_10pymaptools_11_containers_18DefaultOrderedDict___init__(struct __pyx_obj_10pymaptools_11_containers_DefaultOrderedDict *__pyx_v_self, PyObject *__pyx_v_default_factory, PyObject *__pyx_v_args, PyObject *__pyx_v_kwargs); /* proto */
 static PyObject *__pyx_pf_10pymaptools_11_containers_18DefaultOrderedDict_2__getitem__(struct __pyx_obj_10pymaptools_11_containers_DefaultOrderedDict *__pyx_v_self, PyObject *__pyx_v_key); /* proto */
 static PyObject *__pyx_pf_10pymaptools_11_containers_18DefaultOrderedDict_4__missing__(struct __pyx_obj_10pymaptools_11_containers_DefaultOrderedDict *__pyx_v_self, PyObject *__pyx_v_key); /* proto */
@@ -3916,7 +3915,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_36update(struc
  *         for item in iterable:
  *             self.add(item)             # <<<<<<<<<<<<<<
  * 
- *     def update_(self, iterable):
+ *     append = add
  */
     __pyx_t_5 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_add); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 181, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
@@ -3983,162 +3982,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_36update(struc
   return __pyx_r;
 }
 
-/* "pymaptools/_containers.pyx":183
- *             self.add(item)
- * 
- *     def update_(self, iterable):             # <<<<<<<<<<<<<<
- *         for item in iterable:
- *             self.add(item)
- */
-
-/* Python wrapper */
-static PyObject *__pyx_pw_10pymaptools_11_containers_10OrderedSet_39update_(PyObject *__pyx_v_self, PyObject *__pyx_v_iterable); /*proto*/
-static PyObject *__pyx_pw_10pymaptools_11_containers_10OrderedSet_39update_(PyObject *__pyx_v_self, PyObject *__pyx_v_iterable) {
-  PyObject *__pyx_r = 0;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("update_ (wrapper)", 0);
-  __pyx_r = __pyx_pf_10pymaptools_11_containers_10OrderedSet_38update_(((struct __pyx_obj_10pymaptools_11_containers_OrderedSet *)__pyx_v_self), ((PyObject *)__pyx_v_iterable));
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_38update_(struct __pyx_obj_10pymaptools_11_containers_OrderedSet *__pyx_v_self, PyObject *__pyx_v_iterable) {
-  PyObject *__pyx_v_item = NULL;
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  Py_ssize_t __pyx_t_2;
-  PyObject *(*__pyx_t_3)(PyObject *);
-  PyObject *__pyx_t_4 = NULL;
-  PyObject *__pyx_t_5 = NULL;
-  PyObject *__pyx_t_6 = NULL;
-  PyObject *__pyx_t_7 = NULL;
-  __Pyx_RefNannySetupContext("update_", 0);
-
-  /* "pymaptools/_containers.pyx":184
- * 
- *     def update_(self, iterable):
- *         for item in iterable:             # <<<<<<<<<<<<<<
- *             self.add(item)
- * 
- */
-  if (likely(PyList_CheckExact(__pyx_v_iterable)) || PyTuple_CheckExact(__pyx_v_iterable)) {
-    __pyx_t_1 = __pyx_v_iterable; __Pyx_INCREF(__pyx_t_1); __pyx_t_2 = 0;
-    __pyx_t_3 = NULL;
-  } else {
-    __pyx_t_2 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_v_iterable); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 184, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_3 = Py_TYPE(__pyx_t_1)->tp_iternext; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 184, __pyx_L1_error)
-  }
-  for (;;) {
-    if (likely(!__pyx_t_3)) {
-      if (likely(PyList_CheckExact(__pyx_t_1))) {
-        if (__pyx_t_2 >= PyList_GET_SIZE(__pyx_t_1)) break;
-        #if CYTHON_COMPILING_IN_CPYTHON
-        __pyx_t_4 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_2); __Pyx_INCREF(__pyx_t_4); __pyx_t_2++; if (unlikely(0 < 0)) __PYX_ERR(0, 184, __pyx_L1_error)
-        #else
-        __pyx_t_4 = PySequence_ITEM(__pyx_t_1, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 184, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_4);
-        #endif
-      } else {
-        if (__pyx_t_2 >= PyTuple_GET_SIZE(__pyx_t_1)) break;
-        #if CYTHON_COMPILING_IN_CPYTHON
-        __pyx_t_4 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_2); __Pyx_INCREF(__pyx_t_4); __pyx_t_2++; if (unlikely(0 < 0)) __PYX_ERR(0, 184, __pyx_L1_error)
-        #else
-        __pyx_t_4 = PySequence_ITEM(__pyx_t_1, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 184, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_4);
-        #endif
-      }
-    } else {
-      __pyx_t_4 = __pyx_t_3(__pyx_t_1);
-      if (unlikely(!__pyx_t_4)) {
-        PyObject* exc_type = PyErr_Occurred();
-        if (exc_type) {
-          if (likely(exc_type == PyExc_StopIteration || PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-          else __PYX_ERR(0, 184, __pyx_L1_error)
-        }
-        break;
-      }
-      __Pyx_GOTREF(__pyx_t_4);
-    }
-    __Pyx_XDECREF_SET(__pyx_v_item, __pyx_t_4);
-    __pyx_t_4 = 0;
-
-    /* "pymaptools/_containers.pyx":185
- *     def update_(self, iterable):
- *         for item in iterable:
- *             self.add(item)             # <<<<<<<<<<<<<<
- * 
- *     append = add
- */
-    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_add); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 185, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_6 = NULL;
-    if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_5))) {
-      __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_5);
-      if (likely(__pyx_t_6)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_5);
-        __Pyx_INCREF(__pyx_t_6);
-        __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_5, function);
-      }
-    }
-    if (!__pyx_t_6) {
-      __pyx_t_4 = __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_v_item); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 185, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_4);
-    } else {
-      __pyx_t_7 = PyTuple_New(1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 185, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_7);
-      __Pyx_GIVEREF(__pyx_t_6); PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_6); __pyx_t_6 = NULL;
-      __Pyx_INCREF(__pyx_v_item);
-      __Pyx_GIVEREF(__pyx_v_item);
-      PyTuple_SET_ITEM(__pyx_t_7, 0+1, __pyx_v_item);
-      __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_7, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 185, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_4);
-      __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-    }
-    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-
-    /* "pymaptools/_containers.pyx":184
- * 
- *     def update_(self, iterable):
- *         for item in iterable:             # <<<<<<<<<<<<<<
- *             self.add(item)
- * 
- */
-  }
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-  /* "pymaptools/_containers.pyx":183
- *             self.add(item)
- * 
- *     def update_(self, iterable):             # <<<<<<<<<<<<<<
- *         for item in iterable:
- *             self.add(item)
- */
-
-  /* function exit code */
-  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
-  goto __pyx_L0;
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_XDECREF(__pyx_t_4);
-  __Pyx_XDECREF(__pyx_t_5);
-  __Pyx_XDECREF(__pyx_t_6);
-  __Pyx_XDECREF(__pyx_t_7);
-  __Pyx_AddTraceback("pymaptools._containers.OrderedSet.update_", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = NULL;
-  __pyx_L0:;
-  __Pyx_XDECREF(__pyx_v_item);
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "pymaptools/_containers.pyx":189
+/* "pymaptools/_containers.pyx":185
  *     append = add
  * 
  *     def discard(self, key):             # <<<<<<<<<<<<<<
@@ -4147,19 +3991,19 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_38update_(stru
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_10pymaptools_11_containers_10OrderedSet_41discard(PyObject *__pyx_v_self, PyObject *__pyx_v_key); /*proto*/
-static PyObject *__pyx_pw_10pymaptools_11_containers_10OrderedSet_41discard(PyObject *__pyx_v_self, PyObject *__pyx_v_key) {
+static PyObject *__pyx_pw_10pymaptools_11_containers_10OrderedSet_39discard(PyObject *__pyx_v_self, PyObject *__pyx_v_key); /*proto*/
+static PyObject *__pyx_pw_10pymaptools_11_containers_10OrderedSet_39discard(PyObject *__pyx_v_self, PyObject *__pyx_v_key) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("discard (wrapper)", 0);
-  __pyx_r = __pyx_pf_10pymaptools_11_containers_10OrderedSet_40discard(((struct __pyx_obj_10pymaptools_11_containers_OrderedSet *)__pyx_v_self), ((PyObject *)__pyx_v_key));
+  __pyx_r = __pyx_pf_10pymaptools_11_containers_10OrderedSet_38discard(((struct __pyx_obj_10pymaptools_11_containers_OrderedSet *)__pyx_v_self), ((PyObject *)__pyx_v_key));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_40discard(struct __pyx_obj_10pymaptools_11_containers_OrderedSet *__pyx_v_self, PyObject *__pyx_v_key) {
+static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_38discard(struct __pyx_obj_10pymaptools_11_containers_OrderedSet *__pyx_v_self, PyObject *__pyx_v_key) {
   PyObject *__pyx_v_mapping = NULL;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
@@ -4171,7 +4015,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_40discard(stru
   PyObject *__pyx_t_6 = NULL;
   __Pyx_RefNannySetupContext("discard", 0);
 
-  /* "pymaptools/_containers.pyx":192
+  /* "pymaptools/_containers.pyx":188
  *         # unlike ``remove``, ``discard`` does not raise KeyError
  *         # in case of missing key
  *         mapping  = self._map             # <<<<<<<<<<<<<<
@@ -4183,25 +4027,25 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_40discard(stru
   __pyx_v_mapping = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "pymaptools/_containers.pyx":193
+  /* "pymaptools/_containers.pyx":189
  *         # in case of missing key
  *         mapping  = self._map
  *         if key in mapping:             # <<<<<<<<<<<<<<
  *             self._map.__delitem__(key)
  * 
  */
-  __pyx_t_2 = (__Pyx_PySequence_ContainsTF(__pyx_v_key, __pyx_v_mapping, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 193, __pyx_L1_error)
+  __pyx_t_2 = (__Pyx_PySequence_ContainsTF(__pyx_v_key, __pyx_v_mapping, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 189, __pyx_L1_error)
   __pyx_t_3 = (__pyx_t_2 != 0);
   if (__pyx_t_3) {
 
-    /* "pymaptools/_containers.pyx":194
+    /* "pymaptools/_containers.pyx":190
  *         mapping  = self._map
  *         if key in mapping:
  *             self._map.__delitem__(key)             # <<<<<<<<<<<<<<
  * 
  *     def remove(self, key):
  */
-    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->_map, __pyx_n_s_delitem); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 194, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->_map, __pyx_n_s_delitem); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 190, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __pyx_t_5 = NULL;
     if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_4))) {
@@ -4214,23 +4058,23 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_40discard(stru
       }
     }
     if (!__pyx_t_5) {
-      __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_v_key); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 194, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_v_key); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 190, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
     } else {
-      __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 194, __pyx_L1_error)
+      __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 190, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_GIVEREF(__pyx_t_5); PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_5); __pyx_t_5 = NULL;
       __Pyx_INCREF(__pyx_v_key);
       __Pyx_GIVEREF(__pyx_v_key);
       PyTuple_SET_ITEM(__pyx_t_6, 0+1, __pyx_v_key);
-      __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_6, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 194, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_6, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 190, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
     }
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-    /* "pymaptools/_containers.pyx":193
+    /* "pymaptools/_containers.pyx":189
  *         # in case of missing key
  *         mapping  = self._map
  *         if key in mapping:             # <<<<<<<<<<<<<<
@@ -4239,7 +4083,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_40discard(stru
  */
   }
 
-  /* "pymaptools/_containers.pyx":189
+  /* "pymaptools/_containers.pyx":185
  *     append = add
  * 
  *     def discard(self, key):             # <<<<<<<<<<<<<<
@@ -4264,7 +4108,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_40discard(stru
   return __pyx_r;
 }
 
-/* "pymaptools/_containers.pyx":196
+/* "pymaptools/_containers.pyx":192
  *             self._map.__delitem__(key)
  * 
  *     def remove(self, key):             # <<<<<<<<<<<<<<
@@ -4273,19 +4117,19 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_40discard(stru
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_10pymaptools_11_containers_10OrderedSet_43remove(PyObject *__pyx_v_self, PyObject *__pyx_v_key); /*proto*/
-static PyObject *__pyx_pw_10pymaptools_11_containers_10OrderedSet_43remove(PyObject *__pyx_v_self, PyObject *__pyx_v_key) {
+static PyObject *__pyx_pw_10pymaptools_11_containers_10OrderedSet_41remove(PyObject *__pyx_v_self, PyObject *__pyx_v_key); /*proto*/
+static PyObject *__pyx_pw_10pymaptools_11_containers_10OrderedSet_41remove(PyObject *__pyx_v_self, PyObject *__pyx_v_key) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("remove (wrapper)", 0);
-  __pyx_r = __pyx_pf_10pymaptools_11_containers_10OrderedSet_42remove(((struct __pyx_obj_10pymaptools_11_containers_OrderedSet *)__pyx_v_self), ((PyObject *)__pyx_v_key));
+  __pyx_r = __pyx_pf_10pymaptools_11_containers_10OrderedSet_40remove(((struct __pyx_obj_10pymaptools_11_containers_OrderedSet *)__pyx_v_self), ((PyObject *)__pyx_v_key));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_42remove(struct __pyx_obj_10pymaptools_11_containers_OrderedSet *__pyx_v_self, PyObject *__pyx_v_key) {
+static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_40remove(struct __pyx_obj_10pymaptools_11_containers_OrderedSet *__pyx_v_self, PyObject *__pyx_v_key) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -4294,14 +4138,14 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_42remove(struc
   PyObject *__pyx_t_4 = NULL;
   __Pyx_RefNannySetupContext("remove", 0);
 
-  /* "pymaptools/_containers.pyx":197
+  /* "pymaptools/_containers.pyx":193
  * 
  *     def remove(self, key):
  *         self._map.__delitem__(key)             # <<<<<<<<<<<<<<
  * 
  *     def __iter__(self):
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->_map, __pyx_n_s_delitem); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 197, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->_map, __pyx_n_s_delitem); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 193, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_3 = NULL;
   if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_2))) {
@@ -4314,23 +4158,23 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_42remove(struc
     }
   }
   if (!__pyx_t_3) {
-    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_v_key); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 197, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_v_key); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 193, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
   } else {
-    __pyx_t_4 = PyTuple_New(1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 197, __pyx_L1_error)
+    __pyx_t_4 = PyTuple_New(1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 193, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_GIVEREF(__pyx_t_3); PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_3); __pyx_t_3 = NULL;
     __Pyx_INCREF(__pyx_v_key);
     __Pyx_GIVEREF(__pyx_v_key);
     PyTuple_SET_ITEM(__pyx_t_4, 0+1, __pyx_v_key);
-    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_4, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 197, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_4, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 193, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   }
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "pymaptools/_containers.pyx":196
+  /* "pymaptools/_containers.pyx":192
  *             self._map.__delitem__(key)
  * 
  *     def remove(self, key):             # <<<<<<<<<<<<<<
@@ -4354,7 +4198,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_42remove(struc
   return __pyx_r;
 }
 
-/* "pymaptools/_containers.pyx":199
+/* "pymaptools/_containers.pyx":195
  *         self._map.__delitem__(key)
  * 
  *     def __iter__(self):             # <<<<<<<<<<<<<<
@@ -4363,19 +4207,19 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_42remove(struc
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_10pymaptools_11_containers_10OrderedSet_45__iter__(PyObject *__pyx_v_self); /*proto*/
-static PyObject *__pyx_pw_10pymaptools_11_containers_10OrderedSet_45__iter__(PyObject *__pyx_v_self) {
+static PyObject *__pyx_pw_10pymaptools_11_containers_10OrderedSet_43__iter__(PyObject *__pyx_v_self); /*proto*/
+static PyObject *__pyx_pw_10pymaptools_11_containers_10OrderedSet_43__iter__(PyObject *__pyx_v_self) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__iter__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_10pymaptools_11_containers_10OrderedSet_44__iter__(((struct __pyx_obj_10pymaptools_11_containers_OrderedSet *)__pyx_v_self));
+  __pyx_r = __pyx_pf_10pymaptools_11_containers_10OrderedSet_42__iter__(((struct __pyx_obj_10pymaptools_11_containers_OrderedSet *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_44__iter__(struct __pyx_obj_10pymaptools_11_containers_OrderedSet *__pyx_v_self) {
+static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_42__iter__(struct __pyx_obj_10pymaptools_11_containers_OrderedSet *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -4383,7 +4227,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_44__iter__(str
   PyObject *__pyx_t_3 = NULL;
   __Pyx_RefNannySetupContext("__iter__", 0);
 
-  /* "pymaptools/_containers.pyx":200
+  /* "pymaptools/_containers.pyx":196
  * 
  *     def __iter__(self):
  *         return self._map.iterkeys()             # <<<<<<<<<<<<<<
@@ -4391,7 +4235,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_44__iter__(str
  *     def __reversed__(self):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->_map, __pyx_n_s_iterkeys); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 200, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->_map, __pyx_n_s_iterkeys); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 196, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_3 = NULL;
   if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_2))) {
@@ -4404,10 +4248,10 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_44__iter__(str
     }
   }
   if (__pyx_t_3) {
-    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 200, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 196, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   } else {
-    __pyx_t_1 = __Pyx_PyObject_CallNoArg(__pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 200, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_CallNoArg(__pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 196, __pyx_L1_error)
   }
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -4415,7 +4259,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_44__iter__(str
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "pymaptools/_containers.pyx":199
+  /* "pymaptools/_containers.pyx":195
  *         self._map.__delitem__(key)
  * 
  *     def __iter__(self):             # <<<<<<<<<<<<<<
@@ -4436,7 +4280,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_44__iter__(str
   return __pyx_r;
 }
 
-/* "pymaptools/_containers.pyx":202
+/* "pymaptools/_containers.pyx":198
  *         return self._map.iterkeys()
  * 
  *     def __reversed__(self):             # <<<<<<<<<<<<<<
@@ -4445,19 +4289,19 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_44__iter__(str
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_10pymaptools_11_containers_10OrderedSet_47__reversed__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_pw_10pymaptools_11_containers_10OrderedSet_47__reversed__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_10pymaptools_11_containers_10OrderedSet_45__reversed__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_10pymaptools_11_containers_10OrderedSet_45__reversed__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__reversed__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_10pymaptools_11_containers_10OrderedSet_46__reversed__(((struct __pyx_obj_10pymaptools_11_containers_OrderedSet *)__pyx_v_self));
+  __pyx_r = __pyx_pf_10pymaptools_11_containers_10OrderedSet_44__reversed__(((struct __pyx_obj_10pymaptools_11_containers_OrderedSet *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_46__reversed__(struct __pyx_obj_10pymaptools_11_containers_OrderedSet *__pyx_v_self) {
+static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_44__reversed__(struct __pyx_obj_10pymaptools_11_containers_OrderedSet *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -4465,7 +4309,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_46__reversed__
   PyObject *__pyx_t_3 = NULL;
   __Pyx_RefNannySetupContext("__reversed__", 0);
 
-  /* "pymaptools/_containers.pyx":203
+  /* "pymaptools/_containers.pyx":199
  * 
  *     def __reversed__(self):
  *         return reversed(self._map.keys())             # <<<<<<<<<<<<<<
@@ -4473,7 +4317,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_46__reversed__
  *     def __repr__(self):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->_map, __pyx_n_s_keys); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 203, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self->_map, __pyx_n_s_keys); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 199, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_3 = NULL;
   if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_2))) {
@@ -4486,26 +4330,26 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_46__reversed__
     }
   }
   if (__pyx_t_3) {
-    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 203, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 199, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   } else {
-    __pyx_t_1 = __Pyx_PyObject_CallNoArg(__pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 203, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_CallNoArg(__pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 199, __pyx_L1_error)
   }
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = PyTuple_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 203, __pyx_L1_error)
+  __pyx_t_2 = PyTuple_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 199, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_GIVEREF(__pyx_t_1);
   PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_t_1);
   __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_reversed, __pyx_t_2, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 203, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_reversed, __pyx_t_2, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 199, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "pymaptools/_containers.pyx":202
+  /* "pymaptools/_containers.pyx":198
  *         return self._map.iterkeys()
  * 
  *     def __reversed__(self):             # <<<<<<<<<<<<<<
@@ -4526,7 +4370,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_46__reversed__
   return __pyx_r;
 }
 
-/* "pymaptools/_containers.pyx":205
+/* "pymaptools/_containers.pyx":201
  *         return reversed(self._map.keys())
  * 
  *     def __repr__(self):             # <<<<<<<<<<<<<<
@@ -4535,19 +4379,19 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_46__reversed__
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_10pymaptools_11_containers_10OrderedSet_49__repr__(PyObject *__pyx_v_self); /*proto*/
-static PyObject *__pyx_pw_10pymaptools_11_containers_10OrderedSet_49__repr__(PyObject *__pyx_v_self) {
+static PyObject *__pyx_pw_10pymaptools_11_containers_10OrderedSet_47__repr__(PyObject *__pyx_v_self); /*proto*/
+static PyObject *__pyx_pw_10pymaptools_11_containers_10OrderedSet_47__repr__(PyObject *__pyx_v_self) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__repr__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_10pymaptools_11_containers_10OrderedSet_48__repr__(((struct __pyx_obj_10pymaptools_11_containers_OrderedSet *)__pyx_v_self));
+  __pyx_r = __pyx_pf_10pymaptools_11_containers_10OrderedSet_46__repr__(((struct __pyx_obj_10pymaptools_11_containers_OrderedSet *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_48__repr__(struct __pyx_obj_10pymaptools_11_containers_OrderedSet *__pyx_v_self) {
+static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_46__repr__(struct __pyx_obj_10pymaptools_11_containers_OrderedSet *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   int __pyx_t_1;
@@ -4557,18 +4401,18 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_48__repr__(str
   PyObject *__pyx_t_5 = NULL;
   __Pyx_RefNannySetupContext("__repr__", 0);
 
-  /* "pymaptools/_containers.pyx":206
+  /* "pymaptools/_containers.pyx":202
  * 
  *     def __repr__(self):
  *         if not self:             # <<<<<<<<<<<<<<
  *             return '%s()' % (self.__class__.__name__,)
  *         return '%s(%r)' % (self.__class__.__name__, list(self))
  */
-  __pyx_t_1 = __Pyx_PyObject_IsTrue(((PyObject *)__pyx_v_self)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 206, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_IsTrue(((PyObject *)__pyx_v_self)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 202, __pyx_L1_error)
   __pyx_t_2 = ((!__pyx_t_1) != 0);
   if (__pyx_t_2) {
 
-    /* "pymaptools/_containers.pyx":207
+    /* "pymaptools/_containers.pyx":203
  *     def __repr__(self):
  *         if not self:
  *             return '%s()' % (self.__class__.__name__,)             # <<<<<<<<<<<<<<
@@ -4576,24 +4420,24 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_48__repr__(str
  * 
  */
     __Pyx_XDECREF(__pyx_r);
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_class); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 207, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_class); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 203, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_name); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 207, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_name); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 203, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 207, __pyx_L1_error)
+    __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 203, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_GIVEREF(__pyx_t_4);
     PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_4);
     __pyx_t_4 = 0;
-    __pyx_t_4 = __Pyx_PyString_Format(__pyx_kp_s_s, __pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 207, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyString_Format(__pyx_kp_s_s, __pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 203, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __pyx_r = __pyx_t_4;
     __pyx_t_4 = 0;
     goto __pyx_L0;
 
-    /* "pymaptools/_containers.pyx":206
+    /* "pymaptools/_containers.pyx":202
  * 
  *     def __repr__(self):
  *         if not self:             # <<<<<<<<<<<<<<
@@ -4602,7 +4446,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_48__repr__(str
  */
   }
 
-  /* "pymaptools/_containers.pyx":208
+  /* "pymaptools/_containers.pyx":204
  *         if not self:
  *             return '%s()' % (self.__class__.__name__,)
  *         return '%s(%r)' % (self.__class__.__name__, list(self))             # <<<<<<<<<<<<<<
@@ -4610,14 +4454,14 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_48__repr__(str
  *     def _eq__(self, other):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_class); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 208, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_class); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 204, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_name); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 208, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_name); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 204, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = PySequence_List(((PyObject *)__pyx_v_self)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 208, __pyx_L1_error)
+  __pyx_t_4 = PySequence_List(((PyObject *)__pyx_v_self)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 204, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_5 = PyTuple_New(2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 208, __pyx_L1_error)
+  __pyx_t_5 = PyTuple_New(2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 204, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_GIVEREF(__pyx_t_3);
   PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_3);
@@ -4625,14 +4469,14 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_48__repr__(str
   PyTuple_SET_ITEM(__pyx_t_5, 1, __pyx_t_4);
   __pyx_t_3 = 0;
   __pyx_t_4 = 0;
-  __pyx_t_4 = __Pyx_PyString_Format(__pyx_kp_s_s_r, __pyx_t_5); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 208, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyString_Format(__pyx_kp_s_s_r, __pyx_t_5); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 204, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __pyx_r = __pyx_t_4;
   __pyx_t_4 = 0;
   goto __pyx_L0;
 
-  /* "pymaptools/_containers.pyx":205
+  /* "pymaptools/_containers.pyx":201
  *         return reversed(self._map.keys())
  * 
  *     def __repr__(self):             # <<<<<<<<<<<<<<
@@ -4653,7 +4497,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_48__repr__(str
   return __pyx_r;
 }
 
-/* "pymaptools/_containers.pyx":210
+/* "pymaptools/_containers.pyx":206
  *         return '%s(%r)' % (self.__class__.__name__, list(self))
  * 
  *     def _eq__(self, other):             # <<<<<<<<<<<<<<
@@ -4662,19 +4506,19 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_48__repr__(str
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_10pymaptools_11_containers_10OrderedSet_51_eq__(PyObject *__pyx_v_self, PyObject *__pyx_v_other); /*proto*/
-static PyObject *__pyx_pw_10pymaptools_11_containers_10OrderedSet_51_eq__(PyObject *__pyx_v_self, PyObject *__pyx_v_other) {
+static PyObject *__pyx_pw_10pymaptools_11_containers_10OrderedSet_49_eq__(PyObject *__pyx_v_self, PyObject *__pyx_v_other); /*proto*/
+static PyObject *__pyx_pw_10pymaptools_11_containers_10OrderedSet_49_eq__(PyObject *__pyx_v_self, PyObject *__pyx_v_other) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("_eq__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_10pymaptools_11_containers_10OrderedSet_50_eq__(((struct __pyx_obj_10pymaptools_11_containers_OrderedSet *)__pyx_v_self), ((PyObject *)__pyx_v_other));
+  __pyx_r = __pyx_pf_10pymaptools_11_containers_10OrderedSet_48_eq__(((struct __pyx_obj_10pymaptools_11_containers_OrderedSet *)__pyx_v_self), ((PyObject *)__pyx_v_other));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_50_eq__(struct __pyx_obj_10pymaptools_11_containers_OrderedSet *__pyx_v_self, PyObject *__pyx_v_other) {
+static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_48_eq__(struct __pyx_obj_10pymaptools_11_containers_OrderedSet *__pyx_v_self, PyObject *__pyx_v_other) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   int __pyx_t_1;
@@ -4688,7 +4532,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_50_eq__(struct
   PyObject *__pyx_t_9 = NULL;
   __Pyx_RefNannySetupContext("_eq__", 0);
 
-  /* "pymaptools/_containers.pyx":211
+  /* "pymaptools/_containers.pyx":207
  * 
  *     def _eq__(self, other):
  *         if isinstance(other, OrderedSet):             # <<<<<<<<<<<<<<
@@ -4699,7 +4543,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_50_eq__(struct
   __pyx_t_2 = (__pyx_t_1 != 0);
   if (__pyx_t_2) {
 
-    /* "pymaptools/_containers.pyx":212
+    /* "pymaptools/_containers.pyx":208
  *     def _eq__(self, other):
  *         if isinstance(other, OrderedSet):
  *             return set.__eq__(self, other) and all(_imap(_eq, self, other))             # <<<<<<<<<<<<<<
@@ -4707,7 +4551,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_50_eq__(struct
  * 
  */
     __Pyx_XDECREF(__pyx_r);
-    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(((PyObject *)(&PySet_Type)), __pyx_n_s_eq); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 212, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(((PyObject *)(&PySet_Type)), __pyx_n_s_eq); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 208, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __pyx_t_6 = NULL;
     __pyx_t_7 = 0;
@@ -4721,7 +4565,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_50_eq__(struct
         __pyx_t_7 = 1;
       }
     }
-    __pyx_t_8 = PyTuple_New(2+__pyx_t_7); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 212, __pyx_L1_error)
+    __pyx_t_8 = PyTuple_New(2+__pyx_t_7); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 208, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_8);
     if (__pyx_t_6) {
       __Pyx_GIVEREF(__pyx_t_6); PyTuple_SET_ITEM(__pyx_t_8, 0, __pyx_t_6); __pyx_t_6 = NULL;
@@ -4732,11 +4576,11 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_50_eq__(struct
     __Pyx_INCREF(__pyx_v_other);
     __Pyx_GIVEREF(__pyx_v_other);
     PyTuple_SET_ITEM(__pyx_t_8, 1+__pyx_t_7, __pyx_v_other);
-    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_8, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 212, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_8, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 208, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 212, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 208, __pyx_L1_error)
     if (__pyx_t_2) {
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     } else {
@@ -4745,9 +4589,9 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_50_eq__(struct
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       goto __pyx_L4_bool_binop_done;
     }
-    __pyx_t_5 = __Pyx_GetModuleGlobalName(__pyx_n_s_imap); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 212, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_GetModuleGlobalName(__pyx_n_s_imap); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 208, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_8 = __Pyx_GetModuleGlobalName(__pyx_n_s_eq_2); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 212, __pyx_L1_error)
+    __pyx_t_8 = __Pyx_GetModuleGlobalName(__pyx_n_s_eq_2); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 208, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_8);
     __pyx_t_6 = NULL;
     __pyx_t_7 = 0;
@@ -4761,7 +4605,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_50_eq__(struct
         __pyx_t_7 = 1;
       }
     }
-    __pyx_t_9 = PyTuple_New(3+__pyx_t_7); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 212, __pyx_L1_error)
+    __pyx_t_9 = PyTuple_New(3+__pyx_t_7); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 208, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_9);
     if (__pyx_t_6) {
       __Pyx_GIVEREF(__pyx_t_6); PyTuple_SET_ITEM(__pyx_t_9, 0, __pyx_t_6); __pyx_t_6 = NULL;
@@ -4775,16 +4619,16 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_50_eq__(struct
     __Pyx_GIVEREF(__pyx_v_other);
     PyTuple_SET_ITEM(__pyx_t_9, 2+__pyx_t_7, __pyx_v_other);
     __pyx_t_8 = 0;
-    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_9, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 212, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_9, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 208, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __pyx_t_5 = PyTuple_New(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 212, __pyx_L1_error)
+    __pyx_t_5 = PyTuple_New(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 208, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_GIVEREF(__pyx_t_4);
     PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_4);
     __pyx_t_4 = 0;
-    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_builtin_all, __pyx_t_5, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 212, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_builtin_all, __pyx_t_5, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 208, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     __Pyx_INCREF(__pyx_t_4);
@@ -4795,7 +4639,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_50_eq__(struct
     __pyx_t_3 = 0;
     goto __pyx_L0;
 
-    /* "pymaptools/_containers.pyx":211
+    /* "pymaptools/_containers.pyx":207
  * 
  *     def _eq__(self, other):
  *         if isinstance(other, OrderedSet):             # <<<<<<<<<<<<<<
@@ -4804,7 +4648,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_50_eq__(struct
  */
   }
 
-  /* "pymaptools/_containers.pyx":213
+  /* "pymaptools/_containers.pyx":209
  *         if isinstance(other, OrderedSet):
  *             return set.__eq__(self, other) and all(_imap(_eq, self, other))
  *         return set.__eq__(self, other)             # <<<<<<<<<<<<<<
@@ -4812,7 +4656,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_50_eq__(struct
  *     def _ne__(self, other):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)(&PySet_Type)), __pyx_n_s_eq); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 213, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)(&PySet_Type)), __pyx_n_s_eq); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 209, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __pyx_t_5 = NULL;
   __pyx_t_7 = 0;
@@ -4826,7 +4670,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_50_eq__(struct
       __pyx_t_7 = 1;
     }
   }
-  __pyx_t_9 = PyTuple_New(2+__pyx_t_7); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 213, __pyx_L1_error)
+  __pyx_t_9 = PyTuple_New(2+__pyx_t_7); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 209, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_9);
   if (__pyx_t_5) {
     __Pyx_GIVEREF(__pyx_t_5); PyTuple_SET_ITEM(__pyx_t_9, 0, __pyx_t_5); __pyx_t_5 = NULL;
@@ -4837,7 +4681,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_50_eq__(struct
   __Pyx_INCREF(__pyx_v_other);
   __Pyx_GIVEREF(__pyx_v_other);
   PyTuple_SET_ITEM(__pyx_t_9, 1+__pyx_t_7, __pyx_v_other);
-  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_9, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 213, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_9, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 209, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
@@ -4845,7 +4689,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_50_eq__(struct
   __pyx_t_3 = 0;
   goto __pyx_L0;
 
-  /* "pymaptools/_containers.pyx":210
+  /* "pymaptools/_containers.pyx":206
  *         return '%s(%r)' % (self.__class__.__name__, list(self))
  * 
  *     def _eq__(self, other):             # <<<<<<<<<<<<<<
@@ -4869,7 +4713,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_50_eq__(struct
   return __pyx_r;
 }
 
-/* "pymaptools/_containers.pyx":215
+/* "pymaptools/_containers.pyx":211
  *         return set.__eq__(self, other)
  * 
  *     def _ne__(self, other):             # <<<<<<<<<<<<<<
@@ -4878,26 +4722,26 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_50_eq__(struct
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_10pymaptools_11_containers_10OrderedSet_53_ne__(PyObject *__pyx_v_self, PyObject *__pyx_v_other); /*proto*/
-static PyObject *__pyx_pw_10pymaptools_11_containers_10OrderedSet_53_ne__(PyObject *__pyx_v_self, PyObject *__pyx_v_other) {
+static PyObject *__pyx_pw_10pymaptools_11_containers_10OrderedSet_51_ne__(PyObject *__pyx_v_self, PyObject *__pyx_v_other); /*proto*/
+static PyObject *__pyx_pw_10pymaptools_11_containers_10OrderedSet_51_ne__(PyObject *__pyx_v_self, PyObject *__pyx_v_other) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("_ne__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_10pymaptools_11_containers_10OrderedSet_52_ne__(((struct __pyx_obj_10pymaptools_11_containers_OrderedSet *)__pyx_v_self), ((PyObject *)__pyx_v_other));
+  __pyx_r = __pyx_pf_10pymaptools_11_containers_10OrderedSet_50_ne__(((struct __pyx_obj_10pymaptools_11_containers_OrderedSet *)__pyx_v_self), ((PyObject *)__pyx_v_other));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_52_ne__(struct __pyx_obj_10pymaptools_11_containers_OrderedSet *__pyx_v_self, PyObject *__pyx_v_other) {
+static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_50_ne__(struct __pyx_obj_10pymaptools_11_containers_OrderedSet *__pyx_v_self, PyObject *__pyx_v_other) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
   int __pyx_t_2;
   __Pyx_RefNannySetupContext("_ne__", 0);
 
-  /* "pymaptools/_containers.pyx":216
+  /* "pymaptools/_containers.pyx":212
  * 
  *     def _ne__(self, other):
  *         return not self == other             # <<<<<<<<<<<<<<
@@ -4905,16 +4749,16 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_52_ne__(struct
  *     def __richcmp__(self, other, int op):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyObject_RichCompare(((PyObject *)__pyx_v_self), __pyx_v_other, Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 216, __pyx_L1_error)
-  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 216, __pyx_L1_error)
+  __pyx_t_1 = PyObject_RichCompare(((PyObject *)__pyx_v_self), __pyx_v_other, Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 212, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 212, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyBool_FromLong((!__pyx_t_2)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 216, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyBool_FromLong((!__pyx_t_2)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 212, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "pymaptools/_containers.pyx":215
+  /* "pymaptools/_containers.pyx":211
  *         return set.__eq__(self, other)
  * 
  *     def _ne__(self, other):             # <<<<<<<<<<<<<<
@@ -4933,7 +4777,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_52_ne__(struct
   return __pyx_r;
 }
 
-/* "pymaptools/_containers.pyx":218
+/* "pymaptools/_containers.pyx":214
  *         return not self == other
  * 
  *     def __richcmp__(self, other, int op):             # <<<<<<<<<<<<<<
@@ -4942,19 +4786,19 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_52_ne__(struct
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_10pymaptools_11_containers_10OrderedSet_55__richcmp__(PyObject *__pyx_v_self, PyObject *__pyx_v_other, int __pyx_v_op); /*proto*/
-static PyObject *__pyx_pw_10pymaptools_11_containers_10OrderedSet_55__richcmp__(PyObject *__pyx_v_self, PyObject *__pyx_v_other, int __pyx_v_op) {
+static PyObject *__pyx_pw_10pymaptools_11_containers_10OrderedSet_53__richcmp__(PyObject *__pyx_v_self, PyObject *__pyx_v_other, int __pyx_v_op); /*proto*/
+static PyObject *__pyx_pw_10pymaptools_11_containers_10OrderedSet_53__richcmp__(PyObject *__pyx_v_self, PyObject *__pyx_v_other, int __pyx_v_op) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__richcmp__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_10pymaptools_11_containers_10OrderedSet_54__richcmp__(((PyObject *)__pyx_v_self), ((PyObject *)__pyx_v_other), ((int)__pyx_v_op));
+  __pyx_r = __pyx_pf_10pymaptools_11_containers_10OrderedSet_52__richcmp__(((PyObject *)__pyx_v_self), ((PyObject *)__pyx_v_other), ((int)__pyx_v_op));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_54__richcmp__(PyObject *__pyx_v_self, PyObject *__pyx_v_other, int __pyx_v_op) {
+static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_52__richcmp__(PyObject *__pyx_v_self, PyObject *__pyx_v_other, int __pyx_v_op) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   int __pyx_t_1;
@@ -4964,7 +4808,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_54__richcmp__(
   PyObject *__pyx_t_5 = NULL;
   __Pyx_RefNannySetupContext("__richcmp__", 0);
 
-  /* "pymaptools/_containers.pyx":219
+  /* "pymaptools/_containers.pyx":215
  * 
  *     def __richcmp__(self, other, int op):
  *         if op == Py_EQ:             # <<<<<<<<<<<<<<
@@ -4974,7 +4818,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_54__richcmp__(
   __pyx_t_1 = ((__pyx_v_op == Py_EQ) != 0);
   if (__pyx_t_1) {
 
-    /* "pymaptools/_containers.pyx":220
+    /* "pymaptools/_containers.pyx":216
  *     def __richcmp__(self, other, int op):
  *         if op == Py_EQ:
  *             return self._eq__(other)             # <<<<<<<<<<<<<<
@@ -4982,7 +4826,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_54__richcmp__(
  *             return self._ne__(other)
  */
     __Pyx_XDECREF(__pyx_r);
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_eq_3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 220, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_eq_3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 216, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __pyx_t_4 = NULL;
     if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_3))) {
@@ -4995,16 +4839,16 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_54__richcmp__(
       }
     }
     if (!__pyx_t_4) {
-      __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_v_other); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 220, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_v_other); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 216, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
     } else {
-      __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 220, __pyx_L1_error)
+      __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 216, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
       __Pyx_GIVEREF(__pyx_t_4); PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_4); __pyx_t_4 = NULL;
       __Pyx_INCREF(__pyx_v_other);
       __Pyx_GIVEREF(__pyx_v_other);
       PyTuple_SET_ITEM(__pyx_t_5, 0+1, __pyx_v_other);
-      __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_5, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 220, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_5, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 216, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     }
@@ -5013,7 +4857,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_54__richcmp__(
     __pyx_t_2 = 0;
     goto __pyx_L0;
 
-    /* "pymaptools/_containers.pyx":219
+    /* "pymaptools/_containers.pyx":215
  * 
  *     def __richcmp__(self, other, int op):
  *         if op == Py_EQ:             # <<<<<<<<<<<<<<
@@ -5022,7 +4866,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_54__richcmp__(
  */
   }
 
-  /* "pymaptools/_containers.pyx":221
+  /* "pymaptools/_containers.pyx":217
  *         if op == Py_EQ:
  *             return self._eq__(other)
  *         if op == Py_NE:             # <<<<<<<<<<<<<<
@@ -5032,7 +4876,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_54__richcmp__(
   __pyx_t_1 = ((__pyx_v_op == Py_NE) != 0);
   if (__pyx_t_1) {
 
-    /* "pymaptools/_containers.pyx":222
+    /* "pymaptools/_containers.pyx":218
  *             return self._eq__(other)
  *         if op == Py_NE:
  *             return self._ne__(other)             # <<<<<<<<<<<<<<
@@ -5040,7 +4884,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_54__richcmp__(
  * 
  */
     __Pyx_XDECREF(__pyx_r);
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_ne); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 222, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_ne); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 218, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __pyx_t_5 = NULL;
     if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_3))) {
@@ -5053,16 +4897,16 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_54__richcmp__(
       }
     }
     if (!__pyx_t_5) {
-      __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_v_other); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 222, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_v_other); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 218, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
     } else {
-      __pyx_t_4 = PyTuple_New(1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 222, __pyx_L1_error)
+      __pyx_t_4 = PyTuple_New(1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 218, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_GIVEREF(__pyx_t_5); PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_5); __pyx_t_5 = NULL;
       __Pyx_INCREF(__pyx_v_other);
       __Pyx_GIVEREF(__pyx_v_other);
       PyTuple_SET_ITEM(__pyx_t_4, 0+1, __pyx_v_other);
-      __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_4, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 222, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_4, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 218, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     }
@@ -5071,7 +4915,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_54__richcmp__(
     __pyx_t_2 = 0;
     goto __pyx_L0;
 
-    /* "pymaptools/_containers.pyx":221
+    /* "pymaptools/_containers.pyx":217
  *         if op == Py_EQ:
  *             return self._eq__(other)
  *         if op == Py_NE:             # <<<<<<<<<<<<<<
@@ -5080,7 +4924,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_54__richcmp__(
  */
   }
 
-  /* "pymaptools/_containers.pyx":223
+  /* "pymaptools/_containers.pyx":219
  *         if op == Py_NE:
  *             return self._ne__(other)
  *         return PyObject_RichCompare(id(self), id(other), op)             # <<<<<<<<<<<<<<
@@ -5088,23 +4932,23 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_54__richcmp__(
  * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_2 = PyTuple_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 223, __pyx_L1_error)
+  __pyx_t_2 = PyTuple_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 219, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_INCREF(__pyx_v_self);
   __Pyx_GIVEREF(__pyx_v_self);
   PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_v_self);
-  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_id, __pyx_t_2, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 223, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_id, __pyx_t_2, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 219, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = PyTuple_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 223, __pyx_L1_error)
+  __pyx_t_2 = PyTuple_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 219, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_INCREF(__pyx_v_other);
   __Pyx_GIVEREF(__pyx_v_other);
   PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_v_other);
-  __pyx_t_4 = __Pyx_PyObject_Call(__pyx_builtin_id, __pyx_t_2, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 223, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_Call(__pyx_builtin_id, __pyx_t_2, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 219, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = PyObject_RichCompare(__pyx_t_3, __pyx_t_4, __pyx_v_op); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 223, __pyx_L1_error)
+  __pyx_t_2 = PyObject_RichCompare(__pyx_t_3, __pyx_t_4, __pyx_v_op); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 219, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
@@ -5112,7 +4956,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_54__richcmp__(
   __pyx_t_2 = 0;
   goto __pyx_L0;
 
-  /* "pymaptools/_containers.pyx":218
+  /* "pymaptools/_containers.pyx":214
  *         return not self == other
  * 
  *     def __richcmp__(self, other, int op):             # <<<<<<<<<<<<<<
@@ -5134,7 +4978,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_10OrderedSet_54__richcmp__(
   return __pyx_r;
 }
 
-/* "pymaptools/_containers.pyx":234
+/* "pymaptools/_containers.pyx":230
  *     cdef object default_factory
  * 
  *     def __init__(self, default_factory=None, *args, **kwargs):             # <<<<<<<<<<<<<<
@@ -5186,7 +5030,7 @@ static int __pyx_pw_10pymaptools_11_containers_18DefaultOrderedDict_1__init__(Py
       }
       if (unlikely(kw_args > 0)) {
         const Py_ssize_t used_pos_args = (pos_args < 1) ? pos_args : 1;
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, __pyx_v_kwargs, values, used_pos_args, "__init__") < 0)) __PYX_ERR(0, 234, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, __pyx_v_kwargs, values, used_pos_args, "__init__") < 0)) __PYX_ERR(0, 230, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -5225,7 +5069,7 @@ static int __pyx_pf_10pymaptools_11_containers_18DefaultOrderedDict___init__(str
   PyObject *__pyx_t_6 = NULL;
   __Pyx_RefNannySetupContext("__init__", 0);
 
-  /* "pymaptools/_containers.pyx":235
+  /* "pymaptools/_containers.pyx":231
  * 
  *     def __init__(self, default_factory=None, *args, **kwargs):
  *         if (default_factory is not None and             # <<<<<<<<<<<<<<
@@ -5240,22 +5084,22 @@ static int __pyx_pf_10pymaptools_11_containers_18DefaultOrderedDict___init__(str
     goto __pyx_L4_bool_binop_done;
   }
 
-  /* "pymaptools/_containers.pyx":236
+  /* "pymaptools/_containers.pyx":232
  *     def __init__(self, default_factory=None, *args, **kwargs):
  *         if (default_factory is not None and
  *                 not isinstance(default_factory, Callable)):             # <<<<<<<<<<<<<<
  *             raise TypeError('first argument must be callable')
  *         OrderedDict.__init__(self, *args, **kwargs)
  */
-  __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_Callable); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 236, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_Callable); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 232, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_3 = PyObject_IsInstance(__pyx_v_default_factory, __pyx_t_4); if (unlikely(__pyx_t_3 == -1)) __PYX_ERR(0, 236, __pyx_L1_error)
+  __pyx_t_3 = PyObject_IsInstance(__pyx_v_default_factory, __pyx_t_4); if (unlikely(__pyx_t_3 == -1)) __PYX_ERR(0, 232, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_t_2 = ((!(__pyx_t_3 != 0)) != 0);
   __pyx_t_1 = __pyx_t_2;
   __pyx_L4_bool_binop_done:;
 
-  /* "pymaptools/_containers.pyx":235
+  /* "pymaptools/_containers.pyx":231
  * 
  *     def __init__(self, default_factory=None, *args, **kwargs):
  *         if (default_factory is not None and             # <<<<<<<<<<<<<<
@@ -5264,20 +5108,20 @@ static int __pyx_pf_10pymaptools_11_containers_18DefaultOrderedDict___init__(str
  */
   if (__pyx_t_1) {
 
-    /* "pymaptools/_containers.pyx":237
+    /* "pymaptools/_containers.pyx":233
  *         if (default_factory is not None and
  *                 not isinstance(default_factory, Callable)):
  *             raise TypeError('first argument must be callable')             # <<<<<<<<<<<<<<
  *         OrderedDict.__init__(self, *args, **kwargs)
  *         self.default_factory = default_factory
  */
-    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__3, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 237, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__3, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 233, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_Raise(__pyx_t_4, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __PYX_ERR(0, 237, __pyx_L1_error)
+    __PYX_ERR(0, 233, __pyx_L1_error)
 
-    /* "pymaptools/_containers.pyx":235
+    /* "pymaptools/_containers.pyx":231
  * 
  *     def __init__(self, default_factory=None, *args, **kwargs):
  *         if (default_factory is not None and             # <<<<<<<<<<<<<<
@@ -5286,30 +5130,30 @@ static int __pyx_pf_10pymaptools_11_containers_18DefaultOrderedDict___init__(str
  */
   }
 
-  /* "pymaptools/_containers.pyx":238
+  /* "pymaptools/_containers.pyx":234
  *                 not isinstance(default_factory, Callable)):
  *             raise TypeError('first argument must be callable')
  *         OrderedDict.__init__(self, *args, **kwargs)             # <<<<<<<<<<<<<<
  *         self.default_factory = default_factory
  * 
  */
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_ptype_10pymaptools_14_cyordereddict_OrderedDict), __pyx_n_s_init); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 238, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_ptype_10pymaptools_14_cyordereddict_OrderedDict), __pyx_n_s_init); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 234, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_5 = PyTuple_New(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 238, __pyx_L1_error)
+  __pyx_t_5 = PyTuple_New(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 234, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_INCREF(((PyObject *)__pyx_v_self));
   __Pyx_GIVEREF(((PyObject *)__pyx_v_self));
   PyTuple_SET_ITEM(__pyx_t_5, 0, ((PyObject *)__pyx_v_self));
-  __pyx_t_6 = PyNumber_Add(__pyx_t_5, __pyx_v_args); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 238, __pyx_L1_error)
+  __pyx_t_6 = PyNumber_Add(__pyx_t_5, __pyx_v_args); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 234, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_6, __pyx_v_kwargs); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 238, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_6, __pyx_v_kwargs); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 234, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-  /* "pymaptools/_containers.pyx":239
+  /* "pymaptools/_containers.pyx":235
  *             raise TypeError('first argument must be callable')
  *         OrderedDict.__init__(self, *args, **kwargs)
  *         self.default_factory = default_factory             # <<<<<<<<<<<<<<
@@ -5322,7 +5166,7 @@ static int __pyx_pf_10pymaptools_11_containers_18DefaultOrderedDict___init__(str
   __Pyx_DECREF(__pyx_v_self->default_factory);
   __pyx_v_self->default_factory = __pyx_v_default_factory;
 
-  /* "pymaptools/_containers.pyx":234
+  /* "pymaptools/_containers.pyx":230
  *     cdef object default_factory
  * 
  *     def __init__(self, default_factory=None, *args, **kwargs):             # <<<<<<<<<<<<<<
@@ -5344,7 +5188,7 @@ static int __pyx_pf_10pymaptools_11_containers_18DefaultOrderedDict___init__(str
   return __pyx_r;
 }
 
-/* "pymaptools/_containers.pyx":241
+/* "pymaptools/_containers.pyx":237
  *         self.default_factory = default_factory
  * 
  *     def __getitem__(self, key):             # <<<<<<<<<<<<<<
@@ -5382,7 +5226,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_18DefaultOrderedDict_2__get
   PyObject *__pyx_t_12 = NULL;
   __Pyx_RefNannySetupContext("__getitem__", 0);
 
-  /* "pymaptools/_containers.pyx":242
+  /* "pymaptools/_containers.pyx":238
  * 
  *     def __getitem__(self, key):
  *         try:             # <<<<<<<<<<<<<<
@@ -5398,7 +5242,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_18DefaultOrderedDict_2__get
     __Pyx_XGOTREF(__pyx_t_3);
     /*try:*/ {
 
-      /* "pymaptools/_containers.pyx":243
+      /* "pymaptools/_containers.pyx":239
  *     def __getitem__(self, key):
  *         try:
  *             return OrderedDict.__getitem__(self, key)             # <<<<<<<<<<<<<<
@@ -5406,7 +5250,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_18DefaultOrderedDict_2__get
  *             return self.__missing__(key)
  */
       __Pyx_XDECREF(__pyx_r);
-      __pyx_t_5 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_ptype_10pymaptools_14_cyordereddict_OrderedDict), __pyx_n_s_getitem); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 243, __pyx_L3_error)
+      __pyx_t_5 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_ptype_10pymaptools_14_cyordereddict_OrderedDict), __pyx_n_s_getitem); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 239, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_5);
       __pyx_t_6 = NULL;
       __pyx_t_7 = 0;
@@ -5420,7 +5264,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_18DefaultOrderedDict_2__get
           __pyx_t_7 = 1;
         }
       }
-      __pyx_t_8 = PyTuple_New(2+__pyx_t_7); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 243, __pyx_L3_error)
+      __pyx_t_8 = PyTuple_New(2+__pyx_t_7); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 239, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_8);
       if (__pyx_t_6) {
         __Pyx_GIVEREF(__pyx_t_6); PyTuple_SET_ITEM(__pyx_t_8, 0, __pyx_t_6); __pyx_t_6 = NULL;
@@ -5431,7 +5275,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_18DefaultOrderedDict_2__get
       __Pyx_INCREF(__pyx_v_key);
       __Pyx_GIVEREF(__pyx_v_key);
       PyTuple_SET_ITEM(__pyx_t_8, 1+__pyx_t_7, __pyx_v_key);
-      __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_8, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 243, __pyx_L3_error)
+      __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_8, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 239, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
@@ -5439,7 +5283,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_18DefaultOrderedDict_2__get
       __pyx_t_4 = 0;
       goto __pyx_L7_try_return;
 
-      /* "pymaptools/_containers.pyx":242
+      /* "pymaptools/_containers.pyx":238
  * 
  *     def __getitem__(self, key):
  *         try:             # <<<<<<<<<<<<<<
@@ -5454,7 +5298,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_18DefaultOrderedDict_2__get
     __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
     __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-    /* "pymaptools/_containers.pyx":244
+    /* "pymaptools/_containers.pyx":240
  *         try:
  *             return OrderedDict.__getitem__(self, key)
  *         except KeyError:             # <<<<<<<<<<<<<<
@@ -5464,12 +5308,12 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_18DefaultOrderedDict_2__get
     __pyx_t_9 = __Pyx_PyErr_ExceptionMatches(__pyx_builtin_KeyError);
     if (__pyx_t_9) {
       __Pyx_AddTraceback("pymaptools._containers.DefaultOrderedDict.__getitem__", __pyx_clineno, __pyx_lineno, __pyx_filename);
-      if (__Pyx_GetException(&__pyx_t_4, &__pyx_t_5, &__pyx_t_8) < 0) __PYX_ERR(0, 244, __pyx_L5_except_error)
+      if (__Pyx_GetException(&__pyx_t_4, &__pyx_t_5, &__pyx_t_8) < 0) __PYX_ERR(0, 240, __pyx_L5_except_error)
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_GOTREF(__pyx_t_5);
       __Pyx_GOTREF(__pyx_t_8);
 
-      /* "pymaptools/_containers.pyx":245
+      /* "pymaptools/_containers.pyx":241
  *             return OrderedDict.__getitem__(self, key)
  *         except KeyError:
  *             return self.__missing__(key)             # <<<<<<<<<<<<<<
@@ -5477,7 +5321,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_18DefaultOrderedDict_2__get
  *     def __missing__(self, key):
  */
       __Pyx_XDECREF(__pyx_r);
-      __pyx_t_10 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_missing); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 245, __pyx_L5_except_error)
+      __pyx_t_10 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_missing); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 241, __pyx_L5_except_error)
       __Pyx_GOTREF(__pyx_t_10);
       __pyx_t_11 = NULL;
       if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_10))) {
@@ -5490,16 +5334,16 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_18DefaultOrderedDict_2__get
         }
       }
       if (!__pyx_t_11) {
-        __pyx_t_6 = __Pyx_PyObject_CallOneArg(__pyx_t_10, __pyx_v_key); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 245, __pyx_L5_except_error)
+        __pyx_t_6 = __Pyx_PyObject_CallOneArg(__pyx_t_10, __pyx_v_key); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 241, __pyx_L5_except_error)
         __Pyx_GOTREF(__pyx_t_6);
       } else {
-        __pyx_t_12 = PyTuple_New(1+1); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 245, __pyx_L5_except_error)
+        __pyx_t_12 = PyTuple_New(1+1); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 241, __pyx_L5_except_error)
         __Pyx_GOTREF(__pyx_t_12);
         __Pyx_GIVEREF(__pyx_t_11); PyTuple_SET_ITEM(__pyx_t_12, 0, __pyx_t_11); __pyx_t_11 = NULL;
         __Pyx_INCREF(__pyx_v_key);
         __Pyx_GIVEREF(__pyx_v_key);
         PyTuple_SET_ITEM(__pyx_t_12, 0+1, __pyx_v_key);
-        __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_10, __pyx_t_12, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 245, __pyx_L5_except_error)
+        __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_10, __pyx_t_12, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 241, __pyx_L5_except_error)
         __Pyx_GOTREF(__pyx_t_6);
         __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
       }
@@ -5514,7 +5358,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_18DefaultOrderedDict_2__get
     goto __pyx_L5_except_error;
     __pyx_L5_except_error:;
 
-    /* "pymaptools/_containers.pyx":242
+    /* "pymaptools/_containers.pyx":238
  * 
  *     def __getitem__(self, key):
  *         try:             # <<<<<<<<<<<<<<
@@ -5543,7 +5387,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_18DefaultOrderedDict_2__get
     goto __pyx_L0;
   }
 
-  /* "pymaptools/_containers.pyx":241
+  /* "pymaptools/_containers.pyx":237
  *         self.default_factory = default_factory
  * 
  *     def __getitem__(self, key):             # <<<<<<<<<<<<<<
@@ -5568,7 +5412,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_18DefaultOrderedDict_2__get
   return __pyx_r;
 }
 
-/* "pymaptools/_containers.pyx":247
+/* "pymaptools/_containers.pyx":243
  *             return self.__missing__(key)
  * 
  *     def __missing__(self, key):             # <<<<<<<<<<<<<<
@@ -5600,7 +5444,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_18DefaultOrderedDict_4__mis
   PyObject *__pyx_t_5 = NULL;
   __Pyx_RefNannySetupContext("__missing__", 0);
 
-  /* "pymaptools/_containers.pyx":248
+  /* "pymaptools/_containers.pyx":244
  * 
  *     def __missing__(self, key):
  *         if self.default_factory is None:             # <<<<<<<<<<<<<<
@@ -5611,26 +5455,26 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_18DefaultOrderedDict_4__mis
   __pyx_t_2 = (__pyx_t_1 != 0);
   if (__pyx_t_2) {
 
-    /* "pymaptools/_containers.pyx":249
+    /* "pymaptools/_containers.pyx":245
  *     def __missing__(self, key):
  *         if self.default_factory is None:
  *             raise KeyError(key)             # <<<<<<<<<<<<<<
  *         self[key] = value = self.default_factory()
  *         return value
  */
-    __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 249, __pyx_L1_error)
+    __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 245, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_INCREF(__pyx_v_key);
     __Pyx_GIVEREF(__pyx_v_key);
     PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_v_key);
-    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_builtin_KeyError, __pyx_t_3, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 249, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_builtin_KeyError, __pyx_t_3, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 245, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_Raise(__pyx_t_4, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __PYX_ERR(0, 249, __pyx_L1_error)
+    __PYX_ERR(0, 245, __pyx_L1_error)
 
-    /* "pymaptools/_containers.pyx":248
+    /* "pymaptools/_containers.pyx":244
  * 
  *     def __missing__(self, key):
  *         if self.default_factory is None:             # <<<<<<<<<<<<<<
@@ -5639,7 +5483,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_18DefaultOrderedDict_4__mis
  */
   }
 
-  /* "pymaptools/_containers.pyx":250
+  /* "pymaptools/_containers.pyx":246
  *         if self.default_factory is None:
  *             raise KeyError(key)
  *         self[key] = value = self.default_factory()             # <<<<<<<<<<<<<<
@@ -5658,19 +5502,19 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_18DefaultOrderedDict_4__mis
     }
   }
   if (__pyx_t_5) {
-    __pyx_t_4 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_5); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 250, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_5); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 246, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   } else {
-    __pyx_t_4 = __Pyx_PyObject_CallNoArg(__pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 250, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_CallNoArg(__pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 246, __pyx_L1_error)
   }
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(PyObject_SetItem(((PyObject *)__pyx_v_self), __pyx_v_key, __pyx_t_4) < 0)) __PYX_ERR(0, 250, __pyx_L1_error)
+  if (unlikely(PyObject_SetItem(((PyObject *)__pyx_v_self), __pyx_v_key, __pyx_t_4) < 0)) __PYX_ERR(0, 246, __pyx_L1_error)
   __Pyx_INCREF(__pyx_t_4);
   __pyx_v_value = __pyx_t_4;
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "pymaptools/_containers.pyx":251
+  /* "pymaptools/_containers.pyx":247
  *             raise KeyError(key)
  *         self[key] = value = self.default_factory()
  *         return value             # <<<<<<<<<<<<<<
@@ -5682,7 +5526,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_18DefaultOrderedDict_4__mis
   __pyx_r = __pyx_v_value;
   goto __pyx_L0;
 
-  /* "pymaptools/_containers.pyx":247
+  /* "pymaptools/_containers.pyx":243
  *             return self.__missing__(key)
  * 
  *     def __missing__(self, key):             # <<<<<<<<<<<<<<
@@ -5704,7 +5548,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_18DefaultOrderedDict_4__mis
   return __pyx_r;
 }
 
-/* "pymaptools/_containers.pyx":253
+/* "pymaptools/_containers.pyx":249
  *         return value
  * 
  *     def __reduce__(self):             # <<<<<<<<<<<<<<
@@ -5736,7 +5580,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_18DefaultOrderedDict_6__red
   PyObject *__pyx_t_5 = NULL;
   __Pyx_RefNannySetupContext("__reduce__", 0);
 
-  /* "pymaptools/_containers.pyx":254
+  /* "pymaptools/_containers.pyx":250
  * 
  *     def __reduce__(self):
  *         if self.default_factory is None:             # <<<<<<<<<<<<<<
@@ -5747,19 +5591,19 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_18DefaultOrderedDict_6__red
   __pyx_t_2 = (__pyx_t_1 != 0);
   if (__pyx_t_2) {
 
-    /* "pymaptools/_containers.pyx":255
+    /* "pymaptools/_containers.pyx":251
  *     def __reduce__(self):
  *         if self.default_factory is None:
  *             args = tuple()             # <<<<<<<<<<<<<<
  *         else:
  *             args = self.default_factory,
  */
-    __pyx_t_3 = __Pyx_PyObject_Call(((PyObject *)(&PyTuple_Type)), __pyx_empty_tuple, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 255, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_Call(((PyObject *)(&PyTuple_Type)), __pyx_empty_tuple, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 251, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __pyx_v_args = ((PyObject*)__pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "pymaptools/_containers.pyx":254
+    /* "pymaptools/_containers.pyx":250
  * 
  *     def __reduce__(self):
  *         if self.default_factory is None:             # <<<<<<<<<<<<<<
@@ -5769,7 +5613,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_18DefaultOrderedDict_6__red
     goto __pyx_L3;
   }
 
-  /* "pymaptools/_containers.pyx":257
+  /* "pymaptools/_containers.pyx":253
  *             args = tuple()
  *         else:
  *             args = self.default_factory,             # <<<<<<<<<<<<<<
@@ -5777,7 +5621,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_18DefaultOrderedDict_6__red
  * 
  */
   /*else*/ {
-    __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 257, __pyx_L1_error)
+    __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 253, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_INCREF(__pyx_v_self->default_factory);
     __Pyx_GIVEREF(__pyx_v_self->default_factory);
@@ -5787,7 +5631,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_18DefaultOrderedDict_6__red
   }
   __pyx_L3:;
 
-  /* "pymaptools/_containers.pyx":258
+  /* "pymaptools/_containers.pyx":254
  *         else:
  *             args = self.default_factory,
  *         return type(self), args, None, None, self.items()             # <<<<<<<<<<<<<<
@@ -5795,7 +5639,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_18DefaultOrderedDict_6__red
  *     def copy(self):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_items); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 258, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_items); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 254, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __pyx_t_5 = NULL;
   if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_4))) {
@@ -5808,14 +5652,14 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_18DefaultOrderedDict_6__red
     }
   }
   if (__pyx_t_5) {
-    __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 258, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 254, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   } else {
-    __pyx_t_3 = __Pyx_PyObject_CallNoArg(__pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 258, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_CallNoArg(__pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 254, __pyx_L1_error)
   }
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = PyTuple_New(5); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 258, __pyx_L1_error)
+  __pyx_t_4 = PyTuple_New(5); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 254, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_INCREF(((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
   __Pyx_GIVEREF(((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
@@ -5836,7 +5680,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_18DefaultOrderedDict_6__red
   __pyx_t_4 = 0;
   goto __pyx_L0;
 
-  /* "pymaptools/_containers.pyx":253
+  /* "pymaptools/_containers.pyx":249
  *         return value
  * 
  *     def __reduce__(self):             # <<<<<<<<<<<<<<
@@ -5858,7 +5702,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_18DefaultOrderedDict_6__red
   return __pyx_r;
 }
 
-/* "pymaptools/_containers.pyx":260
+/* "pymaptools/_containers.pyx":256
  *         return type(self), args, None, None, self.items()
  * 
  *     def copy(self):             # <<<<<<<<<<<<<<
@@ -5887,7 +5731,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_18DefaultOrderedDict_8copy(
   PyObject *__pyx_t_3 = NULL;
   __Pyx_RefNannySetupContext("copy", 0);
 
-  /* "pymaptools/_containers.pyx":261
+  /* "pymaptools/_containers.pyx":257
  * 
  *     def copy(self):
  *         return self.__copy__()             # <<<<<<<<<<<<<<
@@ -5895,7 +5739,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_18DefaultOrderedDict_8copy(
  *     def __copy__(self):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_copy); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 261, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_copy); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 257, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_3 = NULL;
   if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_2))) {
@@ -5908,10 +5752,10 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_18DefaultOrderedDict_8copy(
     }
   }
   if (__pyx_t_3) {
-    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 261, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 257, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   } else {
-    __pyx_t_1 = __Pyx_PyObject_CallNoArg(__pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 261, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_CallNoArg(__pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 257, __pyx_L1_error)
   }
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -5919,7 +5763,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_18DefaultOrderedDict_8copy(
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "pymaptools/_containers.pyx":260
+  /* "pymaptools/_containers.pyx":256
  *         return type(self), args, None, None, self.items()
  * 
  *     def copy(self):             # <<<<<<<<<<<<<<
@@ -5940,7 +5784,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_18DefaultOrderedDict_8copy(
   return __pyx_r;
 }
 
-/* "pymaptools/_containers.pyx":263
+/* "pymaptools/_containers.pyx":259
  *         return self.__copy__()
  * 
  *     def __copy__(self):             # <<<<<<<<<<<<<<
@@ -5971,7 +5815,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_18DefaultOrderedDict_10__co
   PyObject *__pyx_t_5 = NULL;
   __Pyx_RefNannySetupContext("__copy__", 0);
 
-  /* "pymaptools/_containers.pyx":264
+  /* "pymaptools/_containers.pyx":260
  * 
  *     def __copy__(self):
  *         return type(self)(self.default_factory, self)             # <<<<<<<<<<<<<<
@@ -5992,7 +5836,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_18DefaultOrderedDict_10__co
       __pyx_t_4 = 1;
     }
   }
-  __pyx_t_5 = PyTuple_New(2+__pyx_t_4); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 264, __pyx_L1_error)
+  __pyx_t_5 = PyTuple_New(2+__pyx_t_4); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 260, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   if (__pyx_t_3) {
     __Pyx_GIVEREF(__pyx_t_3); PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_3); __pyx_t_3 = NULL;
@@ -6003,7 +5847,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_18DefaultOrderedDict_10__co
   __Pyx_INCREF(((PyObject *)__pyx_v_self));
   __Pyx_GIVEREF(((PyObject *)__pyx_v_self));
   PyTuple_SET_ITEM(__pyx_t_5, 1+__pyx_t_4, ((PyObject *)__pyx_v_self));
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_5, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 264, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_5, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 260, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -6011,7 +5855,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_18DefaultOrderedDict_10__co
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "pymaptools/_containers.pyx":263
+  /* "pymaptools/_containers.pyx":259
  *         return self.__copy__()
  * 
  *     def __copy__(self):             # <<<<<<<<<<<<<<
@@ -6033,7 +5877,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_18DefaultOrderedDict_10__co
   return __pyx_r;
 }
 
-/* "pymaptools/_containers.pyx":266
+/* "pymaptools/_containers.pyx":262
  *         return type(self)(self.default_factory, self)
  * 
  *     def __deepcopy__(self, memo):             # <<<<<<<<<<<<<<
@@ -6065,7 +5909,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_18DefaultOrderedDict_12__de
   Py_ssize_t __pyx_t_6;
   __Pyx_RefNannySetupContext("__deepcopy__", 0);
 
-  /* "pymaptools/_containers.pyx":267
+  /* "pymaptools/_containers.pyx":263
  * 
  *     def __deepcopy__(self, memo):
  *         return type(self)(self.default_factory,             # <<<<<<<<<<<<<<
@@ -6073,17 +5917,17 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_18DefaultOrderedDict_12__de
  */
   __Pyx_XDECREF(__pyx_r);
 
-  /* "pymaptools/_containers.pyx":268
+  /* "pymaptools/_containers.pyx":264
  *     def __deepcopy__(self, memo):
  *         return type(self)(self.default_factory,
  *                           copy.deepcopy(self.items(), memo=memo))             # <<<<<<<<<<<<<<
  */
-  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_copy_2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 268, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_copy_2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 264, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_deepcopy); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 268, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_deepcopy); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 264, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_items); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 268, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_items); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 264, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __pyx_t_5 = NULL;
   if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_4))) {
@@ -6096,22 +5940,22 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_18DefaultOrderedDict_12__de
     }
   }
   if (__pyx_t_5) {
-    __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_5); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 268, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_5); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 264, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   } else {
-    __pyx_t_2 = __Pyx_PyObject_CallNoArg(__pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 268, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_CallNoArg(__pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 264, __pyx_L1_error)
   }
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = PyTuple_New(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 268, __pyx_L1_error)
+  __pyx_t_4 = PyTuple_New(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 264, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_GIVEREF(__pyx_t_2);
   PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_2);
   __pyx_t_2 = 0;
-  __pyx_t_2 = PyDict_New(); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 268, __pyx_L1_error)
+  __pyx_t_2 = PyDict_New(); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 264, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_memo, __pyx_v_memo) < 0) __PYX_ERR(0, 268, __pyx_L1_error)
-  __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_4, __pyx_t_2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 268, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_memo, __pyx_v_memo) < 0) __PYX_ERR(0, 264, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_4, __pyx_t_2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 264, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
@@ -6129,7 +5973,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_18DefaultOrderedDict_12__de
       __pyx_t_6 = 1;
     }
   }
-  __pyx_t_3 = PyTuple_New(2+__pyx_t_6); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 267, __pyx_L1_error)
+  __pyx_t_3 = PyTuple_New(2+__pyx_t_6); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 263, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   if (__pyx_t_4) {
     __Pyx_GIVEREF(__pyx_t_4); PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_4); __pyx_t_4 = NULL;
@@ -6140,7 +5984,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_18DefaultOrderedDict_12__de
   __Pyx_GIVEREF(__pyx_t_5);
   PyTuple_SET_ITEM(__pyx_t_3, 1+__pyx_t_6, __pyx_t_5);
   __pyx_t_5 = 0;
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_3, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 267, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_3, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 263, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -6148,7 +5992,7 @@ static PyObject *__pyx_pf_10pymaptools_11_containers_18DefaultOrderedDict_12__de
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "pymaptools/_containers.pyx":266
+  /* "pymaptools/_containers.pyx":262
  *         return type(self)(self.default_factory, self)
  * 
  *     def __deepcopy__(self, memo):             # <<<<<<<<<<<<<<
@@ -6236,12 +6080,11 @@ static PyMethodDef __pyx_methods_10pymaptools_11_containers_OrderedSet[] = {
   {"__setstate__", (PyCFunction)__pyx_pw_10pymaptools_11_containers_10OrderedSet_31__setstate__, METH_O, 0},
   {"add", (PyCFunction)__pyx_pw_10pymaptools_11_containers_10OrderedSet_35add, METH_O, 0},
   {"update", (PyCFunction)__pyx_pw_10pymaptools_11_containers_10OrderedSet_37update, METH_O, 0},
-  {"update_", (PyCFunction)__pyx_pw_10pymaptools_11_containers_10OrderedSet_39update_, METH_O, 0},
-  {"discard", (PyCFunction)__pyx_pw_10pymaptools_11_containers_10OrderedSet_41discard, METH_O, 0},
-  {"remove", (PyCFunction)__pyx_pw_10pymaptools_11_containers_10OrderedSet_43remove, METH_O, 0},
-  {"__reversed__", (PyCFunction)__pyx_pw_10pymaptools_11_containers_10OrderedSet_47__reversed__, METH_NOARGS, 0},
-  {"_eq__", (PyCFunction)__pyx_pw_10pymaptools_11_containers_10OrderedSet_51_eq__, METH_O, 0},
-  {"_ne__", (PyCFunction)__pyx_pw_10pymaptools_11_containers_10OrderedSet_53_ne__, METH_O, 0},
+  {"discard", (PyCFunction)__pyx_pw_10pymaptools_11_containers_10OrderedSet_39discard, METH_O, 0},
+  {"remove", (PyCFunction)__pyx_pw_10pymaptools_11_containers_10OrderedSet_41remove, METH_O, 0},
+  {"__reversed__", (PyCFunction)__pyx_pw_10pymaptools_11_containers_10OrderedSet_45__reversed__, METH_NOARGS, 0},
+  {"_eq__", (PyCFunction)__pyx_pw_10pymaptools_11_containers_10OrderedSet_49_eq__, METH_O, 0},
+  {"_ne__", (PyCFunction)__pyx_pw_10pymaptools_11_containers_10OrderedSet_51_ne__, METH_O, 0},
   {0, 0, 0, 0}
 };
 
@@ -6341,7 +6184,7 @@ static PyTypeObject __pyx_type_10pymaptools_11_containers_OrderedSet = {
   #if PY_MAJOR_VERSION >= 3
   0, /*tp_as_async*/
   #endif
-  __pyx_pw_10pymaptools_11_containers_10OrderedSet_49__repr__, /*tp_repr*/
+  __pyx_pw_10pymaptools_11_containers_10OrderedSet_47__repr__, /*tp_repr*/
   &__pyx_tp_as_number_OrderedSet, /*tp_as_number*/
   &__pyx_tp_as_sequence_OrderedSet, /*tp_as_sequence*/
   &__pyx_tp_as_mapping_OrderedSet, /*tp_as_mapping*/
@@ -6355,9 +6198,9 @@ static PyTypeObject __pyx_type_10pymaptools_11_containers_OrderedSet = {
   "\n    An OrderedSet is an object complying to MutableSet interface and which\n    remembers its order, so that every entry has an index that can be looked\n    up.\n\n    This version is based on version written by Luminoso Technologies [11]_\n    with the following changes: this class uses OrderedDict as storage and\n    supports key removal. We drop support for indexing, and add support for\n    fixed-size sets with maxlen parameter.\n\n    With a small modification, this class can be made into an LRU cache.\n\n    References\n    ----------\n\n    .. [11] `Github repository by LuminosoInsight\n           <https://github.com/LuminosoInsight/ordered-set>`_\n    ", /*tp_doc*/
   __pyx_tp_traverse_10pymaptools_11_containers_OrderedSet, /*tp_traverse*/
   __pyx_tp_clear_10pymaptools_11_containers_OrderedSet, /*tp_clear*/
-  __pyx_pw_10pymaptools_11_containers_10OrderedSet_55__richcmp__, /*tp_richcompare*/
+  __pyx_pw_10pymaptools_11_containers_10OrderedSet_53__richcmp__, /*tp_richcompare*/
   0, /*tp_weaklistoffset*/
-  __pyx_pw_10pymaptools_11_containers_10OrderedSet_45__iter__, /*tp_iter*/
+  __pyx_pw_10pymaptools_11_containers_10OrderedSet_43__iter__, /*tp_iter*/
   0, /*tp_iternext*/
   __pyx_methods_10pymaptools_11_containers_OrderedSet, /*tp_methods*/
   0, /*tp_members*/
@@ -6600,10 +6443,10 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
 };
 static int __Pyx_InitCachedBuiltins(void) {
   __pyx_builtin_TypeError = __Pyx_GetBuiltinName(__pyx_n_s_TypeError); if (!__pyx_builtin_TypeError) __PYX_ERR(0, 143, __pyx_L1_error)
-  __pyx_builtin_reversed = __Pyx_GetBuiltinName(__pyx_n_s_reversed); if (!__pyx_builtin_reversed) __PYX_ERR(0, 203, __pyx_L1_error)
-  __pyx_builtin_all = __Pyx_GetBuiltinName(__pyx_n_s_all); if (!__pyx_builtin_all) __PYX_ERR(0, 212, __pyx_L1_error)
-  __pyx_builtin_id = __Pyx_GetBuiltinName(__pyx_n_s_id); if (!__pyx_builtin_id) __PYX_ERR(0, 223, __pyx_L1_error)
-  __pyx_builtin_KeyError = __Pyx_GetBuiltinName(__pyx_n_s_KeyError); if (!__pyx_builtin_KeyError) __PYX_ERR(0, 244, __pyx_L1_error)
+  __pyx_builtin_reversed = __Pyx_GetBuiltinName(__pyx_n_s_reversed); if (!__pyx_builtin_reversed) __PYX_ERR(0, 199, __pyx_L1_error)
+  __pyx_builtin_all = __Pyx_GetBuiltinName(__pyx_n_s_all); if (!__pyx_builtin_all) __PYX_ERR(0, 208, __pyx_L1_error)
+  __pyx_builtin_id = __Pyx_GetBuiltinName(__pyx_n_s_id); if (!__pyx_builtin_id) __PYX_ERR(0, 219, __pyx_L1_error)
+  __pyx_builtin_KeyError = __Pyx_GetBuiltinName(__pyx_n_s_KeyError); if (!__pyx_builtin_KeyError) __PYX_ERR(0, 240, __pyx_L1_error)
   return 0;
   __pyx_L1_error:;
   return -1;
@@ -6635,14 +6478,14 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__2);
   __Pyx_GIVEREF(__pyx_tuple__2);
 
-  /* "pymaptools/_containers.pyx":237
+  /* "pymaptools/_containers.pyx":233
  *         if (default_factory is not None and
  *                 not isinstance(default_factory, Callable)):
  *             raise TypeError('first argument must be callable')             # <<<<<<<<<<<<<<
  *         OrderedDict.__init__(self, *args, **kwargs)
  *         self.default_factory = default_factory
  */
-  __pyx_tuple__3 = PyTuple_Pack(1, __pyx_kp_s_first_argument_must_be_callable); if (unlikely(!__pyx_tuple__3)) __PYX_ERR(0, 237, __pyx_L1_error)
+  __pyx_tuple__3 = PyTuple_Pack(1, __pyx_kp_s_first_argument_must_be_callable); if (unlikely(!__pyx_tuple__3)) __PYX_ERR(0, 233, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__3);
   __Pyx_GIVEREF(__pyx_tuple__3);
 
@@ -6773,9 +6616,9 @@ PyMODINIT_FUNC PyInit__containers(void)
   __pyx_ptype_10pymaptools_11_containers_OrderedSet = &__pyx_type_10pymaptools_11_containers_OrderedSet;
   __pyx_ptype_10pymaptools_14_cyordereddict_OrderedDict = __Pyx_ImportType("pymaptools._cyordereddict", "OrderedDict", sizeof(struct __pyx_obj_10pymaptools_14_cyordereddict_OrderedDict), 1); if (unlikely(!__pyx_ptype_10pymaptools_14_cyordereddict_OrderedDict)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_type_10pymaptools_11_containers_DefaultOrderedDict.tp_base = __pyx_ptype_10pymaptools_14_cyordereddict_OrderedDict;
-  if (PyType_Ready(&__pyx_type_10pymaptools_11_containers_DefaultOrderedDict) < 0) __PYX_ERR(0, 226, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_10pymaptools_11_containers_DefaultOrderedDict) < 0) __PYX_ERR(0, 222, __pyx_L1_error)
   __pyx_type_10pymaptools_11_containers_DefaultOrderedDict.tp_print = 0;
-  if (PyObject_SetAttrString(__pyx_m, "DefaultOrderedDict", (PyObject *)&__pyx_type_10pymaptools_11_containers_DefaultOrderedDict) < 0) __PYX_ERR(0, 226, __pyx_L1_error)
+  if (PyObject_SetAttrString(__pyx_m, "DefaultOrderedDict", (PyObject *)&__pyx_type_10pymaptools_11_containers_DefaultOrderedDict) < 0) __PYX_ERR(0, 222, __pyx_L1_error)
   __pyx_ptype_10pymaptools_11_containers_DefaultOrderedDict = &__pyx_type_10pymaptools_11_containers_DefaultOrderedDict;
   /*--- Type import code ---*/
   __pyx_ptype_7cpython_4type_type = __Pyx_ImportType(__Pyx_BUILTIN_MODULE_NAME, "type", 
@@ -6924,16 +6767,16 @@ PyMODINIT_FUNC PyInit__containers(void)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   PyType_Modified(__pyx_ptype_10pymaptools_11_containers_OrderedSet);
 
-  /* "pymaptools/_containers.pyx":187
+  /* "pymaptools/_containers.pyx":183
  *             self.add(item)
  * 
  *     append = add             # <<<<<<<<<<<<<<
  * 
  *     def discard(self, key):
  */
-  __pyx_t_2 = __Pyx_GetNameInClass((PyObject *)__pyx_ptype_10pymaptools_11_containers_OrderedSet, __pyx_n_s_add); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 187, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_GetNameInClass((PyObject *)__pyx_ptype_10pymaptools_11_containers_OrderedSet, __pyx_n_s_add); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 183, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem((PyObject *)__pyx_ptype_10pymaptools_11_containers_OrderedSet->tp_dict, __pyx_n_s_append, __pyx_t_2) < 0) __PYX_ERR(0, 187, __pyx_L1_error)
+  if (PyDict_SetItem((PyObject *)__pyx_ptype_10pymaptools_11_containers_OrderedSet->tp_dict, __pyx_n_s_append, __pyx_t_2) < 0) __PYX_ERR(0, 183, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   PyType_Modified(__pyx_ptype_10pymaptools_11_containers_OrderedSet);
 

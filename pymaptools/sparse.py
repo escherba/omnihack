@@ -1,4 +1,4 @@
-from funcy import partial
+from functools import partial
 from itertools import izip
 from tqdm import tqdm
 from scipy.sparse import coo_matrix

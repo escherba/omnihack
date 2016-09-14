@@ -1,9 +1,9 @@
-__version__ = '0.2.30'
+__version__ = '0.2.31'
 
 from collections import defaultdict
 from functools import partial
-from funcy import compose
 from itertools import imap
+from pymaptools.func import compose
 
 
 def amap(f, g):
