@@ -1,8 +1,11 @@
 Various tools for data wrangling
 ================================
 
-This repository contains an eclectic collection of algorithm and container
-implementations that I have been using in data analysis.
+This is an eclectic collection of algorithms, containers
+and miscellania that I have used for data analysis.
+
+Installation
+------------
 
 .. code-block:: bash
 
