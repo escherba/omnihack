@@ -100,20 +100,24 @@ def run(args):
         sys.stderr.write("You did not specify database name\n")
         sys.exit(1)
 
-    cmd = """
+    d = {}
+    d['charset'] = args.charset
+    d['host'] = '--host=%s' % args.host if args.host else ''
+    d['port'] = '--port=%s' % args.port if args.port else ''
+    d['user'] = '--user=%s' % args.user if args.user else ''
+    d['password'] = '--password=%s' % args.pwd if args.pwd else ''
+    d['databases'] = '--databases %s' % args.db if args.db else ''
+    d['tables'] = '--tables %s' % args.table if args.table else ''
+
+    template = """
     mysqldump --quick --compress --extended-insert=false --complete-insert=true
       --single-transaction --skip-lock-tables --default-character-set=%(charset)s
       --skip-add-drop-table --skip-add-locks --skip-comments --skip-triggers
       --skip-quote-names --compact --no-create-info
       %(host)s %(port)s %(user)s %(password)s %(databases)s %(tables)s
-    """ % dict(
-        charset=args.charset,
-        host=('--host=\'%s\'' % args.host if args.host else ''),
-        port=('--port=\'%s\'' % args.port if args.port else ''),
-        user=('--user=\'%s\'' % args.user if args.user else ''),
-        password=('--password=\'%s\'' % args.pwd if args.pwd else ''),
-        databases=('--databases=\'%s\'' % args.db if args.db else ''),
-        tables=('--tables=\'%s\'' % args.table if args.table else ''))
+    """
+
+    cmd = template % d
 
     proc = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE)
     try:
