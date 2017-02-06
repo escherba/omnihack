@@ -2,3 +2,4 @@ argparse>=1.2.0
 joblib
 PyYAML>=3.10
 tqdm>=4.7.6
+unicodecsv==0.14.1
