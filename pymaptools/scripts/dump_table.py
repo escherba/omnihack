@@ -52,7 +52,7 @@ def parse_args(args=None):
                     help='whether to use --single-transaction in case of mysqldump')
     ap.add_argument('--delimiter', type=str, default='tab', choices=DELIMITERS.keys(),
                     help='Delimiter to use for writing output')
-    ap.add_argument('--cmd', type=str, default='mysqldump', choices=['mysqldump', 'mysql'],
+    ap.add_argument('--cmd', type=str, default='mysql', choices=['mysqldump', 'mysql'],
                     help='MySQL command to use')
     namespace = ap.parse_args(args)
     return namespace
