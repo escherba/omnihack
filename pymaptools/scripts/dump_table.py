@@ -48,6 +48,8 @@ def parse_args(args=None):
     ap.add_argument('--user', type=str, default=os.environ.get('AURORA_USER'))
     ap.add_argument('--pwd',  type=str, default=os.environ.get('AURORA_PASS'))
     ap.add_argument('--db',   type=str, default=os.environ.get('AURORA_DB'))
+    ap.add_argument('--single_transaction', action='store_true',
+                    help='whether to use --single-transaction in case of mysqldump')
     ap.add_argument('--delimiter', type=str, default='tab', choices=DELIMITERS.keys(),
                     help='Delimiter to use for writing output')
     ap.add_argument('--cmd', type=str, default='mysqldump', choices=['mysqldump', 'mysql'],
@@ -117,12 +119,13 @@ def create_cmd(args):
     if args.cmd == 'mysqldump':
         template = """
         mysqldump --quick --compress --extended-insert=false --complete-insert=true
-        --single-transaction --skip-lock-tables --default-character-set=%(charset)s
+        %(single_transaction)s --skip-lock-tables --default-character-set=%(charset)s
         --skip-add-drop-table --skip-add-locks --skip-comments --skip-triggers
         --skip-quote-names --compact --no-create-info
         %(host)s %(port)s %(user)s %(password)s %(database)s %(table)s
         """
         d['charset'] = args.charset
+        d['single_transaction'] = '--single-transaction' if args.single_transaction else ''
         d['host'] = '--host=%s' % args.host if args.host else ''
         d['port'] = '--port=%s' % args.port if args.port else ''
         d['user'] = '--user=%s' % args.user if args.user else ''
