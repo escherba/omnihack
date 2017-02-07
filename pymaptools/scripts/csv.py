@@ -1,9 +1,7 @@
 import unicodecsv as csv
 import argparse
 import sys
-from functools import partial
-from pymaptools.iter import isiterable
-from operator import itemgetter
+from pymaptools.iter import field_getter
 from pymaptools.io import GzipFileType
 
 
@@ -19,30 +17,16 @@ def parse_args(args=None):
     return namespace
 
 
-def get_indices(header, fields):
-    return tuple(header.index(f) for f in fields)
-
-
-def as_tuple(possible_tuple):
-    return possible_tuple if isiterable(possible_tuple) else (possible_tuple,)
-
-
 def run(args):
     reader = csv.reader(args.input, delimiter=args.input_delimiter)
     writer = csv.writer(args.output, delimiter=args.output_delimiter)
     fields = args.fields
     header = reader.next()
-    if fields:
-        f = itemgetter(*get_indices(header, fields))
-        trans = lambda x: as_tuple(f(x))
-    else:
-        trans = lambda x: x
+    get = field_getter(header, fields)
     if args.output_header:
-        trans_header = trans(header)
-        writer.writerow(trans_header)
+        writer.writerow(get(header))
     for row in reader:
-        transformed = trans(row)
-        writer.writerow(transformed)
+        writer.writerow(get(row))
 
 
 if __name__ == "__main__":

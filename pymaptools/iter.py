@@ -5,6 +5,20 @@ import operator
 from collections import Mapping, Iterator, deque, defaultdict
 from itertools import islice, imap, chain, starmap, ifilterfalse, count, \
     repeat, izip, izip_longest, groupby, cycle, tee, combinations
+from pymaptools.func import identity, compose
+
+
+def get_indices(header, fields):
+    return tuple(header.index(f) for f in fields)
+
+
+def as_tuple(possible_tuple):
+    return possible_tuple if isiterable(possible_tuple) else (possible_tuple,)
+
+
+def field_getter(header, fields):
+    return identity if not fields else \
+        compose(as_tuple, operator.itemgetter(*get_indices(header, fields)))
 
 
 def plen(iterable, predicate=bool):
