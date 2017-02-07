@@ -50,6 +50,8 @@ def parse_args(args=None):
     ap.add_argument('--db',   type=str, default=os.environ.get('AURORA_DB'))
     ap.add_argument('--delimiter', type=str, default='tab', choices=DELIMITERS.keys(),
                     help='Delimiter to use for writing output')
+    ap.add_argument('--cmd', type=str, default='mysqldump', choices=['mysqldump', 'mysql'],
+                    help='MySQL command to use')
     namespace = ap.parse_args(args)
     return namespace
 
@@ -75,7 +77,7 @@ class NullClass:
 NULL = NullClass()
 
 
-def process_input(args, stream):
+def write_mysqldump(args, stream):
     delimiter = DELIMITERS[args.delimiter]
     writer = csv.writer(args.output, delimiter=delimiter,
                         escapechar='\\', quoting=csv.QUOTE_NONE)
@@ -95,33 +97,66 @@ def process_input(args, stream):
         writer.writerow(unescape_row(values))
 
 
+def write_mysql(args, stream):
+    fh = args.output
+    for idx, line in enumerate(iter(stream.readline, '')):
+        fh.write(line)
+
+
+def write_stream(args, stream):
+    if args.cmd == 'mysqldump':
+        write_mysqldump(args, stream)
+    elif args.cmd == 'mysql':
+        write_mysql(args, stream)
+    else:
+        raise ValueError(args.cmd)
+
+
+def create_cmd(args):
+    d = {}
+    if args.cmd == 'mysqldump':
+        template = """
+        mysqldump --quick --compress --extended-insert=false --complete-insert=true
+        --single-transaction --skip-lock-tables --default-character-set=%(charset)s
+        --skip-add-drop-table --skip-add-locks --skip-comments --skip-triggers
+        --skip-quote-names --compact --no-create-info
+        %(host)s %(port)s %(user)s %(password)s %(database)s %(table)s
+        """
+        d['charset'] = args.charset
+        d['host'] = '--host=%s' % args.host if args.host else ''
+        d['port'] = '--port=%s' % args.port if args.port else ''
+        d['user'] = '--user=%s' % args.user if args.user else ''
+        d['password'] = '--password=%s' % args.pwd if args.pwd else ''
+        d['database'] = '--databases %s' % args.db if args.db else ''
+        d['table'] = '--tables %s' % args.table if args.table else ''
+        cmd = (template.strip() % d).split()
+    elif args.cmd == 'mysql':
+        template = """
+            mysql\t-h%(host)s\t-P%(port)s\t-u\t%(user)s\t-p%(password)s\t--batch\t-q\t-e\tselect %(fields)s from %(table)s;\t%(database)s
+        """
+        d['host'] = args.host
+        d['port'] = args.port
+        d['user'] = args.user
+        d['password'] = args.pwd
+        d['fields'] = ', '.join(args.fields) if args.fields else '*'
+        d['table'] = args.table
+        d['database'] = args.db
+        cmd = (template.strip() % d).split('\t')
+    else:
+        raise ValueError(args.cmd)
+    return cmd
+
+
 def run(args):
     if not args.db:
         sys.stderr.write("You did not specify database name\n")
         sys.exit(1)
 
-    d = {}
-    d['charset'] = args.charset
-    d['host'] = '--host=%s' % args.host if args.host else ''
-    d['port'] = '--port=%s' % args.port if args.port else ''
-    d['user'] = '--user=%s' % args.user if args.user else ''
-    d['password'] = '--password=%s' % args.pwd if args.pwd else ''
-    d['databases'] = '--databases %s' % args.db if args.db else ''
-    d['tables'] = '--tables %s' % args.table if args.table else ''
+    cmd = create_cmd(args)
 
-    template = """
-    mysqldump --quick --compress --extended-insert=false --complete-insert=true
-      --single-transaction --skip-lock-tables --default-character-set=%(charset)s
-      --skip-add-drop-table --skip-add-locks --skip-comments --skip-triggers
-      --skip-quote-names --compact --no-create-info
-      %(host)s %(port)s %(user)s %(password)s %(databases)s %(tables)s
-    """
-
-    cmd = template % d
-
-    proc = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE)
+    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
     try:
-        process_input(args, proc.stdout)
+        write_stream(args, proc.stdout)
     except IOError as err:
         proc.kill()
         if err.errno != errno.EPIPE:
