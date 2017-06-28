@@ -1,5 +1,5 @@
-pymaptools.containers module
-============================
+pymaptools\.containers module
+=============================
 
 .. automodule:: pymaptools.containers
     :members:

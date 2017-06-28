@@ -1,7 +1,7 @@
-pymaptools\.sample module
+pymaptools\.sparse module
 =========================
 
-.. automodule:: pymaptools.sample
+.. automodule:: pymaptools.sparse
     :members:
     :undoc-members:
     :show-inheritance:

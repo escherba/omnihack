@@ -1,5 +1,5 @@
-pymaptools.benchmark module
-===========================
+pymaptools\.benchmark module
+============================
 
 .. automodule:: pymaptools.benchmark
     :members:

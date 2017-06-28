@@ -1,5 +1,5 @@
-pymaptools.inspect module
-=========================
+pymaptools\.inspect module
+==========================
 
 .. automodule:: pymaptools.inspect
     :members:

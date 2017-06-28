@@ -1,5 +1,5 @@
-pymaptools.unionfind module
-===========================
+pymaptools\.unionfind module
+============================
 
 .. automodule:: pymaptools.unionfind
     :members:

@@ -1,5 +1,5 @@
-pymaptools.queue module
-=======================
+pymaptools\.queue module
+========================
 
 .. automodule:: pymaptools.queue
     :members:

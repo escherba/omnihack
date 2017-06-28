@@ -1,5 +1,5 @@
-pymaptools.unicode_yaml module
-==============================
+pymaptools\.unicode\_yaml module
+================================
 
 .. automodule:: pymaptools.unicode_yaml
     :members:

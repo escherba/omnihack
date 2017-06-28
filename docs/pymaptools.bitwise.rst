@@ -1,5 +1,5 @@
-pymaptools.bitwise module
-=========================
+pymaptools\.bitwise module
+==========================
 
 .. automodule:: pymaptools.bitwise
     :members:

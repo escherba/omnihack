@@ -1,5 +1,5 @@
-pymaptools.io module
-====================
+pymaptools\.io module
+=====================
 
 .. automodule:: pymaptools.io
     :members:

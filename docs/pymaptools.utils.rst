@@ -1,5 +1,5 @@
-pymaptools.utils module
-=======================
+pymaptools\.utils module
+========================
 
 .. automodule:: pymaptools.utils
     :members:

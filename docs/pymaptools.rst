@@ -1,6 +1,13 @@
 pymaptools package
 ==================
 
+Subpackages
+-----------
+
+.. toctree::
+
+    pymaptools.scripts
+
 Submodules
 ----------
 
@@ -9,6 +16,7 @@ Submodules
    pymaptools.benchmark
    pymaptools.bitwise
    pymaptools.containers
+   pymaptools.func
    pymaptools.graph
    pymaptools.inspect
    pymaptools.io
@@ -16,6 +24,7 @@ Submodules
    pymaptools.pipeline
    pymaptools.queue
    pymaptools.sample
+   pymaptools.sparse
    pymaptools.unicode_yaml
    pymaptools.unionfind
    pymaptools.utils

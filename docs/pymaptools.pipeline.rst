@@ -1,5 +1,5 @@
-pymaptools.pipeline module
-==========================
+pymaptools\.pipeline module
+===========================
 
 .. automodule:: pymaptools.pipeline
     :members:

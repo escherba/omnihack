@@ -1,5 +1,5 @@
-pymaptools.graph module
-=======================
+pymaptools\.graph module
+========================
 
 .. automodule:: pymaptools.graph
     :members:

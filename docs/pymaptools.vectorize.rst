@@ -1,5 +1,5 @@
-pymaptools.vectorize module
-===========================
+pymaptools\.vectorize module
+============================
 
 .. automodule:: pymaptools.vectorize
     :members:

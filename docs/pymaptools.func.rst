@@ -1,7 +1,7 @@
-pymaptools\.iter module
+pymaptools\.func module
 =======================
 
-.. automodule:: pymaptools.iter
+.. automodule:: pymaptools.func
     :members:
     :undoc-members:
     :show-inheritance:

@@ -1,3 +1,4 @@
+import numpy as np
 from functools import partial
 from itertools import izip
 from tqdm import tqdm
@@ -6,7 +7,7 @@ from pymaptools.containers import DefaultOrderedDict
 from collections import defaultdict
 
 
-def dd2coo(dd):
+def dd2coo(dd, dtype=np.float32):
     """
     Convert a dict of dicts to COO-type sparse matrix
     """
@@ -28,7 +29,7 @@ def dd2coo(dd):
             row_indices.append(row_idx)
             col_indices.append(col_map[col_key])
 
-    return row_list, col_list, coo_matrix((values, (row_indices, col_indices)))
+    return row_list, col_list, coo_matrix((values, (row_indices, col_indices)), dtype=dtype)
 
 
 def csr2dd(mat, transpose=False, show_progress=False):
@@ -46,6 +47,7 @@ class CooBuilder(object):
     """
     def __init__(self, dtype):
 
+        self._dtype = dtype
         self._dict = DefaultOrderedDict(partial(DefaultOrderedDict, dtype))
 
     def add(self, x, y, val):
@@ -58,7 +60,7 @@ class CooBuilder(object):
 
     def get_coo(self, transpose=False):
 
-        rows, cols, mat = dd2coo(self._dict)
+        rows, cols, mat = dd2coo(self._dict, dtype=self._dtype)
         if transpose:
             return cols, rows, mat.T
         else:
