@@ -12,12 +12,12 @@ from keyword import iskeyword as _iskeyword
 import sys as _sys
 import heapq as _heapq
 from itertools import repeat as _repeat, chain as _chain, starmap as _starmap
-from itertools import imap as _imap
 
-try:
-    from thread import get_ident as _get_ident
-except ImportError:
-    from dummy_thread import get_ident as _get_ident
+from threading import get_ident as _get_ident
+# try:
+#     from thread import get_ident as _get_ident
+# except ImportError:
+#     from dummy_thread import get_ident as _get_ident
 
 from cpython.dict cimport PyDict_Clear, PyDict_DelItem, PyDict_SetItem
 from cpython.object cimport PyObject_RichCompare, Py_EQ, Py_NE
@@ -199,7 +199,7 @@ cdef class OrderedDict(dict):
         while comparison to a regular mapping is order-insensitive.
         '''
         if isinstance(other, OrderedDict):
-            return dict.__eq__(self, other) and all(_imap(_eq, self, other))
+            return dict.__eq__(self, other) and all(map(_eq, self, other))
         return dict.__eq__(self, other)
 
     def _ne__(self, other):

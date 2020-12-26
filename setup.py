@@ -131,16 +131,20 @@ if use_cython:
     EXT_MODULES = cythonize(EXT_MODULES)
 
 
-INSTALL_REQUIRES, INSTALL_DEPS = parse_reqs(
-    resource_string(__name__, 'requirements.txt').splitlines())
-TESTS_REQUIRE, TESTS_DEPS = parse_reqs(
-    resource_string(__name__, 'dev-requirements.txt').splitlines())
-EXTRAS_REQUIRE, EXTRAS_DEPS = build_extras('extras-*-requirements.txt')
-DEPENDENCY_LINKS = list(set(itertools.chain(
-    INSTALL_DEPS,
-    TESTS_DEPS,
-    EXTRAS_DEPS
-)))
+# INSTALL_REQUIRES, INSTALL_DEPS = parse_reqs(
+#     resource_string(__name__, 'requirements.txt').splitlines())
+# TESTS_REQUIRE, TESTS_DEPS = parse_reqs(
+#     resource_string(__name__, 'dev-requirements.txt').splitlines())
+# EXTRAS_REQUIRE, EXTRAS_DEPS = build_extras('extras-*-requirements.txt')
+# DEPENDENCY_LINKS = list(set(itertools.chain(
+#     INSTALL_DEPS,
+#     TESTS_DEPS,
+#     EXTRAS_DEPS
+# )))
+
+REQS = [
+    'argparse', 'joblib', 'PyYAML', 'tqdm', 'unicodecsv'
+]
 
 setup(
     name=NAME,
@@ -151,9 +155,7 @@ setup(
     license="MIT",
     url='https://github.com/escherba/pymaptools',
     packages=find_packages(exclude=['tests', 'scripts']),
-    install_requires=INSTALL_REQUIRES,
-    tests_require=TESTS_REQUIRE,
-    dependency_links=DEPENDENCY_LINKS,
+    install_requires=REQS,
     ext_modules=EXT_MODULES,
     test_suite='nose.collector',
     classifiers=[
@@ -172,5 +174,5 @@ setup(
         'Topic :: Software Development :: Libraries :: Python Modules',
         'Topic :: Utilities',
     ],
-    long_description=resource_string(__name__, 'README.rst'),
+    # long_description=resource_string(__name__, 'README.rst'),
 )

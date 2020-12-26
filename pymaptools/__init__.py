@@ -2,7 +2,6 @@ __version__ = '0.2.35'
 
 from collections import defaultdict
 from functools import partial
-from itertools import imap
 from pymaptools.func import compose
 
 
@@ -24,7 +23,7 @@ def amap(f, g):
     [10, 11, 12, 13, 14]
 
     """
-    return compose(partial(imap, f), g)
+    return compose(partial(map, f), g)
 
 
 def all_equal(xs):

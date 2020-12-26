@@ -1,7 +1,6 @@
 #cython: infer_types=True
 
 import copy
-from itertools import imap as _imap
 from operator import eq as _eq
 from collections import Callable
 from pymaptools.iter import isiterable
@@ -205,7 +204,7 @@ cdef class OrderedSet(set):
 
     def _eq__(self, other):
         if isinstance(other, OrderedSet):
-            return set.__eq__(self, other) and all(_imap(_eq, self, other))
+            return set.__eq__(self, other) and all(map(_eq, self, other))
         return set.__eq__(self, other)
 
     def _ne__(self, other):

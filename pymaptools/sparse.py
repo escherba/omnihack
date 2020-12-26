@@ -15,7 +15,7 @@ def dd2coo(dd, dtype=np.float32):
 
     # first level
     row_list = dd.keys()
-    col_list = list(set(k for row in dd.itervalues() for k in row.iterkeys()))
+    col_list = list(set(k for row in dd.itervalues() for k in row.keys()))
     row_map = {k: idx for idx, k in enumerate(row_list)}
     col_map = {k: idx for idx, k in enumerate(col_list)}
 

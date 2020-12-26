@@ -1,4 +1,3 @@
-from itertools import izip
 from functools import partial
 from collections import defaultdict, Counter, Mapping
 from pymaptools.iter import plen, iter_items, iter_keys, iter_vals
@@ -66,7 +65,7 @@ class Struct(object):
         self_dict = self.__dict__
         readwrite_attrs = self.readwrite_attrs
         readonly_attrs = self.readonly_attrs
-        for name, value in entries.iteritems():
+        for name, value in entries.items():
             if (name in readwrite_attrs) or (name in readonly_attrs):
                 self_dict[name] = value
             else:
@@ -379,8 +378,8 @@ class CrossTab(object):
         """
         ltrue = []
         lpred = []
-        for (ri, ci), count in self.iteritems():
-            for _ in xrange(count):
+        for (ri, ci), count in self.items():
+            for _ in range(count):
                 ltrue.append(ri)
                 lpred.append(ci)
         return ltrue, lpred
@@ -390,7 +389,7 @@ class CrossTab(object):
         """Instantiate from two arrays of observations (labels)
         """
         rows = cls._row_type_2d()
-        for c, k in izip(labels_true, labels_pred):
+        for c, k in zip(labels_true, labels_pred):
             rows[c][k] += 1
         return cls(rows=rows)
 
@@ -427,8 +426,8 @@ class CrossTab(object):
         point = 0
         ptrue = defaultdict(list)
         ppred = defaultdict(list)
-        for (ri, ci), count in self.iteritems():
-            for _ in xrange(count):
+        for (ri, ci), count in self.items():
+            for _ in range(count):
                 ptrue[ri].append(point)
                 ppred[ci].append(point)
                 point += 1
@@ -555,7 +554,7 @@ class CrossTab(object):
     def __eq__(self, other):
         if len(self) != len(other):
             return False
-        for k, v in other.iteritems():
+        for k, v in other.items():
             try:
                 this_val = self[k]
             except KeyError:
@@ -568,39 +567,27 @@ class CrossTab(object):
         return not self.__eq__(other)
 
     def __len__(self):
-        return plen(self.itervalues())
+        return plen(self.values())
 
-    @doc(dict.iterkeys)
-    def iterkeys(self):
+    @doc(dict.keys)
+    def keys(self):
         for ri, row in iter_items(self.rows):
             for ci in iter_keys(row):
                 yield ri, ci
 
-    __iter__ = iterkeys
+    __iter__ = keys
 
-    @doc(dict.itervalues)
-    def itervalues(self):
+    @doc(dict.values)
+    def values(self):
         for row in self.iter_rows():
             for cell in row:
                 yield cell
 
-    @doc(dict.iteritems)
-    def iteritems(self):
+    @doc(dict.items)
+    def items(self):
         for ri, row in iter_items(self.rows):
             for ci, cell in iter_items(row):
                 yield (ri, ci), cell
-
-    @doc(dict.keys)
-    def keys(self):
-        return list(self.iterkeys())
-
-    @doc(dict.values)
-    def values(self):
-        return list(self.itervalues())
-
-    @doc(dict.items)
-    def items(self):
-        return list(self.iteritems())
 
     # Other
     def iter_all(self):
@@ -835,7 +822,7 @@ def labels_to_clusters(labels_true, labels_pred):
 
     """
     result = defaultdict(list)
-    for label_true, label_pred in izip(labels_true, labels_pred):
+    for label_true, label_pred in zip(labels_true, labels_pred):
         result[label_pred].append(label_true)
     return result.values()
 

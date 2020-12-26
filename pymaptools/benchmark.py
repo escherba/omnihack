@@ -13,7 +13,7 @@ class PMTimer(object):
         True
     """
 
-    def __init__(self, cpu_clock=time.clock, wall_clock=time.time):
+    def __init__(self, cpu_clock=time.perf_counter, wall_clock=time.time):
         self.cpu_clock = cpu_clock
         self.wall_clock = wall_clock
         self.clock_start = None
@@ -27,7 +27,7 @@ class PMTimer(object):
         return self
 
     def __exit__(self, *args):
-        self.clock_interval = time.clock() - self.clock_start
+        self.clock_interval = time.perf_counter() - self.clock_start
         self.wall_interval = time.time() - self.wall_start
 
     def __str__(self):

@@ -17,7 +17,7 @@ from pymaptools.utils import joint_context
 from pymaptools.iter import isiterable
 
 
-SUPPORTED_EXTENSION = re.compile(ur'(\.(?:gz|bz2|zip))$', re.IGNORECASE)
+SUPPORTED_EXTENSION = re.compile(r'(\.(?:gz|bz2|zip))$', re.IGNORECASE)
 
 
 def get_extension(fname, regex=SUPPORTED_EXTENSION, lowercase=True):
@@ -61,14 +61,14 @@ def ndjson2col(iterator):
     """
     result = collections.defaultdict(list)
     try:
-        obj = iterator.next()
+        obj = next(iterator)
     except StopIteration:
         return result
-    fields = frozenset(obj.iterkeys())
+    fields = frozenset(obj.keys())
     for field in fields:
         result[field].append(obj[field])
     for idx, obj in enumerate(iterator, start=2):
-        missing_fields = fields - frozenset(obj.iterkeys())
+        missing_fields = fields - frozenset(obj.keys())
         if missing_fields:
             raise RuntimeError("Missing fields %s at line %d" %
                                (list(missing_fields), idx))
@@ -92,9 +92,8 @@ def open_gz(fname, mode='r', compresslevel=9):
     extension = get_extension(fname)
     if extension is None:
         return open(fname, mode)
-    else:
-        fopen_fun = FILEOPEN_FUNCTIONS[extension]
-        return fopen_fun(fname, mode, compresslevel)
+    fopen_fun = FILEOPEN_FUNCTIONS[extension]
+    return fopen_fun(fname, mode, compresslevel)
 
 
 def parse_json(line):
@@ -342,7 +341,7 @@ def pickle_dump(obj, output_file, protocol=2):
     `protocol` defaults to 2 so pickled objects are compatible across
     Python 2.x and 3.x.
     """
-    if isinstance(output_file, basestring):
+    if isinstance(output_file, str):
         with open_gz(output_file, 'wb') as fhandle:
             pickle.dump(obj, fhandle, protocol=protocol)
     else:
@@ -351,7 +350,7 @@ def pickle_dump(obj, output_file, protocol=2):
 
 def pickle_load(input_file):
     """Load pickled object from `input_file`"""
-    if isinstance(input_file, basestring):
+    if isinstance(input_file, str):
         with open_gz(input_file, 'rb') as fhandle:
             return pickle.load(fhandle)
     else:
